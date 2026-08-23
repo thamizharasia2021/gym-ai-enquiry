@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Tarvos Fit — Leads Central</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" id="pageFavicon" type="image/png" href="/static/1000920458.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #16a34a;
+    --secondary: #0f172a;
+    --accent: #16a34a;
+    --accent-dark: #15803d;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --bg-soft: #f8fafc;
+    --blue: #2563eb;
+    --blue-soft: #eff6ff;
+    --purple: #7c3aed;
+    --purple-soft: #f5f3ff;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --teal: #0d9488;
+    --teal-soft: #f0fdfa;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --font-family: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-family), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg-soft);
+    color: #0f172a;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* Header */
+  header.leads-header {
+    background: var(--secondary);
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .logo {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--primary); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0; overflow: hidden;
+  }
+  .brand .logo img { width: 100%; height: 100%; object-fit: contain; }
+  .brand h1 { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+  .brand p { font-size: 11.5px; color: #94a3b8; }
+  
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .unread-pill {
+    background: #dc2626; color: #fff; padding: 4px 10px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;
+    animation: pulseGlow 2s infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  }
+  .nav-btn {
+    background: #1e293b; color: #f8fafc; border: 1px solid #334155;
+    padding: 7px 12px; border-radius: 8px; font-size: 12.5px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.15s;
+  }
+  .nav-btn:hover { background: #334155; }
+  .nav-btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .nav-btn.primary:hover { opacity: 0.92; }
+
+  /* Desktop Nav Links */
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  @media(max-width: 960px) {
+    .desktop-nav { display: none; }
+  }
+
+  /* Hamburger Menu */
+  .hamburger-btn {
+    display: none;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+  .hamburger-btn:hover { background: rgba(255,255,255,0.22); }
+  @media(max-width: 960px) {
+    .hamburger-btn { display: flex; }
+  }
+
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .mobile-nav-overlay.open { opacity: 1; pointer-events: auto; }
+  .mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    background: #0f172a;
+    color: #fff;
+    z-index: 999;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.4);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-nav-drawer.open { transform: translateX(0); }
+  .drawer-nav-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .drawer-nav-head h3 { font-size: 16px; font-weight: 700; color: #fff; }
+  .drawer-nav-close { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+  .mobile-nav-drawer a {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s;
+  }
+  .mobile-nav-drawer a:hover, .mobile-nav-drawer a.active {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  /* Container */
+  .main-wrap { max-width: 1440px; margin: 0 auto; padding: 24px; }
+
+  /* Stats Grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+  @media(max-width: 1000px){ .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media(max-width: 500px){ .stats-grid { grid-template-columns: 1fr; } }
+  .stat-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+    display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden;
+  }
+  .stat-card.highlight { border-color: var(--primary); background: linear-gradient(180deg, #f0fdf4, #ffffff); }
+  .stat-card .label { font-size: 11.5px; text-transform: uppercase; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }
+  .stat-card .val { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: #0f172a; }
+  .stat-card .desc { font-size: 11.5px; color: var(--muted); }
+
+  /* Toolbar */
+  .toolbar {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px;
+    margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .search-wrap { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 240px; }
+  .search-wrap input {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13.5px; outline: none; transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--primary); }
+  
+  .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill-btn {
+    background: #f1f5f9; border: 1px solid transparent; color: #334155;
+    padding: 6px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .pill-btn:hover { background: #e2e8f0; }
+  .pill-btn.active { background: #0f172a; color: #fff; }
+
+  /* Leads Table */
+  .table-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px;
+    overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  table { width: 100%; border-collapse: collapse; text-align: left; min-width: 820px; }
+  thead th {
+    background: #f8fafc; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--muted); padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td {
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    font-size: 13px; vertical-align: middle;
+  }
+  tbody tr { cursor: pointer; transition: background 0.15s; }
+  tbody tr:hover { background: #f8fafc; }
+  tbody tr.unread-row { background: #f0fdf4; font-weight: 600; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .lead-meta { display: flex; flex-direction: column; }
+  .lead-id { font-size: 10.5px; color: var(--muted); font-family: monospace; }
+  .lead-name { font-size: 14px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 6px; }
+  .unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .lead-phone { font-size: 12.5px; color: #475569; margin-top: 2px; }
+
+  /* Badges */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+    border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+  }
+  .stage-New { background: #eff6ff; color: #1d4ed8; }
+  .stage-Pending { background: #fffbeb; color: #b45309; }
+  .stage-Contacted { background: #f0fdfa; color: #0f766e; }
+  .stage-Interested { background: #faf5ff; color: #6d28d9; }
+  .stage-Trialbooked { background: #fdf4ff; color: #a21caf; }
+  .stage-Joined, .stage-Converted { background: #f0fdf4; color: #15803d; }
+  .stage-Completed { background: #ecfdf5; color: #047857; }
+  .stage-Closed { background: #f1f5f9; color: #475569; }
+
+  .source-tag {
+    background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 600; display: inline-block;
+  }
+
+  /* Action Buttons in Table */
+  .action-btns { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .btn-sm {
+    padding: 5px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 600;
+    border: 1px solid var(--border); background: #fff; cursor: pointer; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .btn-sm:hover { background: #f8fafc; border-color: #cbd5e1; }
+  .btn-sm.wa { background: #25d366; color: #fff; border-color: #25d366; }
+  .btn-sm.wa:hover { opacity: 0.92; }
+  .btn-sm.act-joined { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+  .btn-sm.act-pending { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+  .btn-sm.act-completed { background: #ccfbf1; color: #115e59; border-color: #99f6e4; }
+  .btn-sm.act-delete { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+  .btn-sm.act-delete:hover { background: #fee2e2; border-color: #f87171; }
+
+  /* Drawer Modal */
+  .drawer-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+    z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 440px; max-width: 90vw;
+    background: #fff; z-index: 101; box-shadow: -8px 0 24px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column; transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .drawer-head h3 { font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 700; }
+  .drawer-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+
+  .lead-hero-box {
+    background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .lead-hero-name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .lead-hero-phone { font-size: 14px; color: #475569; font-weight: 600; }
+  .quick-call-row { display: flex; gap: 8px; margin-top: 10px; }
+  .quick-call-row a {
+    flex: 1; padding: 8px; border-radius: 8px; text-align: center;
+    font-size: 12.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.04em; }
+  .form-group select, .form-group input {
+    padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; outline: none;
+  }
+  .form-group select:focus, .form-group input:focus { border-color: var(--primary); }
+
+  .quick-actions-bar {
+    background: #f1f5f9; border-radius: 10px; padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .quick-actions-bar label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; }
+  .quick-action-pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .notes-section {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .note-item {
+    background: #f8fafc; border-left: 3px solid var(--primary);
+    padding: 8px 12px; border-radius: 0 8px 8px 0; font-size: 12.5px;
+  }
+  .note-meta { font-size: 10.5px; color: var(--muted); margin-bottom: 2px; }
+
+  /* Confirm Delete Modal */
+  .confirm-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .confirm-modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .confirm-modal {
+    background: #fff; border-radius: 18px; max-width: 400px; width: 100%; padding: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25); text-align: center;
+  }
+  .confirm-modal .icon { font-size: 40px; margin-bottom: 10px; }
+  .confirm-modal h4 { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+  .confirm-modal p { font-size: 13px; color: #64748b; margin-bottom: 20px; line-height: 1.45; }
+  .confirm-btns { display: flex; gap: 10px; justify-content: center; }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #0f172a; color: #fff; padding: 12px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.25s ease;
+    border-left: 4px solid var(--primary);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="leads-header">
+  <div class="brand">
+    <div class="logo" id="brandLogo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0idGZHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzE2YTM0YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNTgwM2QiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iNDQiIGZpbGw9InVybCgjdGZHcmFkKSIvPgogIDxyZWN0IHg9IjYiIHk9IjYiIHdpZHRoPSIxODgiIGhlaWdodD0iMTg4IiByeD0iMzgiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjI1KSIgc3Ryb2tlLXdpZHRoPSIzIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwLCA4NSkiPgogICAgPHJlY3QgeD0iLTY1IiB5PSItMTgiIHdpZHRoPSIxNCIgaGVpZ2h0PSIzNiIgcng9IjQiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuOTUiLz4KICAgIDxyZWN0IHg9Ii00NyIgeT0iLTI2IiB3aWR0aD0iMTIiIGhlaWdodD0iNTIiIHJ4PSI0IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8cmVjdCB4PSIzNSIgeT0iLTI2IiB3aWR0aD0iMTIiIGhlaWdodD0iNTIiIHJ4PSI0IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8cmVjdCB4PSI1MSIgeT0iLTE4IiB3aWR0aD0iMTQiIGhlaWdodD0iMzYiIHJ4PSI0IiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICA8cmVjdCB4PSItMzUiIHk9Ii02IiB3aWR0aD0iNzAiIGhlaWdodD0iMTIiIHJ4PSIzIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8cGF0aCBkPSJNLTIyLC0yNCBDLTEwLC00MiAxMCwtNDIgMjIsLTI0IEMxNCwtMTQgNiwtOCAwLDQgQy02LC04IC0xNCwtMTQgLTIyLC0yNCBaIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjkiLz4KICA8L2c+CiAgPHRleHQgeD0iMTAwIiB5PSIxNjIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjMyIiBmaWxsPSIjZmZmZmZmIiBsZXR0ZXItc3BhY2luZz0iMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VEFSVk9TPC90ZXh0Pgo8L3N2Zz4=" alt="Tarvos Fit Logo" style="width:100%;height:100%;object-fit:contain;border-radius:10px;" /></div>
+    <div>
+      <h1 id="gymTitle">Tarvos Fit — Leads Central</h1>
+      <p>Multi-Channel Prospect Pipeline & CRM</p>
+    </div>
+  </div>
+
+  <nav class="desktop-nav">
+    <a href="/setup" class="nav-btn">⚙️ Setup Wizard</a>
+    <a href="/site" class="nav-btn">🌐 Live Website</a>
+    <a href="/chat" class="nav-btn">💬 AI Chat</a>
+    <a href="/config" class="nav-btn">🎨 Theme & Config</a>
+    <span class="unread-pill" id="unreadPill" style="display:none;">0 Unread</span>
+    <button class="nav-btn primary" id="notifBtn">🔔 Push Alerts</button>
+  </nav>
+
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open Menu">☰</button>
+</header>
+
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <div class="drawer-nav-head">
+    <h3>Navigation Menu</h3>
+    <button class="drawer-nav-close" id="drawerCloseBtn">✕</button>
+  </div>
+  <a href="/setup">⚙️ Setup Wizard</a>
+  <a href="/site">🌐 Live Website</a>
+  <a href="/chat">💬 AI Chat</a>
+  <a href="/leads" class="active">👥 Leads CRM</a>
+  <a href="/config">🎨 Theme & Config</a>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-wrap">
+  
+  <!-- Real-Time Metrics -->
+  <div class="stats-grid">
+    <div class="stat-card highlight">
+      <span class="label">Total Leads</span>
+      <span class="val" id="statTotal">0</span>
+      <span class="desc">Captured from website & chat</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">New Leads</span>
+      <span class="val" id="statNew" style="color:#2563eb;">0</span>
+      <span class="desc">Needs immediate response</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Pending Action</span>
+      <span class="val" id="statPending" style="color:#d97706;">0</span>
+      <span class="desc">Follow-up in progress</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Joined Members</span>
+      <span class="val" id="statJoined" style="color:#16a34a;">0</span>
+      <span class="desc">Converted active members 🎉</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Resolved / Closed</span>
+      <span class="val" id="statCompleted" style="color:#64748b;">0</span>
+      <span class="desc">Successfully closed leads</span>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by prospect name, phone, interest or ID..." />
+    </div>
+
+    <div class="filter-pills" id="filterPills">
+      <button class="pill-btn active" data-status="All">All Leads</button>
+      <button class="pill-btn" data-status="New">New</button>
+      <button class="pill-btn" data-status="Pending">Pending</button>
+      <button class="pill-btn" data-status="Contacted">Contacted</button>
+      <button class="pill-btn" data-status="Trial booked">Trial Booked</button>
+      <button class="pill-btn" data-status="Joined">Joined 🎉</button>
+      <button class="pill-btn" data-status="Completed">Completed</button>
+      <button class="pill-btn" onclick="promptClearAllLeads()" style="color:#ef4444;border-color:#fecaca;margin-left:auto;">🗑️ Clear All</button>
+    </div>
+  </div>
+
+  <!-- Leads Data Table -->
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Prospect Details</th>
+          <th>Source Channel</th>
+          <th>Interest & Goal</th>
+          <th>Stage Status</th>
+          <th>Received Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="leadsTbody">
+        <tr>
+          <td colspan="6" style="text-align:center;padding:30px;color:#64748b;">
+            Loading prospect leads...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Lead Detail Drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3 id="drawerTitle">Lead Profile</h3>
+    <button class="drawer-close" id="drawerClose">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <!-- Populated dynamically -->
+  </div>
+</div>
+
+<!-- Confirm Deletion Modal -->
+<div class="confirm-modal-overlay" id="confirmDeleteModal">
+  <div class="confirm-modal">
+    <div class="icon">🗑️</div>
+    <h4>Remove Lead Record?</h4>
+    <p>Are you sure you want to permanently remove <strong id="deleteLeadTargetName">this lead</strong>? This action cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="btn-sm" id="cancelDeleteBtn" style="padding:8px 16px;font-size:13px;">Cancel</button>
+      <button class="btn-sm" id="confirmDeleteBtn" style="background:#dc2626;color:#fff;border-color:#dc2626;padding:8px 18px;font-size:13px;">Yes, Remove Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toastMsg">Action updated!</div>
+
+<script src="/static/theme-sync.js"></script>
+<script>
+const API = GymTheme.getApiBase();
+const GYM_ID = GymTheme.getGymId();
+
+let allLeads = [];
+let activeStatusFilter = "All";
+let searchQuery = "";
+let selectedLeadId = new URLSearchParams(location.search).get("lead_id") || null;
+let knownLeadIds = new Set();
+let pendingDeleteId = null;
+
+function showToast(msg){
+  const el = document.getElementById("toastMsg");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 3000);
+}
+
+function escapeHtml(s){
+  return String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function escapeAttr(s){ return escapeHtml(s); }
+
+function stageClass(s){
+  return "stage-" + (s || "New").replace(/\s+/g, "");
+}
+
+function formatDate(ts){
+  if(!ts) return "—";
+  const d = new Date(ts * 1000);
+  return d.toLocaleDateString("en-IN", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" });
+}
+
+// Audio & Web Notification Alerts
+let soundEnabled = localStorage.getItem("gym_leads_sound") !== "0";
+
+function playLeadChime(){
+  if(!soundEnabled) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12); // A5
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.55);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.55);
+  } catch(e){}
+}
+
+const notifBtn = document.getElementById("notifBtn");
+if ("Notification" in window) {
+  if (Notification.permission === "granted") {
+    notifBtn.textContent = soundEnabled ? "🔔 Alerts: Sound + Push" : "🔔 Alerts: Push Only";
+  }
+}
+notifBtn.addEventListener("click", async () => {
+  if (!("Notification" in window)) {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem("gym_leads_sound", soundEnabled ? "1" : "0");
+    notifBtn.textContent = soundEnabled ? "🔊 Sound Alerts: ON" : "🔇 Sound Alerts: OFF";
+    showToast(soundEnabled ? "Sound alerts enabled" : "Sound alerts disabled");
+    if(soundEnabled) playLeadChime();
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm === "granted") {
+    soundEnabled = true;
+    localStorage.setItem("gym_leads_sound", "1");
+    notifBtn.textContent = "🔔 Alerts: Sound + Push";
+    playLeadChime();
+    new Notification("Gym Leads Connected", { body: "You will now receive instant sound & lead alerts." });
+    showToast("Push and sound alerts enabled!");
+  } else {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem("gym_leads_sound", soundEnabled ? "1" : "0");
+    notifBtn.textContent = soundEnabled ? "🔊 Sound Alerts: ON" : "🔇 Sound Alerts: OFF";
+    if(soundEnabled) playLeadChime();
+  }
+});
+
+function renderBrandLogo(logoUrl, gymName) {
+  const brandLogo = document.getElementById("brandLogo");
+  const favicon = document.getElementById("pageFavicon") || document.querySelector("link[rel~='icon']");
+  
+  if (!logoUrl) {
+    logoUrl = localStorage.getItem("gym_logo");
+  }
+  if (!logoUrl) {
+    logoUrl = "/static/1000920458.png";
+  }
+
+  const name = (gymName || localStorage.getItem("gym_name") || "Tarvos Fit").replace(/\s+Elite$/i, "");
+  const isImg = logoUrl && (
+    logoUrl.startsWith("data:") ||
+    logoUrl.startsWith("http") ||
+    logoUrl.startsWith("/") ||
+    logoUrl.startsWith("./") ||
+    /\.(png|jpg|jpeg|svg|webp)/i.test(logoUrl) ||
+    logoUrl.length > 5
+  );
+
+  if (isImg) {
+    if (brandLogo) {
+      brandLogo.innerHTML = `<img src="${logoUrl}" alt="${escapeAttr(name)}" style="width:100%;height:100%;object-fit:contain;border-radius:10px;" onerror="this.parentElement.innerHTML='🏋️'" />`;
+    }
+    if (favicon) {
+      favicon.href = logoUrl;
+    }
+  } else if (logoUrl && logoUrl.length <= 4) {
+    if (brandLogo) {
+      brandLogo.innerHTML = `<span style="font-size:22px;">${escapeHtml(logoUrl)}</span>`;
+    }
+  }
+}
+
+async function loadGymInfo(){
+  // Immediate load from local storage
+  renderBrandLogo(localStorage.getItem("gym_logo"), localStorage.getItem("gym_name") || "Tarvos Fit");
+
+  try {
+    const res = await fetch(`${API}/api/gym/${GYM_ID}/info`);
+    if(res.ok){
+      const info = await res.json();
+      const gymName = (info.gym_name || info.brand_name || "Tarvos Fit").replace(/\s+Elite$/i, "");
+      document.getElementById("gymTitle").textContent = `${gymName} — Leads Central`;
+      document.title = `${gymName} — Leads Central`;
+      localStorage.setItem("gym_name", gymName);
+      
+      if(info.logo_url){
+        localStorage.setItem("gym_logo", info.logo_url);
+        renderBrandLogo(info.logo_url, gymName);
+      } else {
+        renderBrandLogo(null, gymName);
+      }
+    }
+  } catch(e){
+    console.warn("Could not fetch gym info:", e);
+  }
+}
+
+async function fetchLeads(){
+  try {
+    const res = await fetch(`${API}/api/gym/${GYM_ID}/leads`);
+    if(!res.ok) return;
+    const leads = await res.json();
+    
+    // Check for newly arrived leads to trigger sound and notifications
+    if(knownLeadIds.size > 0){
+      let hasNew = false;
+      leads.forEach(l => {
+        if(!knownLeadIds.has(l.id)){
+          hasNew = true;
+          showToast(`🚨 New Lead: ${l.name} (${l.interest})`);
+          if ("Notification" in window && Notification.permission === "granted") {
+            new Notification(`New Lead: ${l.name}`, {
+              body: `Interest: ${l.interest} | Phone: ${l.phone}`,
+              icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>"
+            });
+          }
+        }
+      });
+      if(hasNew) playLeadChime();
+    }
+
+    knownLeadIds = new Set(leads.map(l => l.id));
+    allLeads = leads;
+    renderAll();
+
+    if(selectedLeadId){
+      const l = allLeads.find(x => x.id === selectedLeadId);
+      if(l) openLeadDrawer(l);
+    }
+  } catch(e){
+    console.error("Error fetching leads:", e);
+  }
+}
+
+function updateStats(){
+  const total = allLeads.length;
+  const newCount = allLeads.filter(l => l.status === "New").length;
+  const pendingCount = allLeads.filter(l => l.status === "Pending").length;
+  const joinedCount = allLeads.filter(l => l.status === "Joined" || l.status === "Converted").length;
+  const completedCount = allLeads.filter(l => l.status === "Completed").length;
+  const unreadCount = allLeads.filter(l => !l.is_read).length;
+
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statNew").textContent = newCount;
+  document.getElementById("statPending").textContent = pendingCount;
+  document.getElementById("statJoined").textContent = joinedCount;
+  document.getElementById("statCompleted").textContent = completedCount;
+
+  const pill = document.getElementById("unreadPill");
+  if(unreadCount > 0){
+    pill.style.display = "inline-flex";
+    pill.textContent = `${unreadCount} Unread Lead${unreadCount > 1 ? 's' : ''}`;
+  } else {
+    pill.style.display = "none";
+  }
+}
+
+function formatWhatsAppPhone(phone) {
+  let digits = String(phone || "").replace(/\D/g, "");
+  if (digits.length === 10 && /^[6-9]/.test(digits)) {
+    return "91" + digits;
+  }
+  return digits;
+}
+
+function renderAll(){
+  updateStats();
+  const tbody = document.getElementById("leadsTbody");
+  
+  let filtered = allLeads.filter(l => {
+    if(activeStatusFilter !== "All") {
+      if(activeStatusFilter === "Joined") {
+        if(l.status !== "Joined" && l.status !== "Converted") return false;
+      } else if(l.status !== activeStatusFilter) {
+        return false;
+      }
+    }
+    if(searchQuery){
+      const q = searchQuery.toLowerCase();
+      const match = (l.name||"").toLowerCase().includes(q) ||
+                    (l.phone||"").toLowerCase().includes(q) ||
+                    (l.interest||"").toLowerCase().includes(q) ||
+                    (l.source||"").toLowerCase().includes(q) ||
+                    (l.id||"").toLowerCase().includes(q);
+      if(!match) return false;
+    }
+    return true;
+  });
+
+  if(!filtered.length){
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;padding:36px 20px;color:#64748b;">
+          <div style="font-size:32px;margin-bottom:8px;">📭</div>
+          <p>No leads found matching your active filters.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(lead => `
+    <tr class="${!lead.is_read ? 'unread-row' : ''}" onclick="openLeadDrawerById('${lead.id}')">
+      <td>
+        <div class="lead-meta">
+          <span class="lead-id">${escapeHtml(lead.id)}</span>
+          <span class="lead-name">
+            ${!lead.is_read ? '<span class="unread-dot"></span>' : ''}
+            ${escapeHtml(lead.name)}
+          </span>
+          <span class="lead-phone">📞 ${escapeHtml(lead.phone)}</span>
+        </div>
+      </td>
+      <td>
+        <span class="source-tag">${escapeHtml(lead.source || "Website")}</span>
+      </td>
+      <td>
+        <div><strong>${escapeHtml(lead.interest)}</strong></div>
+        ${lead.preferred_time ? `<div style="font-size:11.5px;color:#64748b;margin-top:2px;">⏰ Preferred: ${escapeHtml(lead.preferred_time)}</div>` : ''}
+      </td>
+      <td>
+        <span class="badge ${stageClass(lead.status)}">${escapeHtml(lead.status || "New")}</span>
+      </td>
+      <td style="color:#64748b;font-size:12.5px;">
+        ${formatDate(lead.created_at || lead.ts)}
+      </td>
+      <td onclick="event.stopPropagation()">
+        <div class="action-btns">
+          <a href="https://wa.me/${escapeAttr(formatWhatsAppPhone(lead.phone))}?text=${encodeURIComponent('Hi ' + lead.name + '! Thank you for contacting our gym.')}" target="_blank" class="btn-sm wa" title="Message on WhatsApp">💬 WA</a>
+          <a href="tel:${escapeAttr(lead.phone)}" class="btn-sm" title="Call Customer">📞 Call</a>
+          <button class="btn-sm act-pending" onclick="quickTakeAction('${lead.id}', 'Pending')" title="Mark as Pending Follow-up">⏳ Pending</button>
+          <button class="btn-sm act-joined" onclick="quickTakeAction('${lead.id}', 'Joined')" title="Mark as Joined Member 🎉">🎉 Joined</button>
+          <button class="btn-sm act-completed" onclick="quickTakeAction('${lead.id}', 'Completed')" title="Mark as Completed">✅ Done</button>
+          <button class="btn-sm act-delete" onclick="promptDeleteLead('${lead.id}', '${escapeAttr(lead.name)}')" title="Permanently Delete Lead">🗑️ Remove</button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openLeadDrawerById(id){
+  const l = allLeads.find(x => x.id === id);
+  if(l) openLeadDrawer(l);
+}
+
+function openLeadDrawer(lead){
+  selectedLeadId = lead.id;
+  const overlay = document.getElementById("drawerOverlay");
+  const drawer = document.getElementById("drawer");
+  const body = document.getElementById("drawerBody");
+
+  // Automatically mark lead as read if unread
+  if(!lead.is_read){
+    patchLead(lead.id, { is_read: true }, false);
+    lead.is_read = true;
+    updateStats();
+  }
+
+  const cleanPhone = formatWhatsAppPhone(lead.phone);
+  const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent('Hi ' + lead.name + '! Thank you for reaching out to us.')}`;
+
+  body.innerHTML = `
+    <div class="lead-hero-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span class="lead-id">${escapeHtml(lead.id)}</span>
+        <span class="badge ${stageClass(lead.status)}">${escapeHtml(lead.status)}</span>
+      </div>
+      <div class="lead-hero-name">${escapeHtml(lead.name)}</div>
+      <div class="lead-hero-phone">📞 ${escapeHtml(lead.phone)}</div>
+      
+      <div class="quick-call-row">
+        <a href="${escapeAttr(waLink)}" target="_blank" style="background:#25d366;color:#fff;">💬 WhatsApp</a>
+        <a href="tel:${escapeAttr(lead.phone)}" style="background:#1e293b;color:#fff;">📞 Direct Call</a>
+      </div>
+    </div>
+
+    <!-- Quick Human Actions Toolbar -->
+    <div class="quick-actions-bar">
+      <label>⚡ Quick Action Items</label>
+      <div class="quick-action-pill-row">
+        <button class="btn-sm act-pending" onclick="quickTakeAction('${lead.id}', 'Pending')">⏳ Mark Pending</button>
+        <button class="btn-sm" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe;" onclick="quickTakeAction('${lead.id}', 'Contacted')">📞 Mark Contacted</button>
+        <button class="btn-sm" style="background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe;" onclick="quickTakeAction('${lead.id}', 'Trial booked')">🎟 Trial Booked</button>
+        <button class="btn-sm act-joined" onclick="quickTakeAction('${lead.id}', 'Joined')">🎉 Mark Joined</button>
+        <button class="btn-sm act-completed" onclick="quickTakeAction('${lead.id}', 'Completed')">✅ Mark Completed</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Status Workflow</label>
+      <select id="statusSelect" onchange="handleStatusChange('${lead.id}', this.value)">
+        <option value="New" ${lead.status==='New'?'selected':''}>New</option>
+        <option value="Pending" ${lead.status==='Pending'?'selected':''}>Pending (Follow-up Needed)</option>
+        <option value="Contacted" ${lead.status==='Contacted'?'selected':''}>Contacted</option>
+        <option value="Interested" ${lead.status==='Interested'?'selected':''}>Interested</option>
+        <option value="Trial booked" ${lead.status==='Trial booked'?'selected':''}>Trial Booked</option>
+        <option value="Joined" ${lead.status==='Joined'||lead.status==='Converted'?'selected':''}>Joined (Active Member 🎉)</option>
+        <option value="Completed" ${lead.status==='Completed'?'selected':''}>Completed / Resolved</option>
+        <option value="Closed" ${lead.status==='Closed'?'selected':''}>Closed / Lost</option>
+      </select>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+      <div>
+        <label style="font-size:11px;color:#64748b;font-weight:700;">ENQUIRY SOURCE</label>
+        <div style="margin-top:2px;">${escapeHtml(lead.source || "Website Form")}</div>
+      </div>
+      <div>
+        <label style="font-size:11px;color:#64748b;font-weight:700;">RECEIVED AT</label>
+        <div style="margin-top:2px;">${formatDate(lead.created_at || lead.ts)}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Primary Interest & Goal</label>
+      <input type="text" id="interestInput" value="${escapeAttr(lead.interest)}" onchange="patchLead('${lead.id}', {interest: this.value})" />
+    </div>
+
+    ${lead.preferred_time ? `
+    <div class="form-group">
+      <label>Preferred Date / Time Slot</label>
+      <input type="text" id="timeInput" value="${escapeAttr(lead.preferred_time)}" onchange="patchLead('${lead.id}', {preferred_time: this.value})" />
+    </div>
+    ` : ''}
+
+    ${lead.message ? `
+    <div class="form-group">
+      <label>Original Visitor Message</label>
+      <div style="background:#f8fafc;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;font-size:13px;line-height:1.45;">
+        ${escapeHtml(lead.message)}
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="notes-section">
+      <label style="font-size:11.5px;font-weight:700;text-transform:uppercase;color:#64748b;">Follow-up Activity & History Log</label>
+      <div id="notesList">
+        ${(lead.notes && lead.notes.length) ? lead.notes.map(n => `
+          <div class="note-item">
+            <div class="note-meta">${formatDate(n.created_at)} · ${escapeHtml(n.author || "Human Admin")}</div>
+            <div>${escapeHtml(n.text)}</div>
+          </div>
+        `).join("") : `<div style="font-size:12.5px;color:#94a3b8;font-style:italic;">No action notes recorded yet.</div>`}
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <input type="text" id="newNoteInput" placeholder="Add follow-up note (e.g. called, agreed to join monthly plan)..." style="flex:1;" />
+        <button class="btn-sm" onclick="handleAddNote('${lead.id}')" style="background:#0f172a;color:#fff;">Add</button>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:14px;">
+      <button class="btn-sm" onclick="toggleReadState('${lead.id}', ${!lead.is_read})">
+        ${lead.is_read ? 'Mark as Unread' : 'Mark as Read'}
+      </button>
+      <button class="btn-sm act-delete" onclick="promptDeleteLead('${lead.id}', '${escapeAttr(lead.name)}')">
+        🗑️ Remove Lead
+      </button>
+    </div>
+  `;
+
+  overlay.classList.add("open");
+  drawer.classList.add("open");
+}
+
+function closeDrawer(){
+  document.getElementById("drawerOverlay").classList.remove("open");
+  document.getElementById("drawer").classList.remove("open");
+}
+
+document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+
+// Delete Lead Modal & Execution
+function promptDeleteLead(id, name){
+  pendingDeleteId = id;
+  document.getElementById("deleteLeadTargetName").textContent = name || `Lead ${id}`;
+  document.getElementById("confirmDeleteModal").classList.add("open");
+}
+
+document.getElementById("cancelDeleteBtn").addEventListener("click", () => {
+  pendingDeleteId = null;
+  document.getElementById("confirmDeleteModal").classList.remove("open");
+});
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+  if(!pendingDeleteId) return;
+  const idToDelete = pendingDeleteId;
+  document.getElementById("confirmDeleteModal").classList.remove("open");
+  
+  try {
+    const res = await fetch(`${API}/api/gym/${GYM_ID}/leads/${idToDelete}`, {
+      method: "DELETE"
+    });
+    if(res.ok){
+      allLeads = allLeads.filter(l => l.id !== idToDelete);
+      knownLeadIds.delete(idToDelete);
+      renderAll();
+      closeDrawer();
+      showToast("🗑️ Lead removed permanently!");
+    } else {
+      showToast("Could not remove lead from server.");
+    }
+  } catch(err) {
+    console.error("Delete error:", err);
+    showToast("Error deleting lead.");
+  } finally {
+    pendingDeleteId = null;
+  }
+});
+
+async function promptClearAllLeads(){
+  if(!allLeads || !allLeads.length) {
+    showToast("No leads to clear.");
+    return;
+  }
+  if(confirm("Are you sure you want to permanently clear ALL prospect leads? This action cannot be undone.")){
+    try {
+      const res = await fetch(`${API}/api/gym/${GYM_ID}/leads`, { method: "DELETE" });
+      if(res.ok){
+        allLeads = [];
+        knownLeadIds.clear();
+        renderAll();
+        closeDrawer();
+        showToast("🗑️ All leads cleared successfully!");
+      }
+    } catch(e) {
+      showToast("Error clearing leads.");
+    }
+  }
+}
+
+async function patchLead(id, updates, reRender=true){
+  try {
+    const res = await fetch(`${API}/api/gym/${GYM_ID}/leads/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates)
+    });
+    if(res.ok){
+      const updated = await res.json();
+      const idx = allLeads.findIndex(l => l.id === id);
+      if(idx >= 0){
+        allLeads[idx] = updated;
+        if(reRender) renderAll();
+      }
+      return updated;
+    }
+  } catch(e){
+    console.error("Error updating lead:", e);
+  }
+}
+
+async function quickTakeAction(id, newStatus){
+  const updated = await patchLead(id, { status: newStatus });
+  showToast(`Lead marked as ${newStatus}!`);
+  const lead = allLeads.find(l => l.id === id);
+  if(lead && document.getElementById("drawer").classList.contains("open")){
+    openLeadDrawer(lead);
+  }
+}
+
+function handleStatusChange(id, newStatus){
+  quickTakeAction(id, newStatus);
+}
+
+function toggleReadState(id, newState){
+  patchLead(id, { is_read: newState });
+  closeDrawer();
+}
+
+async function handleAddNote(id){
+  const input = document.getElementById("newNoteInput");
+  const text = input.value.trim();
+  if(!text) return;
+  await patchLead(id, { note: text });
+  showToast("Note logged!");
+  const lead = allLeads.find(l => l.id === id);
+  if(lead) openLeadDrawer(lead);
+}
+
+// Search & Filter Listeners
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  searchQuery = e.target.value.trim();
+  renderAll();
+});
+
+document.getElementById("filterPills").querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("filterPills").querySelectorAll("button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeStatusFilter = btn.dataset.status;
+    renderAll();
+  });
+});
+
+// Initial Setup & Polling
+loadGymInfo();
+fetchLeads();
+setInterval(fetchLeads, 10000);
+</script>
+
+</body>
+</html>

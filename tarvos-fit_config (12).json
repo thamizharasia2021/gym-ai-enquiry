@@ -1,0 +1,1085 @@
+{
+  "gym_id": "tarvos-fit",
+  "identity": {
+    "gym_name": "Tarvos Fit",
+    "brand_name": "Tarvos Fit",
+    "short_description": "Premier Fitness & Personal Training Center in Trivandrum",
+    "primary_phone": "+91 70128 54261",
+    "whatsapp_number": "+91 73565 51321",
+    "email": "admin@tarvos.fit",
+    "website": "https://tarvos.fit",
+    "city": "Trivandrum",
+    "google_maps_url": "https://maps.app.goo.gl/p6y2t84SyxYGhxnBA",
+    "instagram_url": "https://instagram.com/tarvosfit",
+    "instagram_transformation_url": null,
+    "instagram_events_url": null,
+    "instagram_about_url": null,
+    "member_count_range": "100-500",
+    "gallery": [
+      {
+        "id": "g1",
+        "url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop",
+        "caption": "Premium Strength & Free Weights Zone",
+        "category": "Gym Floor"
+      },
+      {
+        "id": "g2",
+        "url": "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop",
+        "caption": "Heavy Dumbbells & Olympic Barbells",
+        "category": "Equipment"
+      },
+      {
+        "id": "g3",
+        "url": "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=800&auto=format&fit=crop",
+        "caption": "Cardio Endurance & Treadmills Suite",
+        "category": "Equipment"
+      },
+      {
+        "id": "g4",
+        "url": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop",
+        "caption": "1-on-1 Personal Training Coaching",
+        "category": "Training"
+      },
+      {
+        "id": "g5",
+        "url": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop",
+        "caption": "Functional Training & Mobility Studio",
+        "category": "Training"
+      },
+      {
+        "id": "g6",
+        "url": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop",
+        "caption": "Member Body Transformation Spotlight",
+        "category": "Transformations"
+      }
+    ],
+    "detailed_description": "Transform your fitness with certified personal training, advanced equipment, and goal-oriented workout plans.",
+    "supported_languages": [
+      "en"
+    ],
+    "currency": "INR",
+    "logo_url": null,
+    "theme": {
+      "primary_color": "#16a34a",
+      "secondary_color": "#0f172a",
+      "accent_color": "#22c55e",
+      "background_color": "#ffffff",
+      "text_color": "#0f172a",
+      "button_color": "#16a34a",
+      "chatbot_header_color": "#0f172a",
+      "user_msg_color": "#16a34a",
+      "bot_msg_color": "#f1f5f9",
+      "font_family": "Outfit",
+      "preset_name": "emerald"
+    },
+    "sections": {
+      "enabled_sections": [
+        "hero",
+        "trust_strip",
+        "about",
+        "equipment",
+        "health_diet",
+        "nutrition",
+        "policies",
+        "programs",
+        "facilities",
+        "membership",
+        "trainers",
+        "gallery",
+        "timings",
+        "location",
+        "faq",
+        "trial_cta"
+      ],
+      "section_order": [
+        "hero",
+        "trust_strip",
+        "about",
+        "equipment",
+        "health_diet",
+        "nutrition",
+        "policies",
+        "programs",
+        "facilities",
+        "membership",
+        "trainers",
+        "gallery",
+        "timings",
+        "location",
+        "faq",
+        "trial_cta"
+      ]
+    },
+    "google": {
+      "place_id": null,
+      "public_review_url": null,
+      "rating": 4.9,
+      "user_ratings_total": 240,
+      "last_synced_at": null,
+      "cached_reviews": []
+    },
+    "instagram": {
+      "instagram_username": null,
+      "instagram_url": null,
+      "transformation_url": null,
+      "events_url": null,
+      "about_url": null,
+      "last_synced_at": null,
+      "cached_media": []
+    }
+  },
+  "plans": {
+    "daily": {
+      "price": "99",
+      "benefits": ""
+    },
+    "weekly": {
+      "price": "699",
+      "benefits": ""
+    },
+    "monthly": {
+      "price": "1999",
+      "benefits": ""
+    },
+    "quarterly": {
+      "price": "3999",
+      "benefits": ""
+    },
+    "sixmonth": {
+      "price": "5999",
+      "benefits": ""
+    },
+    "yearly": {
+      "price": "9999",
+      "benefits": ""
+    },
+    "student": {
+      "price": "1499",
+      "benefits": ""
+    },
+    "couple": {
+      "price": "3499",
+      "benefits": ""
+    },
+    "kids": {
+      "price": "999",
+      "benefits": ""
+    }
+  },
+  "offers": [
+    {
+      "festival": "Onam",
+      "details": "10%",
+      "from": "2026-08-01",
+      "to": "2026-08-31"
+    }
+  ],
+  "theme": {
+    "font": "Inter",
+    "preset_name": "crimson",
+    "primary_color": "#dc2626",
+    "secondary_color": "#1f2937",
+    "accent_color": "#b91c1c",
+    "background_color": "#ffffff",
+    "text_color": "#0f172a",
+    "button_color": "#dc2626",
+    "chatbot_header_color": "#1f2937",
+    "user_msg_color": "#dc2626",
+    "bot_msg_color": "#fef2f2",
+    "logoDataUrl": null,
+    "logoName": "",
+    "font_family": "Merriweather",
+    "palette": "emerald"
+  },
+  "sections": {
+    "enabled": [
+      "hero",
+      "trust_strip",
+      "about",
+      "equipment",
+      "health_diet",
+      "policies",
+      "programs",
+      "facilities",
+      "membership",
+      "trainers",
+      "timings",
+      "location",
+      "faq",
+      "nutrition",
+      "trial_cta"
+    ],
+    "order": [
+      "hero",
+      "trust_strip",
+      "about",
+      "equipment",
+      "health_diet",
+      "nutrition",
+      "policies",
+      "programs",
+      "facilities",
+      "membership",
+      "trainers",
+      "timings",
+      "location",
+      "faq",
+      "trial_cta"
+    ]
+  },
+  "answers": [
+    {
+      "id": "MEM_001",
+      "situation_label": "Monthly plan exists",
+      "field_values": {
+        "price": "1999"
+      }
+    },
+    {
+      "id": "MEM_002",
+      "situation_label": "Annual exists",
+      "field_values": {
+        "annual_price": "9999"
+      }
+    },
+    {
+      "id": "MEM_003",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "3999"
+      }
+    },
+    {
+      "id": "MEM_009",
+      "situation_label": "Multiple active offers",
+      "field_values": {
+        "offer_list": "Onam — 10% (till 2026-08-31)"
+      }
+    },
+    {
+      "id": "MEM_010",
+      "situation_label": "Expiry known",
+      "field_values": {
+        "offer_name": "Onam offer",
+        "expiry_date": "2026-08-31"
+      }
+    },
+    {
+      "id": "MEM_016",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "99"
+      }
+    },
+    {
+      "id": "MEM_017",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "699"
+      }
+    },
+    {
+      "id": "MEM_018",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "5999"
+      }
+    },
+    {
+      "id": "MEM_019",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "999"
+      }
+    },
+    {
+      "id": "TRIAL_002",
+      "situation_label": "Free",
+      "field_values": {
+        "eligibility": ""
+      }
+    },
+    {
+      "id": "SOC_003",
+      "situation_label": "Link",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_004",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_005",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_006",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_008",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_009",
+      "situation_label": "Instagram",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_011",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_012",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_013",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_014",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "SOC_015",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "PT_001",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_005",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "PT_006",
+      "situation_label": "Yes schedule",
+      "field_values": {
+        "availability": "1"
+      }
+    },
+    {
+      "id": "PT_015",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_016",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_017",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_018",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_019",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_020",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_021",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_022",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_023",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_024",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_025",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_026",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "PT_013",
+      "situation_label": "No live data",
+      "field_values": {}
+    },
+    {
+      "id": "PT_014",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "PT_002",
+      "situation_label": "Fixed package",
+      "field_values": {}
+    },
+    {
+      "id": "PT_003",
+      "situation_label": "Weekly",
+      "field_values": {
+        "sessions_per_week": "6"
+      }
+    },
+    {
+      "id": "PT_004",
+      "situation_label": "60 minutes",
+      "field_values": {}
+    },
+    {
+      "id": "PT_007",
+      "situation_label": "5-10",
+      "field_values": {}
+    },
+    {
+      "id": "CLS_001",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "1-2 times/week"
+      }
+    },
+    {
+      "id": "CLS_004",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "1-2 times/week"
+      }
+    },
+    {
+      "id": "CLS_005",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "1-2 times/week"
+      }
+    },
+    {
+      "id": "CLS_006",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "3-4 times/week"
+      }
+    },
+    {
+      "id": "CLS_007",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "3-4 times/week"
+      }
+    },
+    {
+      "id": "CLS_008",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "3-4 times/week"
+      }
+    },
+    {
+      "id": "CLS_009",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "5-6 times/week"
+      }
+    },
+    {
+      "id": "CLS_010",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "5-6 times/week"
+      }
+    },
+    {
+      "id": "CLS_011",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "1-2 times/week"
+      }
+    },
+    {
+      "id": "CLS_012",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "1-2 times/week"
+      }
+    },
+    {
+      "id": "CLS_013",
+      "situation_label": "Yes",
+      "field_values": {
+        "activities": "1"
+      }
+    },
+    {
+      "id": "CLS_015",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "1-2 times/week"
+      }
+    },
+    {
+      "id": "CLS_016",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "Daily"
+      }
+    },
+    {
+      "id": "CLS_017",
+      "situation_label": "Available with sessions",
+      "field_values": {
+        "sessions_per_week": "Daily"
+      }
+    },
+    {
+      "id": "CLS_018",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "CLS_019",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_001",
+      "situation_label": "Count known",
+      "field_values": {
+        "treadmills_count": "3"
+      }
+    },
+    {
+      "id": "EQP_002",
+      "situation_label": "Quantity",
+      "field_values": {
+        "elliptical_cross_trainers_count": "1"
+      }
+    },
+    {
+      "id": "EQP_003",
+      "situation_label": "Quantity",
+      "field_values": {
+        "exercise_bikes_count": "3"
+      }
+    },
+    {
+      "id": "EQP_004",
+      "situation_label": "Quantity",
+      "field_values": {
+        "rowing_machines_count": "1"
+      }
+    },
+    {
+      "id": "EQP_005",
+      "situation_label": "Quantity",
+      "field_values": {
+        "stair_climber_stepper_count": "1"
+      }
+    },
+    {
+      "id": "EQP_006",
+      "situation_label": "Quantity",
+      "field_values": {
+        "dumbbells_count": "20"
+      }
+    },
+    {
+      "id": "EQP_008",
+      "situation_label": "Quantity",
+      "field_values": {
+        "squat_racks_count": "1"
+      }
+    },
+    {
+      "id": "EQP_009",
+      "situation_label": "Quantity",
+      "field_values": {
+        "smith_machine_count": "1"
+      }
+    },
+    {
+      "id": "EQP_010",
+      "situation_label": "Quantity",
+      "field_values": {
+        "cable_machines_count": "1"
+      }
+    },
+    {
+      "id": "EQP_011",
+      "situation_label": "Quantity",
+      "field_values": {
+        "leg_press_count": "1"
+      }
+    },
+    {
+      "id": "EQP_012",
+      "situation_label": "Quantity",
+      "field_values": {
+        "deadlift_platform_count": "1"
+      }
+    },
+    {
+      "id": "EQP_013",
+      "situation_label": "Quantity",
+      "field_values": {
+        "kettlebells_count": "10"
+      }
+    },
+    {
+      "id": "EQP_014",
+      "situation_label": "Quantity",
+      "field_values": {
+        "battle_ropes_count": "1"
+      }
+    },
+    {
+      "id": "EQP_015",
+      "situation_label": "Quantity",
+      "field_values": {
+        "punching_bags_count": "4"
+      }
+    },
+    {
+      "id": "EQP_016",
+      "situation_label": "Quantity",
+      "field_values": {
+        "boxing_gloves_count": "1"
+      }
+    },
+    {
+      "id": "EQP_017",
+      "situation_label": "Quantity",
+      "field_values": {
+        "mma_mats_count": "10"
+      }
+    },
+    {
+      "id": "EQP_019",
+      "situation_label": "Quantity",
+      "field_values": {
+        "barbells_count": "10"
+      }
+    },
+    {
+      "id": "EQP_020",
+      "situation_label": "Quantity",
+      "field_values": {
+        "weight_plates_count": "20"
+      }
+    },
+    {
+      "id": "EQP_021",
+      "situation_label": "Quantity",
+      "field_values": {
+        "bench_press_count": "1"
+      }
+    },
+    {
+      "id": "EQP_022",
+      "situation_label": "Quantity",
+      "field_values": {
+        "lat_pulldown_count": "2"
+      }
+    },
+    {
+      "id": "EQP_023",
+      "situation_label": "Quantity",
+      "field_values": {
+        "chest_press_count": "1"
+      }
+    },
+    {
+      "id": "EQP_024",
+      "situation_label": "Quantity",
+      "field_values": {
+        "shoulder_press_count": "1"
+      }
+    },
+    {
+      "id": "EQP_025",
+      "situation_label": "Quantity",
+      "field_values": {
+        "leg_curl_extension_count": "1"
+      }
+    },
+    {
+      "id": "EQP_026",
+      "situation_label": "Quantity",
+      "field_values": {
+        "pec_deck_count": "1"
+      }
+    },
+    {
+      "id": "EQP_027",
+      "situation_label": "Quantity",
+      "field_values": {
+        "functional_trainer_count": "1"
+      }
+    },
+    {
+      "id": "EQP_028",
+      "situation_label": "Quantity",
+      "field_values": {
+        "resistance_bands_count": "10"
+      }
+    },
+    {
+      "id": "EQP_029",
+      "situation_label": "Quantity",
+      "field_values": {
+        "medicine_balls_count": "5"
+      }
+    },
+    {
+      "id": "EQP_030",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_031",
+      "situation_label": "Quantity",
+      "field_values": {
+        "pullup_dip_count": "1"
+      }
+    },
+    {
+      "id": "EQP_032",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_033",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_034",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_035",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_036",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "EQP_037",
+      "situation_label": "Quantity",
+      "field_values": {
+        "ab_machine_count": "1"
+      }
+    },
+    {
+      "id": "EQP_038",
+      "situation_label": "Quantity",
+      "field_values": {
+        "preacher_curl_count": "1"
+      }
+    },
+    {
+      "id": "SAFE_002",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_003",
+      "situation_label": "Required",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_004",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_006",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_007",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_008",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_009",
+      "situation_label": "Qualified service",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_010",
+      "situation_label": "Qualified service",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_012",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_013",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_014",
+      "situation_label": "Available",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_015",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "SAFE_016",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "POL_001",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "POL_002",
+      "situation_label": "Towel required + gym rental",
+      "field_values": {
+        "towel_fee": "1"
+      }
+    },
+    {
+      "id": "POL_004",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "POL_005",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "POL_006",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "POL_007",
+      "situation_label": "No",
+      "field_values": {}
+    },
+    {
+      "id": "POL_008",
+      "situation_label": "Yes",
+      "field_values": {}
+    },
+    {
+      "id": "MEM_004",
+      "situation_label": "Yes fixed",
+      "field_values": {
+        "student_price": "1499"
+      }
+    },
+    {
+      "id": "MEM_005",
+      "situation_label": "Yes",
+      "field_values": {
+        "price": "3499"
+      }
+    },
+    {
+      "id": "TIME_005",
+      "situation_label": "Usually open",
+      "field_values": {}
+    },
+    {
+      "id": "FAC_001",
+      "situation_label": "Yes, capacity known",
+      "field_values": {
+        "car_capacity": "4"
+      }
+    },
+    {
+      "id": "FAC_002",
+      "situation_label": "Capacity known",
+      "field_values": {
+        "two_wheeler_capacity": "20"
+      }
+    },
+    {
+      "id": "FAC_005",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "4"
+      }
+    },
+    {
+      "id": "FAC_006",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "1"
+      }
+    },
+    {
+      "id": "FAC_007",
+      "situation_label": "Not available",
+      "field_values": {}
+    },
+    {
+      "id": "FAC_008",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "2"
+      }
+    },
+    {
+      "id": "FAC_009",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "2"
+      }
+    },
+    {
+      "id": "FAC_010",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "1"
+      }
+    },
+    {
+      "id": "FAC_011",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "0"
+      }
+    },
+    {
+      "id": "FAC_012",
+      "situation_label": "Available + details",
+      "field_values": {
+        "facility_details": "1"
+      }
+    },
+    {
+      "id": "FAC_013",
+      "situation_label": "Provided for selected classes",
+      "field_values": {
+        "included_classes": "15"
+      }
+    },
+    {
+      "id": "FAC_014",
+      "situation_label": "Available",
+      "field_values": {
+        "shoe_rack_location": "1"
+      }
+    },
+    {
+      "id": "FAC_016",
+      "situation_label": "Yes + coverage details",
+      "field_values": {
+        "cctv_coverage_details": "4"
+      }
+    },
+    {
+      "id": "FAC_017",
+      "situation_label": "Yes, available",
+      "field_values": {
+        "counselling_topics": "1"
+      }
+    },
+    {
+      "id": "FAC_019",
+      "situation_label": "Available with details",
+      "field_values": {
+        "details": "2"
+      }
+    },
+    {
+      "id": "FAC_020",
+      "situation_label": "Yes, available",
+      "field_values": {
+        "bmi_check_details": "1"
+      }
+    },
+    {
+      "id": "FAC_021",
+      "situation_label": "Yes, available",
+      "field_values": {
+        "weight_check_location": "4"
+      }
+    },
+    {
+      "id": "FAC_022",
+      "situation_label": "Available with details",
+      "field_values": {
+        "details": "1"
+      }
+    },
+    {
+      "id": "FAC_023",
+      "situation_label": "Available with details",
+      "field_values": {
+        "details": "1"
+      }
+    },
+    {
+      "id": "FAC_024",
+      "situation_label": "Available with details",
+      "field_values": {
+        "details": "1"
+      }
+    },
+    {
+      "id": "FAC_018",
+      "situation_label": "Yes, available",
+      "field_values": {}
+    },
+    {
+      "id": "TIME_009",
+      "situation_label": "Optional",
+      "field_values": {}
+    }
+  ],
+  "custom_qa": []
+}

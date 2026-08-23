@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Gym AI Assistant — Brand, Theme & Font Configurator</title>
+<link rel="icon" id="pageFavicon" type="image/png" href="/static/1000920458.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #16a34a;
+    --secondary: #0f172a;
+    --accent: #16a34a;
+    --accent-dark: #15803d;
+    --bg-soft: #f8fafc;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --card-bg: #ffffff;
+    --font-family: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-family), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg-soft);
+    color: #0f172a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* Header */
+  header.global-header {
+    background: var(--secondary);
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  .brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(255,255,255,0.2);
+  }
+  .logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .brand-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17.5px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .brand-sub {
+    font-size: 11px;
+    color: #94a3b8;
+  }
+
+  /* Desktop Nav Links */
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-link {
+    padding: 7px 13px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #cbd5e1;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-link:hover {
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+  }
+  .nav-link.active {
+    background: var(--primary);
+    color: #ffffff;
+  }
+
+  /* Mobile Hamburger Button */
+  .hamburger-btn {
+    display: none;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .hamburger-btn:hover { background: rgba(255,255,255,0.22); }
+  @media(max-width: 860px) {
+    .desktop-nav { display: none; }
+    .hamburger-btn { display: flex; }
+  }
+
+  /* Mobile Nav Drawer */
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .mobile-nav-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    background: #0f172a;
+    color: #fff;
+    z-index: 999;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.4);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-nav-drawer.open {
+    transform: translateX(0);
+  }
+  .drawer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .drawer-head h3 { font-size: 16px; font-weight: 700; }
+  .drawer-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .mobile-nav-drawer a {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s;
+  }
+  .mobile-nav-drawer a:hover, .mobile-nav-drawer a.active {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  /* Main Container */
+  .config-container {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 28px;
+    align-items: start;
+  }
+  @media(max-width: 1080px) {
+    .config-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .config-section {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .sec-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17.5px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sec-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+
+  /* Presets Grid */
+  .presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .preset-card {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    background: #fff;
+  }
+  .preset-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-color: #94a3b8;
+  }
+  .preset-card.active {
+    border-color: var(--primary);
+    background: #f0fdf4;
+  }
+  .preset-preview-bar {
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .preset-preview-bar span { flex: 1; height: 100%; }
+  .preset-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Custom Color Pickers */
+  .color-pickers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .color-picker-item {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .color-picker-item label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .color-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .color-input-wrap input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+  }
+  .color-input-wrap input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+  .color-input-wrap input[type="color"]::-webkit-color-swatch { border: 1px solid #cbd5e1; border-radius: 8px; }
+  .color-input-wrap input[type="text"] {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* Font Picker */
+  .fonts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .font-card {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    cursor: pointer;
+    background: #fff;
+    text-align: center;
+    transition: all 0.18s;
+  }
+  .font-card:hover {
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+  }
+  .font-card.active {
+    border-color: var(--primary);
+    background: #f0fdf4;
+  }
+  .font-card h4 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: #0f172a;
+  }
+  .font-card p {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Logo Customizer */
+  .logo-upload-wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .logo-current-preview {
+    width: 90px;
+    height: 90px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 2px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 36px;
+    flex-shrink: 0;
+  }
+  .logo-current-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .logo-actions {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 240px;
+  }
+  .file-drop-btn {
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+    width: fit-content;
+  }
+  .file-drop-btn:hover {
+    background: #e2e8f0;
+  }
+  .preset-logos-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .preset-logo-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .preset-logo-btn:hover {
+    border-color: var(--primary);
+    transform: scale(1.08);
+  }
+
+  /* Live Preview Sidebar */
+  .preview-sidebar {
+    position: sticky;
+    top: 86px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .preview-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  }
+  .preview-head {
+    background: #f8fafc;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .live-pill {
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* Mock Landing Page Preview */
+  .mock-landing {
+    padding: 20px;
+    background: var(--bg-soft);
+    text-align: center;
+  }
+  .mock-hero-badge {
+    background: var(--primary);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .mock-hero-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 6px;
+  }
+  .mock-hero-p {
+    font-size: 11.5px;
+    color: #64748b;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .mock-btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .mock-btn-pri {
+    background: var(--primary);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .mock-btn-sec {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Mock Chat Widget Preview */
+  .mock-chat {
+    background: #efeae2;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mock-chat-header {
+    background: var(--header-bg);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mock-chat-bubble {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    max-width: 85%;
+    line-height: 1.4;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .mock-chat-bubble.bot {
+    align-self: flex-start;
+    background: var(--bot-msg-bg);
+    color: var(--bot-msg-text);
+  }
+  .mock-chat-bubble.user {
+    align-self: flex-end;
+    background: var(--user-msg-bg);
+    color: var(--user-msg-text);
+  }
+
+  /* Sticky Footer Action Bar */
+  .save-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    z-index: 40;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
+  .save-info {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .save-btns {
+    display: flex;
+    gap: 10px;
+  }
+  .btn-save {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+  .btn-reset {
+    background: #fff;
+    color: #475569;
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-reset:hover { background: #f1f5f9; }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    background: #0f172a;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 9999;
+    transform: translateY(-50px);
+    opacity: 0;
+    transition: all 0.25s ease;
+    border-left: 4px solid var(--primary);
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="global-header">
+  <div class="brand-wrap">
+    <div class="logo-box" id="brandLogo">🏋️</div>
+    <div>
+      <div class="brand-title" id="gymNameDisplay">Tarvos Fit</div>
+      <div class="brand-sub">Theme & Brand Configurator</div>
+    </div>
+  </div>
+
+  <nav class="desktop-nav">
+    <a href="/setup" class="nav-link">⚙️ Setup Wizard</a>
+    <a href="/site" class="nav-link">🌐 Live Website</a>
+    <a href="/chat" class="nav-link">💬 AI Chat</a>
+    <a href="/leads" class="nav-link">👥 Leads CRM</a>
+    <a href="/config" class="nav-link active">🎨 Theme & Config</a>
+  </nav>
+
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open Menu">☰</button>
+</header>
+
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <div class="drawer-head">
+    <h3>Navigation Menu</h3>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <a href="/setup">⚙️ Setup Wizard</a>
+  <a href="/site">🌐 Live Website</a>
+  <a href="/chat">💬 AI Chat</a>
+  <a href="/leads">👥 Leads CRM</a>
+  <a href="/config" class="active">🎨 Theme & Config</a>
+</div>
+
+<!-- Main Config Hub -->
+<div class="config-container">
+  
+  <!-- Left Column: Settings -->
+  <div class="config-main">
+    
+    <!-- Section 1: Presets -->
+    <div class="config-section">
+      <div class="sec-title"><span>🎨</span> Color Theme Presets</div>
+      <div class="sec-desc">Choose from curated color palettes or customize individual colors below. These styles apply instantly across your website, chat, and CRM.</div>
+      
+      <div class="presets-grid" id="presetsGrid"></div>
+
+      <div style="border-top: 1px solid var(--border); margin: 18px 0; padding-top: 18px;">
+        <div class="sec-title" style="font-size: 15px;"><span>🖌️</span> Custom Color Controls</div>
+        <div class="color-pickers-grid">
+          
+          <div class="color-picker-item">
+            <label>Primary / Accent</label>
+            <div class="color-input-wrap">
+              <input type="color" id="colPrimary" value="#16a34a" />
+              <input type="text" id="hexPrimary" value="#16a34a" maxlength="7" />
+            </div>
+          </div>
+
+          <div class="color-picker-item">
+            <label>Dark Base / Nav</label>
+            <div class="color-input-wrap">
+              <input type="color" id="colSecondary" value="#0f172a" />
+              <input type="text" id="hexSecondary" value="#0f172a" maxlength="7" />
+            </div>
+          </div>
+
+          <div class="color-picker-item">
+            <label>Chatbot Header</label>
+            <div class="color-input-wrap">
+              <input type="color" id="colChatHeader" value="#075e54" />
+              <input type="text" id="hexChatHeader" value="#075e54" maxlength="7" />
+            </div>
+          </div>
+
+          <div class="color-picker-item">
+            <label>User Message Bubble</label>
+            <div class="color-input-wrap">
+              <input type="color" id="colUserMsg" value="#dcf8c6" />
+              <input type="text" id="hexUserMsg" value="#dcf8c6" maxlength="7" />
+            </div>
+          </div>
+
+          <div class="color-picker-item">
+            <label>Bot Message Bubble</label>
+            <div class="color-input-wrap">
+              <input type="color" id="colBotMsg" value="#ffffff" />
+              <input type="text" id="hexBotMsg" value="#ffffff" maxlength="7" />
+            </div>
+          </div>
+
+          <div class="color-picker-item">
+            <label>Background Soft</label>
+            <div class="color-input-wrap">
+              <input type="color" id="colBgSoft" value="#f8fafc" />
+              <input type="text" id="hexBgSoft" value="#f8fafc" maxlength="7" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Typography -->
+    <div class="config-section">
+      <div class="sec-title"><span>🔤</span> Google Fonts Typography</div>
+      <div class="sec-desc">Select modern typography to elevate your gym's brand identity.</div>
+      
+      <div class="fonts-grid" id="fontsGrid"></div>
+    </div>
+
+    <!-- Section 3: Logo & Identity -->
+    <div class="config-section">
+      <div class="sec-title"><span>🛡️</span> Gym Logo & Brand Identity</div>
+      <div class="sec-desc">Upload your official high-resolution gym logo or pick from built-in fitness marks.</div>
+
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;">Gym Brand Name</label>
+        <input type="text" id="gymNameInput" placeholder="e.g. Tarvos Fit" style="width:100%;max-width:400px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:600;" />
+      </div>
+
+      <div class="logo-upload-wrap">
+        <div class="logo-current-preview" id="logoPreviewBox">
+          <span id="logoPreviewFallback">🏋️</span>
+        </div>
+        
+        <div class="logo-actions">
+          <label class="file-drop-btn">
+            <span>📁 Upload Logo Image (PNG, JPG, SVG)</span>
+            <input type="file" id="logoFileInput" accept="image/*" style="display:none;" />
+          </label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="url" id="logoUrlInput" placeholder="Or enter hosted image URL..." style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;" />
+            <button class="btn-reset" id="applyUrlBtn" style="padding:8px 14px;font-size:12.5px;">Apply</button>
+            <button class="btn-reset" id="removeLogoBtn" style="padding:8px 14px;font-size:12.5px;color:#dc2626;border-color:#fecaca;">Remove</button>
+          </div>
+          <div>
+            <span style="font-size:11.5px;color:var(--muted);font-weight:600;">Or quick select an icon:</span>
+            <div class="preset-logos-row">
+              <button class="preset-logo-btn" data-icon="🏋️‍♂️">🏋️‍♂️</button>
+              <button class="preset-logo-btn" data-icon="⚡">⚡</button>
+              <button class="preset-logo-btn" data-icon="🏆">🏆</button>
+              <button class="preset-logo-btn" data-icon="🦁">🦁</button>
+              <button class="preset-logo-btn" data-icon="🛡️">🛡️</button>
+              <button class="preset-logo-btn" data-icon="💎">💎</button>
+              <button class="preset-logo-btn" data-icon="🦅">🦅</button>
+              <button class="preset-logo-btn" data-icon="🔥">🔥</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right Column: Real-Time Live Preview -->
+  <div class="preview-sidebar">
+    <div class="preview-box">
+      <div class="preview-head">
+        <span>Website Preview</span>
+        <span class="live-pill">Live</span>
+      </div>
+      <div class="mock-landing">
+        <div class="mock-hero-badge">🏆 #1 Fitness Center</div>
+        <div class="mock-hero-title" id="mockGymName">Tarvos Fit</div>
+        <div class="mock-hero-p">Transform your fitness with certified coaches and modern equipment.</div>
+        <div class="mock-btn-row">
+          <div class="mock-btn-pri">Claim Free Pass</div>
+          <div class="mock-btn-sec">Call Us</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-box">
+      <div class="preview-head">
+        <span>Chatbot Widget Preview</span>
+        <span class="live-pill">Live</span>
+      </div>
+      <div class="mock-chat">
+        <div class="mock-chat-header" id="mockChatHeader">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;" id="mockChatAvatar">🏋️</div>
+          <strong style="font-size:13px;" id="mockChatTitle">Tarvos Fit Assistant</strong>
+        </div>
+        <div class="mock-chat-bubble bot">
+          Welcome! How can I assist you with membership plans or facilities today?
+        </div>
+        <div class="mock-chat-bubble user">
+          What are your gym timings?
+        </div>
+        <div class="mock-chat-bubble bot">
+          We are open Monday to Saturday from 5:30 AM to 10:00 PM!
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Sticky Save Bar -->
+<div class="save-bar">
+  <div class="save-info">
+    <span>💡 Changes will be applied globally across <strong>/setup</strong>, <strong>/site</strong>, <strong>/chat</strong>, and <strong>/leads</strong>.</span>
+  </div>
+  <div class="save-btns">
+    <button class="btn-reset" id="resetDefaultsBtn">Reset Default</button>
+    <button class="btn-save" id="saveGlobalThemeBtn">✨ Save & Apply Globally</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toastMsg">✅ Theme & branding saved successfully!</div>
+
+<script src="/static/theme-sync.js"></script>
+<script>
+const API = GymTheme.getApiBase();
+const GYM_ID = GymTheme.getGymId();
+
+let currentTheme = { ...GymTheme.PRESETS.emerald };
+let currentFont = "Inter";
+let currentLogo = "";
+let currentGymName = "Tarvos Fit";
+
+// Render Preset Cards
+const presetsGrid = document.getElementById("presetsGrid");
+Object.keys(GymTheme.PRESETS).forEach(key => {
+  const p = GymTheme.PRESETS[key];
+  const card = document.createElement("div");
+  card.className = "preset-card" + (key === "emerald" ? " active" : "");
+  card.dataset.preset = key;
+  card.innerHTML = `
+    <div class="preset-preview-bar">
+      <span style="background:${p.primary}"></span>
+      <span style="background:${p.secondary}"></span>
+      <span style="background:${p.chatHeaderBg}"></span>
+    </div>
+    <div class="preset-name">${p.name}</div>
+  `;
+  card.addEventListener("click", () => selectPreset(key));
+  presetsGrid.appendChild(card);
+});
+
+// Render Font Cards
+const fontsGrid = document.getElementById("fontsGrid");
+GymTheme.FONTS.forEach(font => {
+  GymTheme.loadFont(font);
+  const card = document.createElement("div");
+  card.className = "font-card" + (font === "Inter" ? " active" : "");
+  card.dataset.font = font;
+  card.innerHTML = `
+    <h4 style="font-family:'${font}', sans-serif;">${font}</h4>
+    <p>Ag 123 Fitness</p>
+  `;
+  card.addEventListener("click", () => selectFont(font));
+  fontsGrid.appendChild(card);
+});
+
+function syncColorInputs(p, s, ch, um, bm, bg) {
+  document.getElementById("colPrimary").value = p;
+  document.getElementById("hexPrimary").value = p;
+  document.getElementById("colSecondary").value = s;
+  document.getElementById("hexSecondary").value = s;
+  document.getElementById("colChatHeader").value = ch;
+  document.getElementById("hexChatHeader").value = ch;
+  document.getElementById("colUserMsg").value = um;
+  document.getElementById("hexUserMsg").value = um;
+  document.getElementById("colBotMsg").value = bm;
+  document.getElementById("hexBotMsg").value = bm;
+  document.getElementById("colBgSoft").value = bg;
+  document.getElementById("hexBgSoft").value = bg;
+}
+
+function updateLivePreview() {
+  GymTheme.apply(currentTheme, currentFont, currentLogo, currentGymName);
+
+  // Update mock names
+  document.getElementById("mockGymName").textContent = currentGymName;
+  document.getElementById("mockChatTitle").textContent = currentGymName + " Assistant";
+
+  // Update mock avatar
+  const mockAvatar = document.getElementById("mockChatAvatar");
+  const logoPreviewBox = document.getElementById("logoPreviewBox");
+  if (currentLogo && (currentLogo.startsWith("data:") || currentLogo.startsWith("http"))) {
+    mockAvatar.innerHTML = `<img src="${currentLogo}" style="width:100%;height:100%;object-fit:contain;border-radius:50%;" />`;
+    logoPreviewBox.innerHTML = `<img src="${currentLogo}" style="width:100%;height:100%;object-fit:contain;" />`;
+  } else if (currentLogo) {
+    mockAvatar.textContent = currentLogo;
+    logoPreviewBox.innerHTML = `<span>${currentLogo}</span>`;
+  } else {
+    mockAvatar.textContent = "🏋️";
+    logoPreviewBox.innerHTML = `<span>🏋️</span>`;
+  }
+}
+
+function selectPreset(key) {
+  const p = GymTheme.PRESETS[key];
+  if (!p) return;
+  document.querySelectorAll(".preset-card").forEach(c => c.classList.toggle("active", c.dataset.preset === key));
+  currentTheme = {
+    primary_color: p.primary,
+    secondary_color: p.secondary,
+    accent_color: p.primary,
+    background_color: p.bgSoft,
+    chatbot_header_color: p.chatHeaderBg,
+    user_msg_color: p.userMsgBg,
+    user_msg_text: p.userMsgText,
+    bot_msg_color: p.botMsgBg,
+    bot_msg_text: p.botMsgText,
+    font_family: p.font,
+    preset_name: key
+  };
+  syncColorInputs(p.primary, p.secondary, p.chatHeaderBg, p.userMsgBg, p.botMsgBg, p.bgSoft);
+  if (p.font) selectFont(p.font, false);
+  updateLivePreview();
+}
+
+function selectFont(font, updatePreset = true) {
+  currentFont = font;
+  document.querySelectorAll(".font-card").forEach(c => c.classList.toggle("active", c.dataset.font === font));
+  currentTheme.font_family = font;
+  updateLivePreview();
+}
+
+// Bind custom color listeners
+function bindColorPair(colorId, hexId, key) {
+  const colEl = document.getElementById(colorId);
+  const hexEl = document.getElementById(hexId);
+
+  colEl.addEventListener("input", (e) => {
+    hexEl.value = e.target.value;
+    currentTheme[key] = e.target.value;
+    updateLivePreview();
+  });
+  hexEl.addEventListener("input", (e) => {
+    let val = e.target.value.trim();
+    if (!val.startsWith("#")) val = "#" + val;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+      colEl.value = val;
+      currentTheme[key] = val;
+      updateLivePreview();
+    }
+  });
+}
+
+bindColorPair("colPrimary", "hexPrimary", "primary_color");
+bindColorPair("colSecondary", "hexSecondary", "secondary_color");
+bindColorPair("colChatHeader", "hexChatHeader", "chatbot_header_color");
+bindColorPair("colUserMsg", "hexUserMsg", "user_msg_color");
+bindColorPair("colBotMsg", "hexBotMsg", "bot_msg_color");
+bindColorPair("colBgSoft", "hexBgSoft", "background_color");
+
+// Gym Name input
+document.getElementById("gymNameInput").addEventListener("input", (e) => {
+  currentGymName = e.target.value.trim() || "Tarvos Fit";
+  updateLivePreview();
+});
+
+// Logo File Upload (Base64)
+document.getElementById("logoFileInput").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    currentLogo = ev.target.result;
+    document.getElementById("logoUrlInput").value = "";
+    updateLivePreview();
+  };
+  reader.readAsDataURL(file);
+});
+
+// Preset Logo Buttons
+document.querySelectorAll(".preset-logo-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentLogo = btn.dataset.icon;
+    document.getElementById("logoUrlInput").value = "";
+    updateLivePreview();
+  });
+});
+
+// Logo URL apply
+document.getElementById("applyUrlBtn").addEventListener("click", () => {
+  const url = document.getElementById("logoUrlInput").value.trim();
+  if (url) {
+    currentLogo = url;
+    updateLivePreview();
+  }
+});
+
+// Remove Logo
+document.getElementById("removeLogoBtn").addEventListener("click", () => {
+  currentLogo = "";
+  document.getElementById("logoUrlInput").value = "";
+  document.getElementById("logoFileInput").value = "";
+  updateLivePreview();
+});
+
+// Reset Defaults
+document.getElementById("resetDefaultsBtn").addEventListener("click", () => {
+  selectPreset("emerald");
+  selectFont("Inter");
+  currentGymName = "Tarvos Fit";
+  document.getElementById("gymNameInput").value = "Tarvos Fit";
+  currentLogo = "";
+  updateLivePreview();
+});
+
+function showToast(msg) {
+  const toast = document.getElementById("toastMsg");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3500);
+}
+
+// Save Global Theme
+document.getElementById("saveGlobalThemeBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("saveGlobalThemeBtn");
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  const payload = {
+    theme: {
+      primary_color: currentTheme.primary_color || "#16a34a",
+      secondary_color: currentTheme.secondary_color || "#0f172a",
+      accent_color: currentTheme.primary_color || "#16a34a",
+      background_color: currentTheme.background_color || "#ffffff",
+      chatbot_header_color: currentTheme.chatbot_header_color || "#075e54",
+      user_msg_color: currentTheme.user_msg_color || "#dcf8c6",
+      bot_msg_color: currentTheme.bot_msg_color || "#ffffff",
+      font_family: currentFont,
+      preset_name: currentTheme.preset_name || "custom"
+    },
+    font_family: currentFont,
+    logo_url: currentLogo,
+    gym_name: currentGymName
+  };
+
+  // Local storage save for instant client side usage
+  localStorage.setItem("gym_theme_config", JSON.stringify(payload.theme));
+  localStorage.setItem("gym_font", currentFont);
+  localStorage.setItem("gym_logo", currentLogo);
+  localStorage.setItem("gym_name", currentGymName);
+
+  try {
+    const res = await fetch(`${API}/api/gym/${GYM_ID}/theme`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      showToast("🎉 Brand, Theme & Fonts applied globally across all pages!");
+    } else {
+      showToast("✅ Theme saved locally! Ready for preview.");
+    }
+  } catch (err) {
+    showToast("✅ Theme saved locally in your browser!");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "✨ Save & Apply Globally";
+  }
+});
+
+// Load Initial Data
+async function loadInitial() {
+  try {
+    const res = await fetch(`${API}/api/gym/${GYM_ID}/info`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.gym_name) {
+        currentGymName = data.gym_name;
+        document.getElementById("gymNameInput").value = currentGymName;
+      }
+      if (data.logo_url) {
+        currentLogo = data.logo_url;
+      }
+      if (data.theme) {
+        currentTheme = { ...currentTheme, ...data.theme };
+        syncColorInputs(
+          data.theme.primary_color || "#16a34a",
+          data.theme.secondary_color || "#0f172a",
+          data.theme.chatbot_header_color || "#075e54",
+          data.theme.user_msg_color || "#dcf8c6",
+          data.theme.bot_msg_color || "#ffffff",
+          data.theme.background_color || "#f8fafc"
+        );
+        if (data.theme.font_family) {
+          selectFont(data.theme.font_family, false);
+        }
+        if (data.theme.preset_name && GymTheme.PRESETS[data.theme.preset_name]) {
+          document.querySelectorAll(".preset-card").forEach(c => c.classList.toggle("active", c.dataset.preset === data.theme.preset_name));
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("loadInitial fallback:", e);
+  }
+  updateLivePreview();
+}
+
+loadInitial();
+</script>
+
+</body>
+</html>

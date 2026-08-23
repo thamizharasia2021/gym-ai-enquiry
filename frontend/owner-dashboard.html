@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Gym Growth Assistant — Owner Dashboard</title>
+<link rel="icon" id="pageFavicon" type="image/png" href="/static/1000920458.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root{
+    --bg:#0f172a; --panel:#ffffff; --accent:#16a34a; --accent-dark:#15803d;
+    --muted:#64748b; --border:#e2e8f0; --bg-soft:#f8fafc;
+    --blue:#2563eb; --blue-soft:#eff6ff;
+    --purple:#7c3aed; --purple-soft:#f5f3ff;
+    --amber:#d97706; --amber-soft:#fffbeb;
+    --teal:#0891b2; --teal-soft:#ecfeff;
+    --red:#dc2626; --red-soft:#fef2f2;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg-soft);color:#0f172a;}
+  a{color:inherit;}
+
+  /* ---- shell ---- */
+  header{background:var(--bg);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+  header .brand{display:flex;align-items:center;gap:10px;}
+  header .brand .mark{width:34px;height:34px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  header .brand h1{font-size:15.5px;margin:0;font-weight:700;}
+  header .brand p{font-size:11.5px;margin:0;color:#94a3b8;}
+  header .right{display:flex;align-items:center;gap:12px;font-size:12.5px;color:#cbd5e1;}
+  .gym-select{background:#1e293b;color:#fff;border:1px solid #334155;padding:7px 10px;border-radius:8px;font-size:12.5px;}
+  .demo-badge{background:#422006;color:#fed7aa;border:1px solid #92400e;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+  .demo-badge.live{background:#052e16;color:#bbf7d0;border-color:#166534;}
+
+  .layout{display:flex;max-width:1480px;margin:0 auto;}
+  nav{width:210px;padding:18px 10px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--border);flex-shrink:0;background:#fff;}
+  nav button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:10px 12px;margin-bottom:3px;border:none;background:none;border-radius:8px;cursor:pointer;font-size:13.5px;color:#334155;font-weight:500;}
+  nav button:hover{background:#f1f5f9;}
+  nav button.active{background:#dcfce7;color:var(--accent-dark);font-weight:700;}
+  nav button .ic{font-size:15px;}
+  main{flex:1;padding:22px 26px 60px;min-width:0;}
+
+  h2.page-title{font-size:19px;margin:0 0 4px;}
+  p.page-sub{font-size:13px;color:var(--muted);margin:0 0 20px;}
+
+  /* ---- generic cards / grids ---- */
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
+  @media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr);}.grid-3{grid-template-columns:1fr;}.grid-2{grid-template-columns:1fr;}}
+
+  @media(max-width: 860px){
+    header{padding:12px 14px;}
+    .layout{flex-direction:column;}
+    nav{width:100%;height:auto;position:sticky;top:0;z-index:25;border-right:none;border-bottom:1px solid var(--border);display:flex;flex-wrap:nowrap;overflow-x:auto;padding:8px 10px;gap:6px;scrollbar-width:none;}
+    nav::-webkit-scrollbar{display:none;}
+    nav button{width:auto;white-space:nowrap;padding:7px 12px;border-radius:20px;background:#f1f5f9;flex-shrink:0;margin-bottom:0;}
+    nav button.active{background:var(--accent);color:#fff;}
+    main{padding:16px 12px 60px;}
+    .grid-4{grid-template-columns:1fr 1fr;gap:8px;}
+    .drawer{width:100vw;max-width:100vw;}
+    table{min-width:550px;}
+    .card{overflow-x:auto;padding:14px;}
+  }
+
+  .stat h4{margin:0 0 6px;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;font-weight:700;}
+  .stat .num{font-size:26px;font-weight:800;color:#0f172a;}
+  .stat .delta{font-size:11.5px;font-weight:600;margin-top:4px;}
+  .delta.up{color:var(--accent-dark);}
+  .delta.down{color:var(--red);}
+  .section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 12px;}
+  .section-head h3{font-size:15px;margin:0;}
+
+  .btn{background:var(--accent);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+  .btn:hover{background:var(--accent-dark);}
+  .btn.secondary{background:#fff;color:#0f172a;border:1px solid var(--border);}
+  .btn.secondary:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .btn.small{padding:6px 11px;font-size:12px;}
+  .btn:disabled{opacity:.55;cursor:not-allowed;}
+
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+  .badge.stage-New{background:#fef2f2;color:#dc2626;}
+  .badge.stage-Pending{background:var(--amber-soft);color:var(--amber);}
+  .badge.stage-Contacted{background:var(--blue-soft);color:var(--blue);}
+  .badge.stage-TrialBooked, .badge.stage-Trialbooked{background:var(--purple-soft);color:var(--purple);}
+  .badge.stage-Joined, .badge.stage-Paid, .badge.stage-Converted{background:#dcfce7;color:var(--accent-dark);}
+  .badge.stage-Completed{background:var(--teal-soft);color:var(--teal);}
+  .badge.stage-Lost, .badge.stage-Closed{background:var(--red-soft);color:var(--red);}
+
+  /* ---- pipeline strip ---- */
+  .pipeline{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+  .pipeline .stage{flex:1;min-width:120px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+  .pipeline .stage .n{font-size:22px;font-weight:800;}
+  .pipeline .stage .l{font-size:11.5px;color:var(--muted);font-weight:600;}
+  .pipeline .stage .bar{height:5px;border-radius:4px;margin-top:8px;background:#e2e8f0;overflow:hidden;}
+  .pipeline .stage .bar span{display:block;height:100%;background:var(--accent);}
+
+  /* ---- leads table ---- */
+  .toolbar-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+  .toolbar-row input, .toolbar-row select{padding:8px 11px;border-radius:8px;border:1px solid var(--border);font-size:13px;}
+  .toolbar-row input{flex:1;min-width:180px;}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  thead th{background:#f8fafc;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);}
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr{cursor:pointer;}
+  tbody tr:hover{background:#f8fafc;}
+  .lead-name{font-weight:700;}
+  .lead-sub{font-size:11.5px;color:var(--muted);}
+
+  /* ---- drawer ---- */
+  .overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);display:none;z-index:20;}
+  .overlay.open{display:block;}
+  .drawer{position:fixed;top:0;right:0;width:400px;max-width:92vw;height:100vh;background:#fff;box-shadow:-12px 0 32px rgba(0,0,0,.18);z-index:21;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto;}
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;}
+  .drawer-head h3{margin:0 0 3px;font-size:16.5px;}
+  .drawer-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);}
+  .drawer-body{padding:18px 20px;display:flex;flex-direction:column;gap:16px;}
+  .kv{display:grid;grid-template-columns:1fr;gap:9px;}
+  .kv .row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--border);}
+  .kv .row span:first-child{color:var(--muted);}
+  .kv .row span:last-child{font-weight:600;text-align:right;}
+  .drawer-actions{display:flex;flex-wrap:wrap;gap:8px;}
+  .stage-select{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);font-size:13px;}
+
+  /* ---- payments ---- */
+  .pay-box{border:1px dashed var(--border);border-radius:12px;padding:18px;text-align:center;}
+  .qr{width:150px;height:150px;margin:0 auto 12px;border-radius:10px;background:
+      repeating-linear-gradient(0deg,#0f172a 0 6px,#fff 6px 12px),
+      repeating-linear-gradient(90deg,#0f172a 0 6px,transparent 6px 12px);
+      background-blend-mode:multiply; border:8px solid #fff; outline:1px solid var(--border);}
+  .pay-link{font-size:12px;background:#f1f5f9;border-radius:8px;padding:8px 10px;word-break:break-all;color:#334155;margin-bottom:10px;}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:20px;}
+  .status-pill.pending{background:#fffbeb;color:var(--amber);}
+  .status-pill.paid{background:#dcfce7;color:var(--accent-dark);}
+  .status-pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+  .status-pill.pending .dot{animation:pulse 1.1s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  /* ---- messaging ---- */
+  .tmpl-list{display:flex;flex-direction:column;gap:8px;}
+  .tmpl{border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:13px;}
+  .tmpl:hover{border-color:var(--accent);}
+  .tmpl.active{border-color:var(--accent);background:#f0fdf4;}
+  .tmpl .tname{font-weight:700;margin-bottom:3px;}
+  .tmpl .tprev{color:var(--muted);font-size:11.5px;}
+  textarea{width:100%;min-height:100px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-family:inherit;resize:vertical;}
+  .channel-toggle{display:flex;gap:8px;margin:10px 0;}
+  .channel-toggle label{display:flex;align-items:center;gap:6px;font-size:12.5px;border:1px solid var(--border);padding:6px 12px;border-radius:20px;cursor:pointer;}
+  .log-item{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+  .log-item:last-child{border-bottom:none;}
+  .chan-icon{display:inline-block;width:20px;text-align:center;}
+  .log-status{font-weight:700;}
+  .log-status.sent{color:var(--blue);}
+  .log-status.delivered{color:var(--accent-dark);}
+
+  /* ---- instagram ---- */
+  .ig-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .ig-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);flex-shrink:0;}
+  .ig-stats{display:flex;gap:20px;font-size:13px;margin-top:4px;}
+  .ig-stats b{display:block;font-size:15px;}
+  .feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .feed-tile{aspect-ratio:1;border-radius:10px;position:relative;overflow:hidden;color:#fff;font-size:11px;padding:8px;display:flex;align-items:flex-end;font-weight:600;}
+  .feed-tile span{background:rgba(0,0,0,.35);padding:3px 6px;border-radius:6px;}
+  .switch{position:relative;display:inline-block;width:38px;height:21px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:20px;transition:.2s;}
+  .slider:before{content:"";position:absolute;height:15px;width:15px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+  input:checked + .slider{background:var(--accent);}
+  input:checked + .slider:before{transform:translateX(17px);}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--border);margin-top:10px;}
+  .toggle-row .t{font-size:13px;font-weight:600;}
+  .toggle-row .d{font-size:11.5px;color:var(--muted);}
+
+  /* ---- reviews ---- */
+  .rating-summary{display:flex;gap:22px;align-items:center;}
+  .rating-summary .big{font-size:42px;font-weight:800;}
+  .stars{color:#f59e0b;font-size:15px;}
+  .bars{flex:1;display:flex;flex-direction:column;gap:5px;}
+  .bar-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);}
+  .bar-row .track{flex:1;height:7px;background:#f1f5f9;border-radius:4px;overflow:hidden;}
+  .bar-row .track span{display:block;height:100%;background:#f59e0b;}
+  .review{border-bottom:1px solid var(--border);padding:14px 0;}
+  .review:last-child{border-bottom:none;}
+  .review-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .review-name{font-weight:700;font-size:13px;}
+  .sentiment{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:10px;}
+  .sentiment.Positive{background:#dcfce7;color:var(--accent-dark);}
+  .sentiment.Neutral{background:#f1f5f9;color:#475569;}
+  .sentiment.Negative{background:var(--red-soft);color:var(--red);}
+  .review-text{font-size:12.5px;color:#334155;}
+  .tag-cloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .tag-cloud span{font-size:11.5px;padding:5px 11px;border-radius:20px;background:#f1f5f9;color:#334155;}
+  .tag-cloud span.neg{background:var(--red-soft);color:var(--red);}
+  .req-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--border);font-size:13px;}
+  .req-row:last-child{border-bottom:none;}
+
+  .empty-note{font-size:11.5px;color:var(--muted);background:#f8fafc;border:1px dashed var(--border);border-radius:8px;padding:9px 12px;margin-top:10px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">🏋️</div>
+    <div><h1>Gym Growth Assistant</h1><p>Owner dashboard</p></div>
+  </div>
+  <div class="right">
+    <select class="gym-select" id="gymSelect"><option id="gymSelectOption">Downtown Fitness — Chennai</option></select>
+    <span id="todayLabel"></span>
+    <span class="demo-badge" id="dataBadge">Demo preview — sample data</span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer"></div>
+
+<script>
+/* ============================ LIVE BACKEND ============================ */
+// Falls back to the sample data below whenever the backend isn't reachable,
+// so the dashboard still works as a standalone demo — same pattern as
+// index.html / chat.html.
+const API = window.GYM_AI_API_BASE || (
+  window.location.origin && !window.location.origin.includes("null") && !window.location.origin.includes("file:")
+    ? window.location.origin
+    : "http://localhost:8000"
+);
+const GYM_ID = new URLSearchParams(location.search).get("gym") || window.GYM_AI_GYM_ID || "downtown-fitness";
+let usingLiveData = false;
+let liveStats = null;
+
+/* ============================ LIVE BACKEND ============================ */
+function parseInterest(text){
+  const out = {};
+  (text || "").split(";").forEach(part => {
+    const idx = part.indexOf(":");
+    if(idx < 0) return;
+    const k = part.slice(0, idx).trim().toLowerCase();
+    const v = part.slice(idx + 1).trim();
+    if(!v) return;
+    if(k.includes("goal")) out.goal = v;
+    else if(k.includes("pt")) out.pt = v;
+    else if(k.includes("duration")) out.duration = v;
+  });
+  return out;
+}
+
+function mapBackendLead(rec, idx){
+  const parsed = parseInterest(rec.interest);
+  const when = rec.ts ? new Date(rec.ts * 1000) : null;
+  return {
+    id: "live-" + idx,
+    name: rec.name || "Unknown",
+    phone: rec.phone || "—",
+    locality: "—",
+    source: (function(ch){
+      if(ch === "whatsapp") return "WhatsApp Bot";
+      if(ch === "form") return "Website Form";
+      if(ch === "trial") return "Trial Booking";
+      return "Website Chat";
+    })(rec.channel),
+    goal: parsed.goal || "—",
+    preferredTime: rec.preferred_time || "—",
+    joinDate: "—",
+    plan: parsed.duration || "—",
+    pt: parsed.pt || "—",
+    language: "—",
+    trainerPref: "—",
+    trial: "—",
+    attendance: "—",
+    stage: rec.status === "Converted" ? "Joined" : (rec.status || "New"),
+    value: 0,
+    consent: "Given",
+    lastInteraction: rec.interest || "Enquired via chat",
+    nextAction: rec.status === "Joined" ? "Onboarding active" : (rec.status === "Pending" ? "Follow-up required" : "Contact lead"),
+    _when: when ? when.toLocaleDateString("en-IN", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }) : "—",
+  };
+}
+
+let liveIdentity = null;
+
+async function loadRealData(){
+  try{
+    const [leadsRes, statsRes, infoRes] = await Promise.all([
+      fetch(`${API}/api/gym/${GYM_ID}/leads`),
+      fetch(`${API}/api/gym/${GYM_ID}/stats`),
+      fetch(`${API}/api/gym/${GYM_ID}/info`),
+    ]);
+    if(leadsRes.ok){
+      const raw = await leadsRes.json();
+      if(raw && raw.length){
+        leads = raw.map(mapBackendLead);
+        usingLiveData = true;
+      }
+    }
+    if(statsRes.ok){
+      liveStats = await statsRes.json();
+      usingLiveData = true;
+    }
+    if(infoRes.ok){
+      liveIdentity = await infoRes.json();
+      usingLiveData = true;
+      const opt = document.getElementById("gymSelectOption");
+      if(opt && liveIdentity.gym_name){
+        opt.textContent = liveIdentity.gym_name + (liveIdentity.city ? " — " + liveIdentity.city : "");
+      }
+    }
+  }catch(e){
+    // backend not reachable at API — dashboard stays in demo mode with sample data
+  }
+  const badge = document.getElementById("dataBadge");
+  if(usingLiveData && badge){
+    badge.textContent = "Live data — " + GYM_ID;
+    badge.classList.add("live");
+  }
+  renderAll();
+}
+
+/* ============================= DATA (sample) ============================= */
+const STAGES = ["New","Contacted","Trial Booked","Attended","Payment Sent","Paid","Lost"];
+const stageClass = s => "stage-" + s.replace(/\s+/g,"");
+
+let leads = [
+  {id:1,name:"Arjun Menon",phone:"+91 98470 11223",locality:"Aluva",source:"Instagram",goal:"Weight loss",preferredTime:"Early morning",joinDate:"18 Aug",plan:"Quarterly",pt:"Interested",language:"Malayalam",trainerPref:"No preference",trial:"12 Aug, 7:00 AM",attendance:"—",stage:"New",value:0,consent:"Given",lastInteraction:"Enquired via IG DM",nextAction:"Call to qualify"},
+  {id:2,name:"Divya Suresh",phone:"+91 96330 55214",locality:"Angamaly",source:"Google",goal:"General fitness",preferredTime:"Evening",joinDate:"15 Aug",plan:"Monthly",pt:"Not interested",language:"English",trainerPref:"Female trainer",trial:"11 Aug, 6:30 PM",attendance:"—",stage:"Contacted",value:0,consent:"Given",lastInteraction:"WhatsApp: confirmed trial slot",nextAction:"Send trial reminder"},
+  {id:3,name:"Rahul Nair",phone:"+91 90720 88451",locality:"Kalamassery",source:"Referral",goal:"Muscle gain",preferredTime:"Evening",joinDate:"10 Aug",plan:"Annual",pt:"Interested",language:"Malayalam",trainerPref:"No preference",trial:"9 Aug, 6:00 PM",attendance:"Attended",stage:"Trial Booked",value:0,consent:"Given",lastInteraction:"Trial booked, trainer assigned",nextAction:"Follow up after trial"},
+  {id:4,name:"Sneha Pillai",phone:"+91 88484 22190",locality:"Angamaly",source:"Website",goal:"Weight loss",preferredTime:"Morning",joinDate:"8 Aug",plan:"Quarterly",pt:"Interested",language:"English",trainerPref:"Female trainer",trial:"8 Aug, 8:00 AM",attendance:"Attended",stage:"Attended",value:0,consent:"Given",lastInteraction:"Completed trial class",nextAction:"Send plan + payment link"},
+  {id:5,name:"Vishnu Prasad",phone:"+91 94001 34567",locality:"Aluva",source:"Facebook",goal:"General fitness",preferredTime:"Evening",joinDate:"6 Aug",plan:"Monthly",pt:"Not interested",language:"Malayalam",trainerPref:"No preference",trial:"6 Aug, 7:00 PM",attendance:"Attended",stage:"Payment Sent",value:1499,consent:"Given",lastInteraction:"Payment link sent on WhatsApp",nextAction:"Confirm payment"},
+  {id:6,name:"Meera Krishnan",phone:"+91 97460 90233",locality:"Kalamassery",source:"Google",goal:"Rehabilitation",preferredTime:"Morning",joinDate:"2 Aug",plan:"Quarterly",pt:"Interested",language:"English",trainerPref:"Female trainer",trial:"2 Aug, 8:30 AM",attendance:"Attended",stage:"Paid",value:3999,consent:"Given",lastInteraction:"Payment received, membership active",nextAction:"Add to onboarding batch"},
+  {id:7,name:"Anoop Varghese",phone:"+91 99610 77812",locality:"Angamaly",source:"Instagram",goal:"Muscle gain",preferredTime:"Evening",joinDate:"29 Jul",plan:"Annual",pt:"Interested",language:"Malayalam",trainerPref:"No preference",trial:"29 Jul, 6:00 PM",attendance:"Attended",stage:"Paid",value:12999,consent:"Given",lastInteraction:"Renewed for a year",nextAction:"Request Google review"},
+  {id:8,name:"Fathima Rasheed",phone:"+91 91234 56780",locality:"Aluva",source:"Referral",goal:"Weight loss",preferredTime:"Morning",joinDate:"—",plan:"Monthly",pt:"Not interested",language:"Malayalam",trainerPref:"Female trainer",trial:"20 Jul, 7:30 AM",attendance:"No-show",stage:"Lost",value:0,consent:"Withdrawn",lastInteraction:"Missed trial, unresponsive",nextAction:"Win-back message"},
+  {id:9,name:"Karthik Iyer",phone:"+91 90480 22341",locality:"Kalamassery",source:"Website",goal:"General fitness",preferredTime:"Evening",joinDate:"—",plan:"Monthly",pt:"Interested",language:"English",trainerPref:"No preference",trial:"—",attendance:"—",stage:"New",value:0,consent:"Given",lastInteraction:"Submitted enquiry form",nextAction:"Call to qualify"},
+  {id:10,name:"Lakshmi Menon",phone:"+91 99465 33210",locality:"Angamaly",source:"Google",goal:"Weight loss",preferredTime:"Morning",joinDate:"5 Aug",plan:"Quarterly",pt:"Interested",language:"Malayalam",trainerPref:"Female trainer",trial:"5 Aug, 8:00 AM",attendance:"Attended",stage:"Paid",value:3999,consent:"Given",lastInteraction:"Payment received",nextAction:"Request Google review"},
+];
+
+let transactions = [
+  {lead:"Meera Krishnan",plan:"Quarterly",amount:3999,method:"UPI",status:"Paid",date:"2 Aug"},
+  {lead:"Anoop Varghese",plan:"Annual",amount:12999,method:"UPI",status:"Paid",date:"29 Jul"},
+  {lead:"Lakshmi Menon",plan:"Quarterly",amount:3999,method:"UPI",status:"Paid",date:"5 Aug"},
+];
+
+let messageLog = [
+  {lead:"Divya Suresh",channel:"WhatsApp",template:"Trial confirmation",status:"delivered",time:"Yesterday, 5:40 PM"},
+  {lead:"Sneha Pillai",channel:"WhatsApp",template:"Trial reminder",status:"delivered",time:"Yesterday, 8:10 AM"},
+  {lead:"Vishnu Prasad",channel:"WhatsApp",template:"Payment link",status:"sent",time:"Today, 9:05 AM"},
+  {lead:"Fathima Rasheed",channel:"SMS",template:"Win-back",status:"delivered",time:"3 days ago"},
+];
+
+const templates = [
+  {id:"trial_conf",name:"Trial confirmation",channel:"WhatsApp",body:"Hi {name}! Your free trial at {gym} is confirmed for {trial}. Wear comfortable shoes and we'll take care of the rest. See you soon!"},
+  {id:"trial_rem",name:"Trial reminder",channel:"WhatsApp",body:"Hi {name}, just a reminder — your trial session at {gym} is tomorrow at {trial}. Reply here if you'd like to reschedule."},
+  {id:"pay_link",name:"Payment link",channel:"WhatsApp",body:"Hi {name}, great meeting you today! Here's your {plan} membership link for {gym}: {link}. Let us know if you have any questions."},
+  {id:"missed_trial",name:"Missed trial follow-up",channel:"SMS",body:"Hi {name}, we missed you at {gym} today. No worries — reply here anytime to pick a new trial slot."},
+  {id:"renewal",name:"Renewal reminder",channel:"WhatsApp",body:"Hi {name}, your {gym} membership renews in a few days. Renew now to keep your streak going and lock in your current rate."},
+  {id:"winback",name:"Win-back",channel:"SMS",body:"Hi {name}, we'd love to have you back at {gym}. Come in this week for a free re-trial session, no strings attached."},
+  {id:"review_req",name:"Review request",channel:"WhatsApp",body:"Hi {name}, thanks for being part of {gym}! If you've enjoyed your sessions, a quick Google review would mean a lot: {reviewLink}"},
+];
+
+const reviews = [
+  {name:"Anoop V.",stars:5,sentiment:"Positive",text:"Great energy in the mornings and the trainers actually remember your goals. Been a member for 6 months now.",date:"2 days ago"},
+  {name:"Priya S.",stars:4,sentiment:"Positive",text:"Clean equipment and flexible timings. Only wish weekend slots opened a bit earlier.",date:"5 days ago"},
+  {name:"Manoj K.",stars:2,sentiment:"Negative",text:"Good trainers but parking near the entrance is a real problem during peak hours.",date:"1 week ago"},
+  {name:"Lakshmi M.",stars:5,sentiment:"Positive",text:"Switched from a bigger chain and honestly the personal attention here is worth it.",date:"1 week ago"},
+  {name:"Sarath R.",stars:3,sentiment:"Neutral",text:"Decent gym overall. AC in the free-weights area could be stronger in summer.",date:"2 weeks ago"},
+];
+
+/* ============================== STATE ============================== */
+let activeTab = "overview";
+let leadFilter = { stage:"", q:"" };
+let selectedLeadId = null;
+let selectedTemplateId = templates[0].id;
+let composeLeadId = leads.find(l=>l.stage==="Payment Sent").id;
+
+/* ============================== HELPERS ============================== */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function fmtRs(n){ return "₹" + Number(n).toLocaleString("en-IN"); }
+function leadById(id){ return leads.find(l=>l.id===id); }
+function fillTemplate(body, lead){
+  return body
+    .replace(/{name}/g, lead ? lead.name.split(" ")[0] : "there")
+    .replace(/{gym}/g, "Downtown Fitness")
+    .replace(/{trial}/g, lead ? lead.trial : "your scheduled time")
+    .replace(/{plan}/g, lead ? lead.plan : "your")
+    .replace(/{link}/g, "pay.gymassist.in/dtf/" + (lead ? lead.id : "x") + "8k2")
+    .replace(/{reviewLink}/g, "g.page/r/downtown-fitness/review");
+}
+
+document.getElementById("todayLabel").textContent = new Date().toLocaleDateString("en-IN",{ day:"numeric", month:"short", year:"numeric" });
+
+/* ============================== NAV ============================== */
+const NAV_ITEMS = [
+  {id:"overview", label:"Overview", icon:"📊"},
+  {id:"insights", label:"Chat Insights", icon:"📈"},
+  {id:"leads", label:"Leads", icon:"🧾"},
+  {id:"payments", label:"Payments", icon:"💳"},
+  {id:"messaging", label:"Messaging", icon:"💬"},
+  {id:"instagram", label:"Instagram", icon:"📷"},
+  {id:"reviews", label:"Google Reviews", icon:"⭐"},
+  {id:"admin", label:"Admin", icon:"⚙️"},
+];
+
+function renderNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = NAV_ITEMS.map(item => `
+    <button data-tab="${item.id}" class="${activeTab===item.id?"active":""}">
+      <span class="ic">${item.icon}</span>${item.label}
+    </button>`).join("");
+  nav.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => { activeTab = btn.dataset.tab; renderAll(); });
+  });
+}
+
+/* ============================== CHAT INSIGHTS ============================== */
+const DEMO_STATS = {
+  total_conversations: 86,
+  total_messages: 412,
+  messages_today: 18,
+  total_leads: 10,
+  leads_today: 2,
+  conversion_rate_pct: 12.8,
+  top_categories: [
+    {category:"Membership & Offers", count:64}, {category:"PT & Trainers", count:41},
+    {category:"Timings & Crowd", count:37}, {category:"Trial & Joining", count:29},
+    {category:"Parking & Facilities", count:22}, {category:"Classes & Programs", count:15},
+  ],
+  messages_last_7_days: [
+    {date:"Mon", count:38}, {date:"Tue", count:52}, {date:"Wed", count:44}, {date:"Thu", count:61},
+    {date:"Fri", count:58}, {date:"Sat", count:70}, {date:"Sun", count:49},
+  ],
+};
+function formatDayLabel(d){
+  if(/^\d{4}-\d{2}-\d{2}$/.test(d)) return new Date(d + "T00:00:00").toLocaleDateString("en-IN", { weekday:"short" });
+  return d;
+}
+
+function renderInsights(){
+  const s = liveStats || DEMO_STATS;
+  const maxDay = Math.max(...s.messages_last_7_days.map(d=>d.count), 1);
+  const maxCat = Math.max(...(s.top_categories.map(c=>c.count)), 1);
+
+  return `
+    <h2 class="page-title">Chat Insights</h2>
+    <p class="page-sub">${usingLiveData ? "Live numbers from your chat widget and WhatsApp bot." : "Sample numbers shown below — connect the backend at " + API + " to see your real chat activity."}</p>
+
+    <div class="grid-4">
+      <div class="card stat"><h4>Conversations</h4><div class="num">${s.total_conversations}</div></div>
+      <div class="card stat"><h4>Messages</h4><div class="num">${s.total_messages}</div></div>
+      <div class="card stat"><h4>Messages today</h4><div class="num">${s.messages_today}</div></div>
+      <div class="card stat"><h4>Chat → lead conversion</h4><div class="num">${s.conversion_rate_pct}%</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:22px;">
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">Messages — last 7 days</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 6px;">Across the web chat widget and WhatsApp.</p>
+        <div class="pipeline" style="margin-top:14px;">
+          ${s.messages_last_7_days.map(d=>`
+            <div class="stage">
+              <div class="n">${d.count}</div>
+              <div class="l">${formatDayLabel(d.date)}</div>
+              <div class="bar"><span style="width:${(d.count/maxDay*100).toFixed(0)}%"></span></div>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">What people ask about most</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 6px;">Category of the best-matched answer for each message.</p>
+        <div class="bars" style="margin-top:14px;">
+          ${s.top_categories.map(c=>`
+            <div class="bar-row"><span style="min-width:160px;">${escapeHtml(c.category)}</span><div class="track"><span style="width:${(c.count/maxCat*100).toFixed(0)}%"></span></div><span>${c.count}</span></div>`).join("")}
+        </div>
+      </div>
+    </div>
+    <p class="empty-note" style="margin-top:14px;">"Chat → lead conversion" is captured leads divided by distinct chat sessions. The "Find my plan" guided flow in chat.html is logged the same way as any other question right now — its own usage rate isn't broken out separately yet.</p>
+  `;
+}
+
+/* ============================== OVERVIEW ============================== */
+function renderOverview(){
+  const stageCounts = STAGES.map(s => leads.filter(l=>l.stage===s).length);
+  const maxCount = Math.max(...stageCounts, 1);
+  const revenueMTD = leads.filter(l=>l.stage==="Paid").reduce((a,l)=>a+l.value,0);
+  const needsAttention = [
+    {text:"3 leads not contacted in over 2 days", action:"Contact now"},
+    {text:"Sneha Pillai's trial completed yesterday — plan not sent yet", action:"Send plan"},
+    {text:"2 memberships renew within 7 days", action:"Send renewal reminder"},
+  ];
+
+  return `
+    <h2 class="page-title">Overview</h2>
+    <p class="page-sub">Downtown Fitness — how enquiries are moving through your funnel this month.</p>
+
+    <div class="grid-4">
+      <div class="card stat"><h4>New leads today</h4><div class="num">4</div><div class="delta up">▲ 2 vs yesterday</div></div>
+      <div class="card stat"><h4>Trials this week</h4><div class="num">7</div><div class="delta up">▲ 3 vs last week</div></div>
+      <div class="card stat"><h4>Trial → paid rate</h4><div class="num">38%</div><div class="delta up">▲ 5pt this month</div></div>
+      <div class="card stat"><h4>Revenue this month</h4><div class="num">${fmtRs(revenueMTD)}</div><div class="delta up">▲ from 3 memberships</div></div>
+    </div>
+
+    <div class="section-head"><h3>Pipeline right now</h3></div>
+    <div class="pipeline">
+      ${STAGES.map((s,i)=>`
+        <div class="stage">
+          <div class="n">${stageCounts[i]}</div>
+          <div class="l">${s}</div>
+          <div class="bar"><span style="width:${(stageCounts[i]/maxCount*100).toFixed(0)}%"></span></div>
+        </div>`).join("")}
+    </div>
+
+    <div class="grid-2" style="margin-top:26px;">
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">Needs your attention</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 12px;">Follow-ups the assistant flagged automatically.</p>
+        ${needsAttention.map(n=>`
+          <div class="req-row">
+            <span>${n.text}</span>
+            <button class="btn secondary small">${n.action}</button>
+          </div>`).join("")}
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">This month at a glance</h3>
+        <div class="kv" style="margin-top:10px;">
+          <div class="row"><span>Google rating</span><span>4.6 ★ (128 reviews)</span></div>
+          <div class="row"><span>Instagram followers</span><span>2,340</span></div>
+          <div class="row"><span>Messages sent</span><span>${(liveStats || DEMO_STATS).total_messages}</span></div>
+          <div class="row"><span>Members at risk of lapsing</span><span>6</span></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================== LEADS ============================== */
+function renderLeads(){
+  const filtered = leads.filter(l => {
+    if(leadFilter.stage && l.stage !== leadFilter.stage) return false;
+    if(leadFilter.q && !(l.name.toLowerCase().includes(leadFilter.q.toLowerCase()) || l.locality.toLowerCase().includes(leadFilter.q.toLowerCase()))) return false;
+    return true;
+  });
+
+  return `
+    <h2 class="page-title">Leads</h2>
+    <p class="page-sub">Every enquiry, from first message to paid membership. Click a row for full details.</p>
+
+    <div class="toolbar-row">
+      <input id="leadSearch" placeholder="Search by name or locality..." value="${escapeAttrVal(leadFilter.q)}"/>
+      <select id="stageFilter">
+        <option value="">All stages</option>
+        ${STAGES.map(s=>`<option value="${s}" ${leadFilter.stage===s?"selected":""}>${s}</option>`).join("")}
+      </select>
+      <span style="font-size:12px;color:var(--muted);">${filtered.length} of ${leads.length} leads</span>
+      <button class="btn secondary small" id="refreshLeadsBtn" style="margin-left:auto;">${usingLiveData ? "↻ Refresh" : "↻ Check for live data"}</button>
+    </div>
+
+    <table>
+      <thead><tr>
+        <th>Lead</th><th>Source</th><th>Goal</th><th>Locality</th><th>Stage</th><th>Next action</th>
+      </tr></thead>
+      <tbody>
+        ${filtered.map(l => `
+          <tr data-id="${l.id}">
+            <td><div class="lead-name">${escapeHtml(l.name)}</div><div class="lead-sub">${escapeHtml(l.phone)}</div></td>
+            <td>${escapeHtml(l.source)}</td>
+            <td>${escapeHtml(l.goal)}</td>
+            <td>${escapeHtml(l.locality)}</td>
+            <td><span class="badge ${stageClass(l.stage)}">${l.stage}</span></td>
+            <td class="lead-sub">${escapeHtml(l.nextAction)}</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>
+  `;
+}
+function escapeAttrVal(s){ return escapeHtml(s||""); }
+
+function openDrawer(id){
+  selectedLeadId = id;
+  const l = leadById(id);
+  document.getElementById("drawer").innerHTML = `
+    <div class="drawer-head">
+      <div>
+        <h3>${escapeHtml(l.name)}</h3>
+        <div class="lead-sub">${escapeHtml(l.phone)} · ${escapeHtml(l.locality)}</div>
+      </div>
+      <button class="drawer-close" id="drawerClose">×</button>
+    </div>
+    <div class="drawer-body">
+      <div>
+        <label class="lead-sub" style="display:block;margin-bottom:6px;">Pipeline stage</label>
+        <select class="stage-select" id="stageSelect">
+          ${STAGES.map(s=>`<option value="${s}" ${l.stage===s?"selected":""}>${s}</option>`).join("")}
+        </select>
+      </div>
+      <div class="kv">
+        <div class="row"><span>Source</span><span>${escapeHtml(l.source)}</span></div>
+        <div class="row"><span>Goal</span><span>${escapeHtml(l.goal)}</span></div>
+        <div class="row"><span>Preferred time</span><span>${escapeHtml(l.preferredTime)}</span></div>
+        <div class="row"><span>Expected joining</span><span>${escapeHtml(l.joinDate)}</span></div>
+        <div class="row"><span>Plan interest</span><span>${escapeHtml(l.plan)}</span></div>
+        <div class="row"><span>Personal training</span><span>${escapeHtml(l.pt)}</span></div>
+        <div class="row"><span>Language</span><span>${escapeHtml(l.language)}</span></div>
+        <div class="row"><span>Trainer preference</span><span>${escapeHtml(l.trainerPref)}</span></div>
+        <div class="row"><span>Trial slot</span><span>${escapeHtml(l.trial)}</span></div>
+        <div class="row"><span>Trial attendance</span><span>${escapeHtml(l.attendance)}</span></div>
+        <div class="row"><span>Consent</span><span>${escapeHtml(l.consent)}</span></div>
+        <div class="row"><span>Last interaction</span><span>${escapeHtml(l.lastInteraction)}</span></div>
+      </div>
+      <div class="drawer-actions">
+        <button class="btn small" id="drawerMsgBtn">Send WhatsApp message</button>
+        <button class="btn secondary small" id="drawerPayBtn">Request payment</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+  document.getElementById("stageSelect").addEventListener("change", e => {
+    l.stage = e.target.value; renderAll(); openDrawer(id);
+  });
+  document.getElementById("drawerMsgBtn").addEventListener("click", () => {
+    composeLeadId = id; closeDrawer(); activeTab = "messaging"; renderAll();
+  });
+  document.getElementById("drawerPayBtn").addEventListener("click", () => {
+    composeLeadId = id; closeDrawer(); activeTab = "payments"; renderAll();
+  });
+}
+function closeDrawer(){
+  document.getElementById("overlay").classList.remove("open");
+  document.getElementById("drawer").classList.remove("open");
+}
+
+/* ============================== PAYMENTS ============================== */
+let pendingPayment = null; // {leadId, amount, plan, status}
+
+function renderPayments(){
+  const eligibleLeads = leads.filter(l => ["Attended","Payment Sent","Trial Booked"].includes(l.stage));
+  const selLead = leadById(composeLeadId) || eligibleLeads[0];
+
+  return `
+    <h2 class="page-title">Payments</h2>
+    <p class="page-sub">Generate a UPI payment link or QR for a lead and confirm collection automatically.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin:0 0 12px;font-size:15px;">Collect a payment</h3>
+        <label class="lead-sub" style="display:block;margin-bottom:6px;">Lead</label>
+        <select id="payLeadSelect" class="stage-select" style="margin-bottom:12px;">
+          ${eligibleLeads.map(l=>`<option value="${l.id}" ${selLead&&l.id===selLead.id?"selected":""}>${l.name} — ${l.plan}</option>`).join("")}
+        </select>
+        <label class="lead-sub" style="display:block;margin-bottom:6px;">Amount (₹)</label>
+        <input id="payAmount" type="number" style="width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);font-size:13px;margin-bottom:14px;" value="${selLead? planAmount(selLead.plan):1499}"/>
+        <button class="btn" id="genLinkBtn">Generate payment link</button>
+
+        <div id="payResult" style="margin-top:16px;"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">Recent transactions</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 12px;">Confirmed automatically once payment is received — no screenshots needed.</p>
+        <table>
+          <thead><tr><th>Lead</th><th>Plan</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>
+            ${transactions.slice().reverse().map(t=>`
+              <tr style="cursor:default;">
+                <td>${escapeHtml(t.lead)}</td>
+                <td>${escapeHtml(t.plan)}</td>
+                <td>${fmtRs(t.amount)}</td>
+                <td><span class="badge ${t.status==="Paid"?"stage-Paid":"stage-PaymentSent"}">${t.status}</span></td>
+                <td class="lead-sub">${escapeHtml(t.date)}</td>
+              </tr>`).join("")}
+          </tbody>
+        </table>
+        <p class="empty-note">Connect a UPI provider account (e.g. Razorpay) to replace this preview with real, live payment links.</p>
+      </div>
+    </div>
+  `;
+}
+function planAmount(plan){
+  return { Monthly:1499, Quarterly:3999, Annual:12999 }[plan] || 1499;
+}
+
+function generatePaymentLink(){
+  const leadId = Number(document.getElementById("payLeadSelect").value);
+  const amount = Number(document.getElementById("payAmount").value) || 1499;
+  const lead = leadById(leadId);
+  pendingPayment = { leadId, amount, plan: lead.plan, status:"pending", link: "pay.gymassist.in/dtf/" + leadId + Math.random().toString(36).slice(2,6) };
+  renderPayResult();
+
+  setTimeout(() => {
+    if(!pendingPayment || pendingPayment.leadId !== leadId) return;
+    pendingPayment.status = "paid";
+    transactions.push({lead:lead.name, plan:lead.plan, amount, method:"UPI", status:"Paid", date:"Today"});
+    lead.stage = "Paid"; lead.value = amount;
+    renderPayResult();
+  }, 3500);
+}
+
+function renderPayResult(){
+  const box = document.getElementById("payResult");
+  if(!box || !pendingPayment) return;
+  const p = pendingPayment;
+  box.innerHTML = `
+    <div class="pay-box">
+      <div class="qr"></div>
+      <div class="pay-link">${p.link}</div>
+      <div class="status-pill ${p.status==="paid"?"paid":"pending"}">
+        <span class="dot"></span> ${p.status==="paid" ? "Payment received" : "Awaiting payment · " + fmtRs(p.amount)}
+      </div>
+    </div>`;
+}
+
+/* ============================== MESSAGING ============================== */
+function renderMessaging(){
+  const lead = leadById(composeLeadId) || leads[0];
+  const tmpl = templates.find(t=>t.id===selectedTemplateId);
+
+  return `
+    <h2 class="page-title">Messaging</h2>
+    <p class="page-sub">Send WhatsApp follow-ups with SMS as a fallback when WhatsApp can't be delivered.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin:0 0 12px;font-size:15px;">Templates</h3>
+        <div class="tmpl-list">
+          ${templates.map(t=>`
+            <div class="tmpl ${t.id===selectedTemplateId?"active":""}" data-tid="${t.id}">
+              <div class="tname">${t.name} <span class="lead-sub">· ${t.channel}</span></div>
+              <div class="tprev">${escapeHtml(t.body).slice(0,70)}...</div>
+            </div>`).join("")}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 12px;font-size:15px;">Compose</h3>
+        <label class="lead-sub" style="display:block;margin-bottom:6px;">Send to</label>
+        <select id="msgLeadSelect" class="stage-select" style="margin-bottom:12px;">
+          ${leads.map(l=>`<option value="${l.id}" ${l.id===lead.id?"selected":""}>${l.name} — ${l.stage}</option>`).join("")}
+        </select>
+        <div class="channel-toggle">
+          <label><input type="radio" name="chan" value="WhatsApp" checked/> WhatsApp</label>
+          <label><input type="radio" name="chan" value="SMS"/> SMS fallback</label>
+        </div>
+        <textarea id="msgBody">${escapeHtml(fillTemplate(tmpl.body, lead))}</textarea>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <button class="btn" id="sendMsgBtn">Send message</button>
+          <button class="btn secondary" id="resetMsgBtn">Reset to template</button>
+        </div>
+
+        <div class="section-head" style="margin:20px 0 8px;"><h3>Recent activity</h3></div>
+        <div id="msgLog">
+          ${messageLog.slice().reverse().map(m=>`
+            <div class="log-item">
+              <div><span class="chan-icon">${m.channel==="WhatsApp"?"💬":"✉️"}</span> ${escapeHtml(m.lead)} · ${escapeHtml(m.template)}</div>
+              <div><span class="log-status ${m.status}">${m.status==="delivered"?"Delivered":"Sent"}</span> <span class="lead-sub">${m.time}</span></div>
+            </div>`).join("")}
+        </div>
+        <p class="empty-note">Connect your WhatsApp Business and SMS provider accounts to send these for real.</p>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================== INSTAGRAM ============================== */
+const feedPosts = [
+  {caption:"New batch starting Monday!", color:"linear-gradient(135deg,#f97316,#dc2626)"},
+  {caption:"Trainer spotlight: Coach Divya", color:"linear-gradient(135deg,#7c3aed,#2563eb)"},
+  {caption:"Before/after — 3 month journey", color:"linear-gradient(135deg,#16a34a,#0891b2)"},
+  {caption:"Weekend HIIT class recap", color:"linear-gradient(135deg,#d97706,#dc2626)"},
+  {caption:"Member of the month 🏆", color:"linear-gradient(135deg,#2563eb,#7c3aed)"},
+  {caption:"Early bird offer — this week only", color:"linear-gradient(135deg,#0891b2,#16a34a)"},
+];
+let igAutoShare = true;
+
+function instagramHandle(url){
+  if(!url) return null;
+  const clean = url.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/^instagram\.com\//i, "").replace(/\/$/, "");
+  const first = clean.split("/")[0].split("?")[0];
+  return first ? "@" + first : null;
+}
+
+function renderInstagram(){
+  const igUrl = liveIdentity && liveIdentity.instagram_url;
+  const handle = instagramHandle(igUrl);
+
+  if(!igUrl){
+    return `
+      <h2 class="page-title">Instagram</h2>
+      <p class="page-sub">Keep your page active and turn good reviews and offers into posts automatically.</p>
+      <div class="card">
+        <div class="ig-header">
+          <div class="ig-avatar" style="background:#e2e8f0;"></div>
+          <div>
+            <div style="font-weight:700;">Instagram not linked yet</div>
+            <div class="lead-sub">Add your Instagram link in the owner setup wizard → Gym Identity, then save, to connect it here.</div>
+          </div>
+        </div>
+        <div class="feed-grid" style="opacity:.45;">
+          ${feedPosts.map(p=>`<div class="feed-tile" style="background:${p.color}"><span>${p.caption}</span></div>`).join("")}
+        </div>
+        <p class="empty-note">This is a layout preview — once an Instagram link is saved it'll show your real handle here.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <h2 class="page-title">Instagram</h2>
+    <p class="page-sub">Keep your page active and turn good reviews and offers into posts automatically.</p>
+
+    <div class="card">
+      <div class="ig-header">
+        <div class="ig-avatar"></div>
+        <div>
+          <div style="font-weight:700;"><a href="${igUrl}" target="_blank" rel="noopener" style="color:inherit;">${handle || "View profile"}</a></div>
+          <div class="lead-sub">Linked from Gym Identity</div>
+          <div class="ig-stats">
+            <div><b>—</b>Followers</div>
+            <div><b>—</b>Engagement rate</div>
+            <div><b>—</b>Last post</div>
+          </div>
+        </div>
+        <div style="margin-left:auto;"><a class="btn secondary small" href="${igUrl}" target="_blank" rel="noopener">Open profile</a></div>
+      </div>
+
+      <div class="feed-grid">
+        ${feedPosts.map(p=>`<div class="feed-tile" style="background:${p.color}"><span>${p.caption}</span></div>`).join("")}
+      </div>
+
+      <div class="toggle-row">
+        <div><div class="t">Auto-share new 5★ reviews</div><div class="d">Posts a quote card whenever a member leaves a great review.</div></div>
+        <label class="switch"><input type="checkbox" id="igAutoShareToggle" ${igAutoShare?"checked":""}/><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="t">Auto-share trial offers</div><div class="d">Posts your active trial or seasonal offer weekly.</div></div>
+        <label class="switch"><input type="checkbox" checked/><span class="slider"></span></label>
+      </div>
+      <p class="empty-note">Follower/engagement numbers and the feed grid are illustrative — connect Instagram's official API to pull live numbers and real posts here.</p>
+    </div>
+  `;
+}
+
+/* ============================== GOOGLE REVIEWS ============================== */
+function renderReviews(){
+  const dist = [ {s:5,pct:68}, {s:4,pct:18}, {s:3,pct:8}, {s:2,pct:4}, {s:1,pct:2} ];
+  const paidNoReviewAsk = leads.filter(l=>l.stage==="Paid").slice(0,3);
+
+  return `
+    <h2 class="page-title">Google Reviews</h2>
+    <p class="page-sub">Track your rating and turn happy members into public reviews.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="rating-summary">
+          <div>
+            <div class="big">4.6</div>
+            <div class="stars">★★★★★</div>
+            <div class="lead-sub">128 reviews</div>
+          </div>
+          <div class="bars">
+            ${dist.map(d=>`
+              <div class="bar-row"><span>${d.s}★</span><div class="track"><span style="width:${d.pct}%"></span></div><span>${d.pct}%</span></div>`).join("")}
+          </div>
+        </div>
+
+        <div class="section-head" style="margin:20px 0 8px;"><h3>Recent reviews</h3></div>
+        ${reviews.map(r=>`
+          <div class="review">
+            <div class="review-top">
+              <span class="review-name">${escapeHtml(r.name)} <span class="stars" style="font-size:12px;">${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</span></span>
+              <span class="sentiment ${r.sentiment}">${r.sentiment}</span>
+            </div>
+            <div class="review-text">${escapeHtml(r.text)}</div>
+            <div class="lead-sub" style="margin-top:4px;">${r.date}</div>
+          </div>`).join("")}
+
+        <div class="section-head" style="margin:18px 0 6px;"><h3>Frequently mentioned</h3></div>
+        <div class="tag-cloud">
+          <span>friendly trainers</span><span>clean equipment</span><span>early morning slots</span>
+          <span class="neg">parking</span><span class="neg">AC in weights area</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">Request a review</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 12px;">Send a review link to members who recently paid or hit a milestone.</p>
+        ${paidNoReviewAsk.map(l=>`
+          <div class="req-row">
+            <span>${escapeHtml(l.name)}</span>
+            <button class="btn small reviewReqBtn" data-id="${l.id}">Send review link</button>
+          </div>`).join("")}
+        <p class="empty-note">Connect your Google Business Profile to pull live ratings and reviews here.</p>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================== ADMIN ============================== */
+const adminSite = {
+  generated: true,
+  font: "Poppins",
+  palette: "Emerald",
+  lastGenerated: "Today, 11:20 AM",
+  plans: [
+    { label:"Monthly", price:1499 },
+    { label:"3-Month", price:3999 },
+    { label:"Yearly", price:12999 },
+  ],
+  offers: [
+    { festival:"Onam", details:"15% off quarterly plans", to:"15 Sep" },
+    { festival:"New Year", details:"Free 1 month PT with annual plan", to:"31 Jan" },
+  ],
+};
+
+function renderAdmin(){
+  return `
+    <h2 class="page-title">Admin</h2>
+    <p class="page-sub">Site settings and the data behind your leads, plans and offers — configured from the owner setup wizard.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">Public website</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 14px;">Generated from Gym Identity + Membership Plans & Offers in the setup wizard.</p>
+        <div class="kv">
+          <div class="row"><span>Status</span><span>${adminSite.generated ? "Published preview" : "Not generated yet"}</span></div>
+          <div class="row"><span>Font</span><span>${adminSite.font}</span></div>
+          <div class="row"><span>Color theme</span><span>${adminSite.palette}</span></div>
+          <div class="row"><span>Last generated</span><span>${adminSite.lastGenerated}</span></div>
+        </div>
+        <div class="drawer-actions" style="margin-top:14px;">
+          <button class="btn small">Preview website</button>
+          <button class="btn secondary small">Change theme</button>
+        </div>
+        <p class="empty-note">Theme and regeneration happen in the owner setup wizard's Website Theme tab — this panel mirrors what was last generated there.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 4px;font-size:15px;">Membership plans</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 12px;">Current pricing shown to leads and the chatbot.</p>
+        ${adminSite.plans.map(p=>`
+          <div class="req-row"><span>${p.label}</span><span style="font-weight:700;">${fmtRs(p.price)}</span></div>`).join("")}
+        <div class="section-head" style="margin:18px 0 8px;"><h3>Active offers</h3></div>
+        ${adminSite.offers.map(o=>`
+          <div class="req-row"><span>${o.festival} — ${o.details}</span><span class="lead-sub">till ${o.to}</span></div>`).join("")}
+      </div>
+    </div>
+
+    <div class="section-head"><h3>Data</h3></div>
+    <div class="card">
+      <div class="toggle-row" style="border-top:none;padding-top:0;">
+        <div><div class="t">Export leads</div><div class="d">Download every lead, including goal / PT / plan-duration answers collected in chat.</div></div>
+        <button class="btn secondary small" id="exportLeadsBtn">Export CSV</button>
+      </div>
+      <div class="toggle-row">
+        <div><div class="t">Team access</div><div class="d">Manage who on your staff can see leads and payments.</div></div>
+        <button class="btn secondary small">Manage access</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================== MASTER RENDER ============================== */
+function renderAll(){
+  renderNav();
+  const main = document.getElementById("main");
+  if(activeTab==="overview") main.innerHTML = renderOverview();
+  else if(activeTab==="insights") main.innerHTML = renderInsights();
+  else if(activeTab==="leads") main.innerHTML = renderLeads();
+  else if(activeTab==="payments") main.innerHTML = renderPayments();
+  else if(activeTab==="messaging") main.innerHTML = renderMessaging();
+  else if(activeTab==="instagram") main.innerHTML = renderInstagram();
+  else if(activeTab==="reviews") main.innerHTML = renderReviews();
+  else if(activeTab==="admin") main.innerHTML = renderAdmin();
+  attachHandlers();
+}
+
+function attachHandlers(){
+  document.getElementById("overlay").addEventListener("click", closeDrawer);
+
+  if(activeTab==="leads"){
+    document.getElementById("leadSearch").addEventListener("input", e => { leadFilter.q = e.target.value; renderAll(); });
+    document.getElementById("stageFilter").addEventListener("change", e => { leadFilter.stage = e.target.value; renderAll(); });
+    document.querySelectorAll("tbody tr[data-id]").forEach(tr => {
+      tr.addEventListener("click", () => openDrawer(Number(tr.dataset.id)));
+    });
+    const refreshBtn = document.getElementById("refreshLeadsBtn");
+    if(refreshBtn) refreshBtn.addEventListener("click", async () => {
+      refreshBtn.disabled = true; refreshBtn.textContent = "Checking...";
+      await loadRealData();
+    });
+  }
+
+  if(activeTab==="payments"){
+    document.getElementById("payLeadSelect").addEventListener("change", e => {
+      composeLeadId = Number(e.target.value);
+      document.getElementById("payAmount").value = planAmount(leadById(composeLeadId).plan);
+    });
+    document.getElementById("genLinkBtn").addEventListener("click", generatePaymentLink);
+  }
+
+  if(activeTab==="messaging"){
+    document.querySelectorAll(".tmpl").forEach(el => {
+      el.addEventListener("click", () => {
+        selectedTemplateId = el.dataset.tid;
+        renderAll();
+      });
+    });
+    document.getElementById("msgLeadSelect").addEventListener("change", e => {
+      composeLeadId = Number(e.target.value); renderAll();
+    });
+    document.getElementById("resetMsgBtn").addEventListener("click", () => renderAll());
+    document.getElementById("sendMsgBtn").addEventListener("click", () => {
+      const lead = leadById(composeLeadId);
+      const tmpl = templates.find(t=>t.id===selectedTemplateId);
+      const chan = document.querySelector('input[name="chan"]:checked').value;
+      messageLog.push({ lead: lead.name, channel: chan, template: tmpl.name, status:"sent", time:"Just now" });
+      renderAll();
+      setTimeout(() => {
+        const last = messageLog[messageLog.length-1];
+        if(last) last.status = "delivered";
+        if(activeTab==="messaging") renderAll();
+      }, 1800);
+    });
+  }
+
+  if(activeTab==="instagram"){
+    const t = document.getElementById("igAutoShareToggle");
+    if(t) t.addEventListener("change", e => { igAutoShare = e.target.checked; });
+  }
+
+  if(activeTab==="reviews"){
+    document.querySelectorAll(".reviewReqBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const lead = leadById(Number(btn.dataset.id));
+        messageLog.push({ lead: lead.name, channel:"WhatsApp", template:"Review request", status:"sent", time:"Just now" });
+        btn.textContent = "Sent ✓";
+        btn.disabled = true;
+      });
+    });
+  }
+
+  if(activeTab==="payments" && pendingPayment){ renderPayResult(); }
+
+  if(activeTab==="admin"){
+    const exp = document.getElementById("exportLeadsBtn");
+    if(exp) exp.addEventListener("click", () => {
+      const cols = ["name","phone","locality","source","goal","stage","plan","pt","language","trainerPref","value"];
+      const csv = [cols.join(",")].concat(
+        leads.map(l => cols.map(c => `"${String(l[c]).replace(/"/g,'""')}"`).join(","))
+      ).join("\n");
+      const blob = new Blob([csv], { type:"text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "leads.csv"; document.body.appendChild(a); a.click(); a.remove();
+    });
+  }
+}
+
+renderAll();       // fast first paint with sample data
+loadRealData();    // then swap in live leads/stats if the backend answers
+setInterval(loadRealData, 30000); // keep leads/stats fresh without a manual reload
+</script>
+</body>
+</html>

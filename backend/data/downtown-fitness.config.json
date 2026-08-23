@@ -1,0 +1,167 @@
+{
+  "gym_id": "downtown-fitness",
+  "identity": {
+    "gym_name": "Tarvos Fit",
+    "brand_name": "Tarvos Fit",
+    "short_description": "Premier Fitness & Personal Training Center in Trivandrum",
+    "detailed_description": "Transform your fitness with certified personal training, advanced equipment, and goal-oriented workout plans.",
+    "primary_phone": "9343435566",
+    "whatsapp_number": "9344356565",
+    "email": "thamizharasi@gmail.com",
+    "website": "https://tarvos.fit",
+    "supported_languages": [
+      "en"
+    ],
+    "currency": "INR",
+    "city": "Trivandrum",
+    "google_maps_url": "https://maps.app.goo.gl/p6y2t84SyxYGhxnBA",
+    "instagram_url": "https://instagram.com/tarvosfit",
+    "logo_url": null,
+    "member_count_range": "100-500",
+    "theme": {
+      "primary_color": "#16a34a",
+      "secondary_color": "#0f172a",
+      "accent_color": "#16a34a",
+      "background_color": "#ffffff",
+      "text_color": "#0f172a",
+      "button_color": "#16a34a",
+      "chatbot_header_color": "#0f172a",
+      "user_msg_color": "#16a34a",
+      "bot_msg_color": "#f1f5f9",
+      "font_family": "Inter",
+      "preset_name": "emerald"
+    },
+    "sections": {
+      "enabled_sections": [
+        "hero",
+        "trust_strip",
+        "about",
+        "programs",
+        "facilities",
+        "membership",
+        "trainers",
+        "reviews",
+        "instagram",
+        "timings",
+        "location",
+        "faq",
+        "trial_cta"
+      ],
+      "section_order": [
+        "hero",
+        "trust_strip",
+        "about",
+        "programs",
+        "facilities",
+        "membership",
+        "trainers",
+        "reviews",
+        "instagram",
+        "timings",
+        "location",
+        "faq",
+        "trial_cta"
+      ]
+    },
+    "google": {
+      "place_id": null,
+      "public_review_url": "https://maps.app.goo.gl/p6y2t84SyxYGhxnBA",
+      "rating": 4.9,
+      "user_ratings_total": 240,
+      "cached_reviews": []
+    },
+    "instagram": {
+      "instagram_username": "tarvosfit",
+      "instagram_url": "https://instagram.com/tarvosfit",
+      "cached_media": []
+    }
+  },
+  "answers": [
+    {
+      "id": "TRIAL_002",
+      "situation_label": "Free",
+      "field_values": {
+        "eligibility": ""
+      }
+    },
+    {
+      "id": "MEM_009",
+      "situation_label": "Multiple active offers",
+      "field_values": {
+        "offer_list": "Onam \u2014 10% (till 2026-08-31)"
+      }
+    },
+    {
+      "id": "MEM_016",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "250"
+      }
+    },
+    {
+      "id": "MEM_017",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "750"
+      }
+    },
+    {
+      "id": "MEM_001",
+      "situation_label": "Monthly plan exists",
+      "field_values": {
+        "price": "1999"
+      }
+    },
+    {
+      "id": "MEM_003",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "2999"
+      }
+    },
+    {
+      "id": "MEM_018",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "59999"
+      }
+    },
+    {
+      "id": "MEM_002",
+      "situation_label": "Annual exists",
+      "field_values": {
+        "annual_price": "9999"
+      }
+    },
+    {
+      "id": "MEM_004",
+      "situation_label": "Yes fixed",
+      "field_values": {
+        "student_price": "1500"
+      }
+    },
+    {
+      "id": "MEM_005",
+      "situation_label": "Yes",
+      "field_values": {
+        "price": "3500"
+      }
+    },
+    {
+      "id": "MEM_019",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "1000"
+      }
+    },
+    {
+      "id": "MEM_010",
+      "situation_label": "Expiry known",
+      "field_values": {
+        "offer_name": "Onam offer",
+        "expiry_date": "2026-08-31"
+      }
+    }
+  ],
+  "custom_qa": []
+}

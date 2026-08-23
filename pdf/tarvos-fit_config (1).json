@@ -1,0 +1,162 @@
+{
+  "gym_id": "tarvos-fit",
+  "identity": {
+    "gym_name": "Tarvos Fit",
+    "brand_name": "Tarvos Fit",
+    "short_description": "Premier Fitness & Personal Training Center in Trivandrum",
+    "primary_phone": "+91 70128 54261",
+    "whatsapp_number": "+91 73565 51321",
+    "email": "admin@tarvos.fit",
+    "website": "https://tarvos.fit",
+    "city": "Trivandrum",
+    "google_maps_url": "https://maps.app.goo.gl/p6y2t84SyxYGhxnBA",
+    "instagram_url": "https://instagram.com/tarvosfit",
+    "member_count_range": "100-500",
+    "detailed_description": "Transform your fitness with certified personal training, advanced equipment, and goal-oriented workout plans.",
+    "supported_languages": [
+      "en"
+    ],
+    "currency": "INR",
+    "logo_url": null
+  },
+  "plans": {
+    "daily": {
+      "price": "199",
+      "benefits": ""
+    },
+    "weekly": {
+      "price": "699",
+      "benefits": ""
+    },
+    "monthly": {
+      "price": "1999",
+      "benefits": ""
+    },
+    "quarterly": {
+      "price": "3999",
+      "benefits": ""
+    },
+    "sixmonth": {
+      "price": "5999",
+      "benefits": ""
+    },
+    "yearly": {
+      "price": "9999",
+      "benefits": ""
+    },
+    "student": {
+      "price": "1499",
+      "benefits": ""
+    },
+    "couple": {
+      "price": "3499",
+      "benefits": ""
+    },
+    "kids": {
+      "price": "999",
+      "benefits": ""
+    }
+  },
+  "offers": [
+    {
+      "festival": "Onam",
+      "details": "10%",
+      "from": "2026-08-01",
+      "to": "2026-08-31"
+    }
+  ],
+  "theme": {
+    "font": "Inter",
+    "palette": "emerald",
+    "logoDataUrl": null,
+    "logoName": ""
+  },
+  "answers": [
+    {
+      "id": "TRIAL_002",
+      "situation_label": "Free",
+      "field_values": {
+        "eligibility": ""
+      }
+    },
+    {
+      "id": "MEM_009",
+      "situation_label": "Multiple active offers",
+      "field_values": {
+        "offer_list": "Onam — 10% (till 2026-08-31)"
+      }
+    },
+    {
+      "id": "MEM_016",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "199"
+      }
+    },
+    {
+      "id": "MEM_017",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "699"
+      }
+    },
+    {
+      "id": "MEM_001",
+      "situation_label": "Monthly plan exists",
+      "field_values": {
+        "price": "1999"
+      }
+    },
+    {
+      "id": "MEM_003",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "3999"
+      }
+    },
+    {
+      "id": "MEM_018",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "5999"
+      }
+    },
+    {
+      "id": "MEM_002",
+      "situation_label": "Annual exists",
+      "field_values": {
+        "annual_price": "9999"
+      }
+    },
+    {
+      "id": "MEM_004",
+      "situation_label": "Yes fixed",
+      "field_values": {
+        "student_price": "1499"
+      }
+    },
+    {
+      "id": "MEM_005",
+      "situation_label": "Yes",
+      "field_values": {
+        "price": "3499"
+      }
+    },
+    {
+      "id": "MEM_019",
+      "situation_label": "Available",
+      "field_values": {
+        "price": "999"
+      }
+    },
+    {
+      "id": "MEM_010",
+      "situation_label": "Expiry known",
+      "field_values": {
+        "offer_name": "Onam offer",
+        "expiry_date": "2026-08-31"
+      }
+    }
+  ],
+  "custom_qa": []
+}

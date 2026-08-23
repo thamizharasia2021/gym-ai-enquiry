@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Admin Login — Tarvos Fit</title>
+<link rel="icon" id="pageFavicon" type="image/png" href="/static/1000920458.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120;
+    --card: #1e293b;
+    --card-border: #334155;
+    --accent: #10b981;
+    --accent-dark: #059669;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 80%);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-card {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 40px rgba(16,185,129,0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+  }
+  .logo-badge {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.15);
+    border: 2px solid rgba(16,185,129,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 18px;
+  }
+  h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  p.subtitle {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+  .form-group {
+    text-align: left;
+    margin-bottom: 18px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #cbd5e1;
+  }
+  .input-wrap {
+    position: relative;
+  }
+  .input-wrap input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #fff;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .input-wrap input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+  }
+  .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.3);
+  }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .hint-box {
+    margin-top: 22px;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 10px;
+    border: 1px dashed var(--card-border);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .hint-box strong { color: var(--accent); }
+  .error-msg {
+    color: var(--danger);
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="logo-badge">🏋️</div>
+  <h1>Tarvos Fit</h1>
+  <p class="subtitle">Admin Authentication Gate</p>
+
+  <div class="error-msg" id="errorMsg">Invalid username or password</div>
+
+  <form id="loginForm">
+    <div class="form-group">
+      <label>Username</label>
+      <div class="input-wrap">
+        <input type="text" id="usernameInput" value="admin" required autocomplete="username"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrap">
+        <input type="password" id="passwordInput" placeholder="Enter password" required autocomplete="current-password"/>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit" id="loginBtn">Sign In to Admin Setup</button>
+  </form>
+
+  <div class="hint-box">
+    Default Username: <strong>admin</strong> &nbsp;·&nbsp; Password: <strong>admin123</strong>
+  </div>
+</div>
+
+<script>
+const API = window.GYM_AI_API_BASE || (
+  window.location.origin && !window.location.origin.includes("null") && !window.location.origin.includes("file:")
+    ? window.location.origin
+    : "http://localhost:8000"
+);
+
+// If already logged in, redirect straight to setup
+if(localStorage.getItem("gym_admin_auth") === "true"){
+  window.location.href = "setup";
+}
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("usernameInput").value.trim();
+  const password = document.getElementById("passwordInput").value.trim();
+  const errorEl = document.getElementById("errorMsg");
+  const btn = document.getElementById("loginBtn");
+
+  errorEl.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Verifying...";
+
+  try {
+    const res = await fetch(`${API}/api/admin/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    
+    if(res.ok){
+      localStorage.setItem("gym_admin_auth", "true");
+      localStorage.setItem("gym_admin_user", username);
+      window.location.href = "setup";
+    } else {
+      const data = await res.json();
+      errorEl.textContent = data.detail || "Invalid username or password";
+      errorEl.style.display = "block";
+    }
+  } catch(err) {
+    // If backend is local or offline fallback
+    if(username.toLowerCase() === "admin" && (password === "admin123" || password === (localStorage.getItem("gym_custom_admin_pwd") || "admin123"))){
+      localStorage.setItem("gym_admin_auth", "true");
+      localStorage.setItem("gym_admin_user", username);
+      window.location.href = "setup";
+    } else {
+      errorEl.textContent = "Could not connect to server or invalid password";
+      errorEl.style.display = "block";
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Sign In to Admin Setup";
+  }
+});
+</script>
+
+</body>
+</html>

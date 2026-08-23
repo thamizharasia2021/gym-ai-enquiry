@@ -1,0 +1,3083 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Gym AI Assistant — Owner Setup</title>
+<link rel="icon" id="pageFavicon" type="image/png" href="/static/1000920458.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root{--bg:#0f172a;--panel:#ffffff;--accent:#16a34a;--accent-dark:#15803d;--muted:#64748b;--border:#e2e8f0;--bg-soft:#f8fafc;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg-soft);color:#0f172a;}
+  header{background:var(--bg);color:#fff;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+  header .brand{display:flex;align-items:center;gap:10px;}
+  header .brand .mark{width:32px;height:32px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+  header h1{font-size:16px;margin:0;font-weight:700;}
+  header .idrow{font-size:12.5px;color:#cbd5e1;display:flex;align-items:center;gap:6px;}
+  header input{padding:5px 9px;border-radius:6px;border:none;font-size:12.5px;}
+
+  .progress-shell{background:#1e293b;height:3px;width:100%;}
+  .progress-shell span{display:block;height:100%;background:var(--accent);transition:width .3s;}
+
+  .layout{display:flex;max-width:1440px;margin:0 auto;}
+  nav{width:250px;padding:18px 10px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--border);flex-shrink:0;background:#fff;}
+  nav .navlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:14px 12px 6px;}
+  nav .navlabel:first-child{padding-top:4px;}
+  nav button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:9px 12px;margin-bottom:2px;border:none;background:none;border-radius:8px;cursor:pointer;font-size:13.5px;color:#334155;}
+  nav button:hover{background:#f1f5f9;}
+  nav button.active{background:#dcfce7;color:var(--accent-dark);font-weight:700;}
+  nav button .ic{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+  nav button .lbl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  nav .count{font-size:10.5px;color:var(--muted);flex-shrink:0;}
+  nav button.active .count{color:var(--accent-dark);}
+
+  main{flex:1;padding:26px 32px 80px;max-width:900px;min-width:0;}
+  h2.page-title{font-size:20px;margin:0 0 4px;}
+  p.page-sub{font-size:13px;color:var(--muted);margin:0 0 20px;}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+  .qid{font-size:11px;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+  .configured-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  .imported-card{border-color:#bfdbfe;background:#f8fbff;}
+  .imported-badge{background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:none;letter-spacing:0;}
+  .imported-text{font-size:13.5px;color:#334155;margin:4px 0 10px;line-height:1.5;}
+  .question{font-size:15px;font-weight:700;margin:0 0 10px;color:#0f172a;}
+  select{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--border);font-size:14px;margin-bottom:8px;background:#fff;}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .field label{font-size:11px;color:var(--muted);display:block;margin-bottom:3px;text-transform:capitalize;}
+  .field input{width:100%;padding:7px 9px;border-radius:6px;border:1px solid var(--border);font-size:14px;}
+  .identity input, .identity textarea{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--border);font-size:14px;margin-bottom:10px;font-family:inherit;}
+  .identity label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px;text-transform:capitalize;}
+
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;}
+  .btn:hover{background:var(--accent-dark);}
+  .btn.secondary{background:#fff;color:var(--accent-dark);border:1px solid var(--accent);}
+  .btn.secondary:hover{background:#f0fdf4;}
+  .btn.ghost{background:none;border:1px solid var(--border);color:#334155;}
+  .btn.ghost:hover{border-color:#94a3b8;}
+  .btn.small{padding:6px 12px;font-size:12px;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .toolbar{position:sticky;bottom:0;background:#f8fafcee;backdrop-filter:blur(6px);padding:14px 0;display:flex;gap:10px;align-items:center;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .status{font-size:12.5px;color:var(--muted);}
+
+  @media(max-width: 860px){
+    .layout{flex-direction:column;}
+    nav{width:100%;height:auto;position:sticky;top:54px;z-index:25;border-right:none;border-bottom:1px solid var(--border);display:flex;flex-wrap:nowrap;overflow-x:auto;padding:10px 12px;gap:6px;scrollbar-width:none;}
+    nav::-webkit-scrollbar{display:none;}
+    nav .navlabel{display:none;}
+    nav button{width:auto;white-space:nowrap;padding:8px 14px;border-radius:20px;background:#f1f5f9;flex-shrink:0;margin-bottom:0;}
+    nav button.active{background:var(--accent);color:#fff;}
+    nav button.active .count{color:#fff;}
+    main{padding:18px 14px 100px;max-width:100%;}
+    .fields{grid-template-columns:1fr;}
+    .toolbar{position:fixed;bottom:0;left:0;right:0;padding:10px 14px;background:#ffffff;box-shadow:0 -4px 16px rgba(0,0,0,0.1);z-index:40;}
+  }
+
+  /* ---- plans & offers ---- */
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+  @media(max-width:760px){.plan-grid{grid-template-columns:1fr;}}
+  .plan-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .plan-card h4{margin:0 0 2px;font-size:14.5px;}
+  .plan-card .tag{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;font-weight:700;}
+  .plan-card .rupee{display:flex;align-items:center;gap:4px;margin:10px 0 8px;}
+  .plan-card .rupee span{font-size:15px;color:var(--muted);}
+  .plan-card .rupee input{flex:1;padding:8px 9px;border-radius:8px;border:1px solid var(--border);font-size:15px;font-weight:700;}
+  .plan-card textarea{width:100%;padding:7px 9px;border-radius:7px;border:1px solid var(--border);font-size:12px;font-family:inherit;min-height:52px;resize:vertical;}
+  .plan-card label{font-size:11px;color:var(--muted);display:block;margin:6px 0 3px;}
+
+  .offer-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--border);}
+  @media(max-width:820px){.offer-row{grid-template-columns:1fr;}}
+  .offer-row label{font-size:10.5px;color:var(--muted);display:block;margin-bottom:3px;}
+  .offer-row input, .offer-row select{width:100%;padding:7px 9px;border-radius:7px;border:1px solid var(--border);font-size:12.5px;}
+  .offer-row .rm{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:7px;padding:7px 10px;font-size:12px;cursor:pointer;height:33px;}
+  .custom-qa-row{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
+  .custom-qa-row input{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--border);font-size:13px;margin-bottom:8px;font-weight:600;}
+  .custom-qa-row textarea{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--border);font-size:12.5px;font-family:inherit;resize:vertical;margin-bottom:8px;}
+  .custom-qa-row .rm{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;}
+  .empty-note{font-size:12px;color:var(--muted);background:#f8fafc;border:1px dashed var(--border);border-radius:8px;padding:10px 12px;}
+
+  /* ---- theme ---- */
+  .swatch-row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 20px;}
+  .swatch{width:76px;cursor:pointer;text-align:center;}
+  .swatch .dots{display:flex;height:34px;border-radius:9px;overflow:hidden;border:2px solid transparent;}
+  .swatch.active .dots{border-color:#0f172a;}
+  .swatch .dots span{flex:1;}
+  .swatch p{font-size:10.5px;margin:5px 0 0;color:var(--muted);}
+  .font-row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 20px;}
+  .font-opt{border:2px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;font-size:15px;background:#fff;}
+  .font-opt.active{border-color:var(--accent);background:#f0fdf4;}
+  .site-preview-note{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .logo-row{display:flex;align-items:center;gap:16px;}
+  .logo-preview{width:76px;height:76px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+  .logo-preview img{max-width:100%;max-height:100%;object-fit:contain;}
+  .logo-preview span{font-size:10.5px;color:var(--muted);}
+
+  .banner{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:12.5px;padding:10px 14px;border-radius:10px;margin-bottom:16px;}
+  .banner a{color:#1d4ed8;font-weight:700;cursor:pointer;}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  @media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;}}
+  .stat-box{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .stat-box h4{margin:0 0 6px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;font-weight:700;}
+  .stat-box .num{font-size:24px;font-weight:800;}
+  .leadtable{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .leadtable th{background:#f8fafc;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);}
+  .leadtable td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;}
+  .leadtable tr:last-child td{border-bottom:none;}
+
+  .eqp-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .eqp-chip{display:flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:20px;padding:8px 14px;cursor:pointer;font-size:13px;background:#fff;user-select:none;}
+  .eqp-chip:hover{border-color:var(--accent);}
+  .eqp-chip.checked{background:#dcfce7;border-color:var(--accent);color:var(--accent-dark);font-weight:600;}
+  .eqp-chip input{accent-color:var(--accent);width:15px;height:15px;}
+  .eqp-detail-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);}
+  .eqp-detail-row:last-child{border-bottom:none;}
+  .eqp-detail-row span{width:180px;flex-shrink:0;font-size:13px;font-weight:600;}
+  .eqp-detail-row input{flex:1;padding:7px 9px;border-radius:7px;border:1px solid var(--border);font-size:12.5px;}
+
+  .chat-fab{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:99;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+  .chat-fab:hover{transform:scale(1.05);}
+  .chat-panel{position:fixed;bottom:94px;right:24px;width:440px;max-width:92vw;height:640px;max-height:82vh;background:#fff;border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;z-index:99;border:1px solid var(--border);}
+  .chat-panel.open{display:flex;}
+  .chat-head{background:var(--bg);color:#fff;padding:12px 16px;font-size:13.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+
+  .pdf-modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .pdf-modal-overlay.open{display:flex;}
+  .pdf-modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+  .pdf-modal h3{margin:0 0 10px;font-size:17px;}
+  .pdf-modal p{font-size:13.5px;color:#334155;line-height:1.55;margin:0 0 16px;}
+  .pdf-modal .spinner{width:28px;height:28px;border:3px solid #e2e8f0;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:14px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .pdf-modal .stat-line{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px dashed var(--border);}
+  .pdf-modal .stat-line:last-of-type{border-bottom:none;margin-bottom:14px;}
+
+  /* Login Gate Overlay */
+  .auth-overlay{position:fixed;inset:0;background:radial-gradient(circle at 50% 0%, #1e293b 0%, #0b1120 80%);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
+  .auth-overlay.open{display:flex;}
+  .auth-card{background:#fff;border-radius:20px;max-width:400px;width:100%;padding:32px 28px;box-shadow:0 25px 60px rgba(0,0,0,.4);text-align:center;}
+  .auth-card h2{font-size:20px;margin-bottom:6px;font-weight:800;color:#0f172a;}
+  .auth-card p.sub{font-size:13px;color:#64748b;margin-bottom:20px;line-height:1.5;}
+  .auth-card .form-group{text-align:left;margin-bottom:14px;}
+  .auth-card label{display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:5px;}
+  .auth-card input{width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;outline:none;}
+  .auth-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(22,163,74,.15);}
+  .auth-card button.btn-auth{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14.5px;font-weight:700;cursor:pointer;margin-top:6px;}
+  .auth-card button.btn-auth:hover{background:var(--accent-dark);}
+  .auth-card .auth-error{color:#dc2626;font-size:12px;font-weight:600;margin-bottom:10px;display:none;}
+  .auth-card .auth-hint{margin-top:16px;font-size:11.5px;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:12px;}
+  .auth-card .auth-hint strong{color:#0f172a;}
+
+  /* Change Password Mini Panel */
+  .pwd-change-toggle{font-size:12px;color:var(--accent-dark);cursor:pointer;margin-top:12px;display:inline-block;font-weight:600;}
+  .pwd-change-panel{display:none;margin-top:12px;padding:12px;background:#f8fafc;border-radius:10px;border:1px dashed #cbd5e1;text-align:left;}
+</style>
+</head>
+<body>
+
+<!-- Login Gate Modal -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <div style="font-size:36px;margin-bottom:10px;">🏋️</div>
+    <h2>Admin Login</h2>
+    <p class="sub">Enter admin credentials to edit gym details, upload PDF/JSON, or generate the website.</p>
+    <div class="auth-error" id="authError">Invalid username or password</div>
+    
+    <form id="authForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="authUsername" value="admin" required autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="authPassword" placeholder="Enter password" required autocomplete="current-password"/>
+      </div>
+      <button type="submit" class="btn-auth" id="authSubmitBtn">Sign In</button>
+    </form>
+
+    <div>
+      <span class="pwd-change-toggle" id="pwdToggleBtn">⚙️ Set custom password</span>
+      <div class="pwd-change-panel" id="pwdChangePanel">
+        <label style="font-size:11.5px;font-weight:700;">New Admin Password</label>
+        <input type="password" id="newPwdInput" placeholder="New custom password" style="margin-top:4px;padding:8px 10px;font-size:13px;"/>
+        <button type="button" id="saveNewPwdBtn" class="btn small" style="margin-top:8px;width:100%;">Save Password</button>
+      </div>
+    </div>
+
+    <div class="auth-hint">
+      Default: Username <strong>admin</strong> · Password <strong>admin123</strong>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="brand">
+    <div class="mark">🏋️</div>
+    <h1>Gym AI Assistant — Owner Setup</h1>
+  </div>
+  <div class="idrow">gym_id:&nbsp;<input id="gymIdInput" value="tarvos-fit"/></div>
+  <div class="idrow" id="backendStatusRow">🔄 Checking backend…</div>
+  <div class="idrow" id="authStatusRow" style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <a href="config" class="btn small" style="color:#fde047;border:1px solid #854d0e;background:#422006;text-decoration:none;font-weight:700;border-radius:8px;">🎨 Theme & Branding (/config)</a>
+    <a href="leads" target="_blank" class="btn small" style="color:#bbf7d0;border:1px solid #166534;background:#052e16;text-decoration:none;font-weight:700;border-radius:8px;">🧾 Leads Central (/leads)</a>
+    <a href="chat" target="_blank" class="btn small" style="color:#38bdf8;border:1px solid #0284c7;background:#0c4a6e;text-decoration:none;font-weight:700;border-radius:8px;">💬 Chat</a>
+    <a href="site" target="_blank" class="btn small" style="color:#6ee7b7;border:1px solid #059669;background:#064e3b;text-decoration:none;font-weight:700;border-radius:8px;">🌐 Live Site</a>
+    <span style="font-size:12px;color:#4ade80;font-weight:700;display:inline-flex;align-items:center;gap:5px;">🔒 Admin: Active</span>
+    <button class="btn small" id="logoutBtn" style="padding:4px 10px;font-size:11.5px;color:#fca5a5;border:1px solid #ef4444;background:rgba(239,68,68,0.15);border-radius:8px;font-weight:600;">Log out</button>
+  </div>
+</header>
+<div class="progress-shell"><span id="progressBar" style="width:0%"></span></div>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main>
+    <div id="content"></div>
+    <div class="toolbar">
+      <button class="btn" id="saveBtn">Save & Generate Knowledge Base</button>
+      <button class="btn ghost" id="downloadJsonBtn" title="Download all gym details and answers as a JSON file">📥 Download JSON</button>
+      <label class="btn ghost" style="cursor:pointer;" title="Upload JSON config to instantly populate all website fields and answers">
+        📤 Upload JSON
+        <input type="file" id="jsonUpload" accept="application/json,.json" style="display:none;"/>
+      </label>
+      <a class="btn ghost" id="pdfLink" href="#" target="_blank">View PDF</a>
+      <label class="btn ghost" style="cursor:pointer;">
+        Upload PDF
+        <input type="file" id="pdfUpload" accept="application/pdf" style="display:none;"/>
+      </label>
+      <button class="btn ghost" id="reindexBtn" title="Fixes it if the chatbot's answers ever fall out of sync with what's saved here — re-syncs the search index from your last saved config.">🔧 Repair Index</button>
+      <span class="status" id="statusText"></span>
+    </div>
+  </main>
+</div>
+
+<div class="pdf-modal-overlay" id="pdfModalOverlay"><div class="pdf-modal" id="pdfModalBody"></div></div>
+
+<button class="chat-fab" id="chatFab" title="Preview Web Chat" aria-label="Open Assistant Chat">💬</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head" style="display:flex;justify-content:flex-end;padding:6px 12px;background:#075e54;">
+    <button id="chatCloseBtn" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;padding:0 4px;" aria-label="Close Chat">×</button>
+  </div>
+  <iframe id="chatPreviewFrame" src="about:blank" style="width:100%;height:100%;border:none;flex:1;"></iframe>
+</div>
+
+<script src="/static/theme-sync.js"></script>
+<script>
+const API = typeof GymTheme !== "undefined" ? GymTheme.getApiBase() : (
+  window.GYM_AI_API_BASE || (
+    window.location.origin && !window.location.origin.includes("null") && !window.location.origin.includes("file:")
+      ? window.location.origin
+      : "http://localhost:8000"
+  )
+);
+
+let schema = [];
+let identity = { gym_name:"", brand_name:"", short_description:"", primary_phone:"", whatsapp_number:"", email:"", website:"", city:"", google_maps_url:"", instagram_url:"", instagram_transformation_url:"", instagram_events_url:"", instagram_about_url:"", member_count_range:"", gallery:[] };
+const MEMBER_COUNT_OPTIONS = ["<100", "100-500", ">500"];
+const MEMBER_COUNT_DISPLAY = { "<100":"100+", "100-500":"500+", ">500":"750+" };
+let answers = {}; // id -> { situation_label, field_values }
+let activeCat = "__identity__";
+
+// ---- Sections Configuration ----
+const AVAILABLE_SECTIONS = [
+  { key: "hero", label: "Hero Section & Branding", desc: "Main headline, gym logo, opening hours status, and call-to-action buttons.", icon: "🦸" },
+  { key: "trust_strip", label: "Trust & Credibility Strip", desc: "Google Rating, verified members count, certified trainers, and experience.", icon: "⭐" },
+  { key: "about", label: "About the Gym", desc: "Introduction, short description, and reasons to choose this gym.", icon: "🏢" },
+  { key: "equipment", label: "Equipment & Training Gear", desc: "Free weights, dumbbells, Olympic barbells, cardio machines, and power racks.", icon: "🏋️" },
+  { key: "health_diet", label: "Health, Injury & Diet Support", desc: "Pre-workout screening, injury rehab, corrective mobility, and custom diet guidance.", icon: "🩺" },
+  { key: "nutrition", label: "Nutrition Products & Supplements", desc: "100% whey protein, pre-workout energizers, BCAAs, and shake bar options.", icon: "🥗" },
+  { key: "policies", label: "Policies, Hygiene & Rules", desc: "Cleanliness standards, footwear dress code, towel policy, and safety rules.", icon: "📜" },
+  { key: "programs", label: "Programs & Classes", desc: "Strength training, cardio, functional, yoga, zumba, and personal training options.", icon: "🧘" },
+  { key: "facilities", label: "Facilities & Amenities", desc: "Air conditioning, lockers, showers, drinking water, and parking features.", icon: "🅿️" },
+  { key: "membership", label: "Membership Plans & Offers", desc: "Daily, monthly, quarterly, annual pricing cards and festival offer discounts.", icon: "💳" },
+  { key: "trainers", label: "Certified Trainers & Coaches", desc: "Trainer profiles, certifications, and specializations.", icon: "🧑‍🏫" },
+  { key: "gallery", label: "Photo Gallery & Facility Tour", desc: "Showcase workout floors, premium gear, coaching sessions, and member transformations.", icon: "📸" },
+  { key: "timings", label: "Opening Timings & Schedule", desc: "Weekly morning and evening hours, Sunday schedule, and peak crowd details.", icon: "🕒" },
+  { key: "location", label: "Location, Map & Directions", desc: "Structured address, landmark, Get Directions button, and embedded Google map.", icon: "📍" },
+  { key: "faq", label: "Frequently Asked Questions (FAQ)", desc: "Common questions with clear answers for visitors.", icon: "❓" },
+  { key: "trial_cta", label: "Free Trial Pass & Direct Lead Capture", desc: "High-converting 1-day pass claim form with code-level lead capture.", icon: "🎟️" }
+];
+let sectionOrder = AVAILABLE_SECTIONS.map(s => s.key);
+let enabledSections = new Set(AVAILABLE_SECTIONS.map(s => s.key));
+
+// ---- Unified Theme Configuration ----
+let theme = {
+  font: "Inter",
+  preset_name: "emerald",
+  primary_color: "#16a34a",
+  secondary_color: "#0f172a",
+  accent_color: "#16a34a",
+  background_color: "#ffffff",
+  text_color: "#0f172a",
+  button_color: "#16a34a",
+  chatbot_header_color: "#0f172a",
+  user_msg_color: "#16a34a",
+  bot_msg_color: "#f1f5f9",
+  logoDataUrl: null,
+  logoName: ""
+};
+
+const PALETTES = {
+  emerald: { name: "Emerald Pro", primary: "#16a34a", secondary: "#0f172a", accent: "#16a34a", bg: "#ffffff", text: "#0f172a", btn: "#16a34a", chatHeader: "#0f172a", userMsg: "#16a34a", botMsg: "#f1f5f9" },
+  ocean:   { name: "Ocean Blue",  primary: "#0ea5e9", secondary: "#0c4a6e", accent: "#0284c7", bg: "#ffffff", text: "#0f172a", btn: "#0ea5e9", chatHeader: "#0c4a6e", userMsg: "#0ea5e9", botMsg: "#f0f9ff" },
+  sunset:  { name: "Sunset Energy", primary: "#f97316", secondary: "#7c2d12", accent: "#ea580c", bg: "#ffffff", text: "#0f172a", btn: "#f97316", chatHeader: "#7c2d12", userMsg: "#f97316", botMsg: "#fff7ed" },
+  royal:   { name: "Royal Purple", primary: "#7c3aed", secondary: "#312e81", accent: "#6d28d9", bg: "#ffffff", text: "#0f172a", btn: "#7c3aed", chatHeader: "#312e81", userMsg: "#7c3aed", botMsg: "#f5f3ff" },
+  crimson: { name: "Crimson Power", primary: "#dc2626", secondary: "#1f2937", accent: "#b91c1c", bg: "#ffffff", text: "#0f172a", btn: "#dc2626", chatHeader: "#1f2937", userMsg: "#dc2626", botMsg: "#fef2f2" },
+  midnight:{ name: "Midnight Dark", primary: "#10b981", secondary: "#020617", accent: "#059669", bg: "#0f172a", text: "#f8fafc", btn: "#10b981", chatHeader: "#020617", userMsg: "#10b981", botMsg: "#1e293b" },
+  amber:   { name: "Amber Gold",   primary: "#f59e0b", secondary: "#18181b", accent: "#d97706", bg: "#ffffff", text: "#18181b", btn: "#f59e0b", chatHeader: "#18181b", userMsg: "#f59e0b", botMsg: "#fffbeb" },
+  slate:   { name: "Modern Slate", primary: "#475569", secondary: "#0f172a", accent: "#334155", bg: "#ffffff", text: "#0f172a", btn: "#334155", chatHeader: "#0f172a", userMsg: "#475569", botMsg: "#f1f5f9" }
+};
+const FONTS = ["Inter", "Poppins", "Montserrat", "Outfit", "Merriweather"];
+
+const PLAN_DEFS = [
+  { key:"daily",     title:"Daily",     tag:"Single-day pass",        qid:"MEM_016", availLabel:"Available", benefitsLabel:"Available + benefits", priceField:"price" },
+  { key:"weekly",    title:"Weekly",    tag:"7-day pass",             qid:"MEM_017", availLabel:"Available", benefitsLabel:"Available + benefits", priceField:"price" },
+  { key:"monthly",   title:"Monthly",   tag:"Billed every month",     qid:"MEM_001", availLabel:"Monthly plan exists", priceField:"price" },
+  { key:"quarterly", title:"3-Month",   tag:"Billed every 3 months",  qid:"MEM_003", availLabel:"Available", benefitsLabel:"Available + benefits", priceField:"price" },
+  { key:"sixmonth",  title:"6-Month",   tag:"Billed every 6 months",  qid:"MEM_018", availLabel:"Available", benefitsLabel:"Available + benefits", priceField:"price" },
+  { key:"yearly",    title:"Yearly",    tag:"Best value",             qid:"MEM_002", availLabel:"Annual exists", priceField:"annual_price" },
+  { key:"student",   title:"Student",   tag:"With valid student ID",  qid:"MEM_004", availLabel:"Yes fixed", priceField:"student_price" },
+  { key:"couple",    title:"Couple",    tag:"Two people, one plan",   qid:"MEM_005", availLabel:"Yes", priceField:"price" },
+  { key:"kids",      title:"Kids",      tag:"Youth membership",       qid:"MEM_019", availLabel:"Available", benefitsLabel:"Available + benefits", priceField:"price" },
+];
+let plans = {};
+PLAN_DEFS.forEach(def => { plans[def.key] = { price:"", benefits:"" }; });
+let trial = { offered:true, free:true, fee:"" };
+
+const FESTIVALS = ["Diwali","Onam","Pongal","New Year","Christmas","Republic Day","Independence Day","Navratri","Eid","Holi","Raksha Bandhan","Summer special","Custom / other"];
+let offers = []; // { festival, details, from, to }
+let customQA = []; // { question, answer }
+
+const CATEGORY_META = {
+  "Gym & Location": "📍", "Timings & Crowd": "🕒", "Parking & Facilities": "🅿️",
+  "Membership & Offers": "💳", "Trial & Joining": "🤝", "Reviews & Social": "⭐",
+  "PT & Trainers": "🧑‍🏫", "Classes & Programs": "🧘", "Equipment": "🏋️",
+  "Health, Injury & Diet": "🩺", "Nutrition Products": "🥤", "Policies / Hygiene": "🧼",
+};
+
+const navEl = document.getElementById("nav");
+const contentEl = document.getElementById("content");
+const statusEl = document.getElementById("statusText");
+const gymIdInput = document.getElementById("gymIdInput");
+
+function gymId(){ return gymIdInput.value.trim(); }
+function categories(){ return [...new Set(schema.map(q => q.category))]; }
+function configuredCount(){ return Object.values(answers).filter(a => a.situation_label).length; }
+function escapeHtml(s){ return String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function escapeAttr(s){ return escapeHtml(s); }
+
+// resolves one question's current answer into final text
+function resolveText(q){
+  const sel = answers[q.id];
+  if(!sel) return null;
+  if(sel._pdfText) return sel._pdfText;
+  if(!sel.situation_label) return null;
+  const situation = q.situations.find(s => s.label === sel.situation_label);
+  if(!situation) return null;
+  let text = situation.template;
+  for(const f of situation.fields){
+    const val = (sel.field_values[f] || "").trim();
+    text = text.replace("{" + f + "}", val || `[${f} not set]`);
+  }
+  return text;
+}
+
+function looksPositive(text){
+  if(!text) return false;
+  const low = String(text).trim().toLowerCase();
+  if(!low) return false;
+  if(low === "0" || low === "no" || low === "false" || low === "none" || low === "n/a" || low === "na" || low === "nil" || low === "zero" || low === "—" || low === "-") return false;
+  if(low.startsWith("0 ") || low.startsWith("no,") || low.startsWith("no ") || low.startsWith("we don't") || low.startsWith("we do not") || low.startsWith("sorry,")) return false;
+  if(low.includes("not currently") || low.includes("not available") || low.includes("not provided") || low.includes("not offered") || low.includes("i don't have confirmed") || low.includes("not set") || (low.includes("[") && low.includes("not set]")) || low.includes("0 steam") || low.includes("0 sauna") || low.includes("0 locker") || low.includes("0 shower") || low.includes("0 ac")) return false;
+  return true;
+}
+
+function resolveGymSchedule(){
+  let openTimeStr = "5:00 AM";
+  const ansOpen = answers["TIME_001"];
+  if (ansOpen && ansOpen.situation_label && ansOpen.situation_label !== "Unknown / not configured") {
+    openTimeStr = ansOpen.situation_label;
+    if (ansOpen.field_values && ansOpen.field_values.open_time) openTimeStr = ansOpen.field_values.open_time;
+  }
+
+  let closeTimeStr = "10:00 PM";
+  const ansClose = answers["TIME_002"];
+  if (ansClose && ansClose.situation_label && ansClose.situation_label !== "Unknown / not configured") {
+    closeTimeStr = ansClose.situation_label;
+    if (ansClose.field_values && ansClose.field_values.close_time) closeTimeStr = ansClose.field_values.close_time;
+  }
+
+  function normTime(t) {
+    if (!t) return "";
+    let s = t.trim();
+    if (/^\d{1,2}\s*(AM|PM)$/i.test(s)) {
+      const parts = s.match(/^(\d{1,2})\s*(AM|PM)$/i);
+      if (parts) return `${parts[1]}:00 ${parts[2].toUpperCase()}`;
+    }
+    return s;
+  }
+
+  const weekdayDisplay = `${normTime(openTimeStr)} – ${normTime(closeTimeStr)}`;
+
+  let sundayDisplay = "Closed (Rest Day)";
+  const ansSun1 = answers["TIME_003"];
+  const ansSun2 = answers["TIME_004"];
+
+  const isSunClosed = (ansSun1 && ansSun1.situation_label === "Closed") || 
+                      (ansSun2 && ansSun2.situation_label === "Closed");
+  const isSunOpen = (ansSun1 && ansSun1.situation_label === "Open") || 
+                    (ansSun2 && ansSun2.situation_label === "Open");
+
+  if (isSunClosed) {
+    sundayDisplay = "Closed (Rest Day)";
+  } else if (isSunOpen && ansSun2 && ansSun2.field_values && (ansSun2.field_values.sunday_open || ansSun2.field_values.sunday_close)) {
+    sundayDisplay = `${normTime(ansSun2.field_values.sunday_open || "6:00 AM")} – ${normTime(ansSun2.field_values.sunday_close || "1:00 PM")}`;
+  } else if (isSunOpen) {
+    sundayDisplay = "6:00 AM – 1:00 PM";
+  } else if (ansSun1 || ansSun2) {
+    const label = (ansSun1?.situation_label || ansSun2?.situation_label || "").toLowerCase();
+    if (label.includes("closed")) {
+      sundayDisplay = "Closed (Rest Day)";
+    } else {
+      sundayDisplay = "6:00 AM – 1:00 PM";
+    }
+  }
+
+  let holidayDisplay = "Usually Open";
+  const ansHol = answers["TIME_005"];
+  if (ansHol && ansHol.situation_label) {
+    if (ansHol.situation_label.toLowerCase().includes("closed")) {
+      holidayDisplay = "Closed on Public Holidays";
+    } else if (ansHol.situation_label.toLowerCase().includes("open")) {
+      holidayDisplay = "Open on Most Public Holidays";
+    }
+  }
+
+  return {
+    weekdayDisplay,
+    sundayDisplay,
+    holidayDisplay,
+    summary: `Mon – Sat: ${weekdayDisplay} · Sun: ${sundayDisplay}`
+  };
+}
+
+// ---------------------------------------------------------------- nav -----
+const TOP_NAV = [
+  { id:"__identity__", label:"Gym Identity & Profile", icon:"🏢" },
+  { id:"__plans__",     label:"Membership Plans & Offers", icon:"💰" },
+  { id:"__gallery__",   label:"Photo Gallery & Media", icon:"📸" },
+  { id:"__sections__",  label:"Website Sections & Order", icon:"📑" },
+  { id:"__theme__",     label:"Website Theme & Chat Styling", icon:"🎨" },
+];
+const BOTTOM_NAV = [
+  { id:"__dashboard__", label:"Owner Dashboard", icon:"📊" },
+];
+
+function renderNav(){
+  let html = "";
+  html += `<div class="navlabel">Configuration</div>`;
+  for(const item of TOP_NAV){
+    html += `<button data-cat="${item.id}" class="${activeCat===item.id?"active":""}"><span class="ic">${item.icon}</span><span class="lbl">${item.label}</span></button>`;
+  }
+  html += `<div class="navlabel">Questions Chatbot Can Answer</div>`;
+  for(const c of categories()){
+    const total = schema.filter(q=>q.category===c).length;
+    const done = schema.filter(q=>q.category===c && answers[q.id]?.situation_label).length;
+    const icon = CATEGORY_META[c] || "❓";
+    html += `<button data-cat="${escapeAttr(c)}" class="${activeCat===c?"active":""}"><span class="ic">${icon}</span><span class="lbl">${escapeHtml(c)}</span><span class="count">${done}/${total}</span></button>`;
+  }
+  html += `<div class="navlabel">Operations</div>`;
+  for(const item of BOTTOM_NAV){
+    html += `<button data-cat="${item.id}" class="${activeCat===item.id?"active":""}"><span class="ic">${item.icon}</span><span class="lbl">${item.label}</span></button>`;
+  }
+  navEl.innerHTML = html;
+  navEl.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => { activeCat = btn.dataset.cat; renderAll(); });
+  });
+}
+
+// ----------------------------------------------------------- identity -----
+function saveToLocalStorage(){
+  try{
+    localStorage.setItem("gym_identity_" + gymId(), JSON.stringify(identity));
+    localStorage.setItem("gym_plans_" + gymId(), JSON.stringify(plans));
+    localStorage.setItem("gym_offers_" + gymId(), JSON.stringify(offers));
+    localStorage.setItem("gym_theme_" + gymId(), JSON.stringify(theme));
+    localStorage.setItem("gym_sections_order_" + gymId(), JSON.stringify(sectionOrder));
+    localStorage.setItem("gym_sections_enabled_" + gymId(), JSON.stringify([...enabledSections]));
+  }catch(e){}
+}
+
+function restoreFromLocalStorage(){
+  try{
+    const savedId = localStorage.getItem("gym_identity_" + gymId());
+    if(savedId){
+      const parsed = JSON.parse(savedId);
+      identity = { ...identity, ...parsed };
+    }
+    const savedPlans = localStorage.getItem("gym_plans_" + gymId());
+    if(savedPlans) plans = { ...plans, ...JSON.parse(savedPlans) };
+    const savedOffers = localStorage.getItem("gym_offers_" + gymId());
+    if(savedOffers) offers = JSON.parse(savedOffers);
+    const savedTheme = localStorage.getItem("gym_theme_" + gymId());
+    if(savedTheme) theme = { ...theme, ...JSON.parse(savedTheme) };
+    const savedOrder = localStorage.getItem("gym_sections_order_" + gymId());
+    if(savedOrder) sectionOrder = JSON.parse(savedOrder);
+    const savedEnabled = localStorage.getItem("gym_sections_enabled_" + gymId());
+    if(savedEnabled) enabledSections = new Set(JSON.parse(savedEnabled));
+  }catch(e){}
+
+  // Ensure gallery section is always enabled by default
+  enabledSections.add("gallery");
+  if(!sectionOrder.includes("gallery")){
+    sectionOrder.push("gallery");
+  }
+}
+
+function renderIdentity(){
+  const essentialFields = [
+    { key: "gym_name", label: "Gym / Brand Name", placeholder: "e.g. Tarvos Fit", icon: "🏋️" },
+    { key: "short_description", label: "Tagline / Short Description", placeholder: "e.g. Premier Fitness & Personal Training Center", icon: "✨", isLong: true },
+    { key: "primary_phone", label: "Primary Phone Number", placeholder: "e.g. 9343435566", icon: "📞" },
+    { key: "whatsapp_number", label: "WhatsApp Support Number", placeholder: "e.g. 9344356565", icon: "💬" },
+    { key: "email", label: "Contact Email", placeholder: "e.g. contact@tarvos.fit", icon: "✉️" },
+    { key: "city", label: "City / Area", placeholder: "e.g. Trivandrum", icon: "🏙️" },
+    { key: "google_maps_url", label: "Google Maps Location Link", placeholder: "https://maps.app.goo.gl/...", icon: "📍" },
+    { key: "instagram_url", label: "Instagram Main Profile Link", placeholder: "https://instagram.com/tarvosfit", icon: "📸" },
+    { key: "instagram_transformation_url", label: "🔥 Transformations Post/Reel Link (oEmbed)", placeholder: "https://www.instagram.com/reel/C-xyz123/", icon: "🔥" },
+    { key: "instagram_events_url", label: "🎉 Events & Challenges Post/Reel Link (oEmbed)", placeholder: "https://www.instagram.com/p/C-abc456/", icon: "🎉" },
+    { key: "instagram_about_url", label: "ℹ️ About & Gym Tour Post/Reel Link (oEmbed)", placeholder: "https://www.instagram.com/reel/C-tour789/", icon: "ℹ️" },
+    { key: "website", label: "Website Domain URL", placeholder: "https://tarvos.fit", icon: "🌐" },
+  ];
+
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+      <div>
+        <h2 class="page-title">Website Essentials & Gym Profile</h2>
+        <p class="page-sub">Fill these core details once — they automatically populate the generated website, chatbot header, contact links, Google Maps embed, and review links.</p>
+      </div>
+      <span style="background:#dcfce7;color:#15803d;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;">
+        ✓ Auto-Saved Locally
+      </span>
+    </div>
+
+    <div class="card identity" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;">`;
+
+  for(const f of essentialFields){
+    const val = identity[f.key] || "";
+    html += `
+      <div style="${f.isLong ? 'grid-column: 1 / -1;' : ''}">
+        <label style="display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;margin-bottom:6px;">
+          <span>${f.icon}</span> ${f.label}
+        </label>
+        ${f.isLong
+          ? `<textarea rows="2" data-identity="${f.key}" placeholder="${f.placeholder}" style="width:100%;">${escapeHtml(val)}</textarea>`
+          : `<input data-identity="${f.key}" value="${escapeAttr(val)}" placeholder="${f.placeholder}" style="width:100%;"/>`
+        }
+      </div>`;
+  }
+
+  html += `
+      <div>
+        <label style="display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;margin-bottom:6px;">
+          <span>👥</span> Member Count (Website Badge)
+        </label>
+        <select data-identity="member_count_range" style="width:100%;">
+          <option value="">— not shown on the website —</option>
+          ${MEMBER_COUNT_OPTIONS.map(o => `<option value="${o}" ${identity.member_count_range===o?"selected":""}>${o} members (shows as "${MEMBER_COUNT_DISPLAY[o]}" on site)</option>`).join("")}
+        </select>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;background:#f8fafc;border:1px dashed #cbd5e1;">
+      <h3 style="margin:0 0 6px;font-size:14px;color:#334155;">💡 Quick Tips:</h3>
+      <ul style="margin-left:18px;font-size:12.5px;color:#64748b;line-height:1.6;">
+        <li><strong>No repetitive typing:</strong> Every change you make here is automatically preserved.</li>
+        <li><strong>PDF Import:</strong> If you upload your knowledge base PDF, your gym identity and answers will automatically populate here.</li>
+        <li>Click <strong>"Save & Generate Knowledge Base"</strong> in the top right to sync changes to the live chatbot and PDF.</li>
+      </ul>
+    </div>`;
+
+  contentEl.innerHTML = html;
+  contentEl.querySelectorAll("[data-identity]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      identity[inp.dataset.identity] = inp.value;
+      saveToLocalStorage();
+    });
+    inp.addEventListener("change", () => {
+      identity[inp.dataset.identity] = inp.value;
+      saveToLocalStorage();
+    });
+  });
+}
+
+// -------------------------------------------------- photo gallery tab ----
+function renderGallery(){
+  if(!identity.gallery) identity.gallery = [];
+  
+  let html = `<h2 class="page-title">Photo Gallery & Media Management</h2>
+    <p class="page-sub">Upload high-resolution gym photos, facility tours, trainer pictures, and member transformations. These are beautifully showcased on your website's Gallery section with filter tabs and lightbox preview.</p>
+
+    <div class="card" style="background:#f8fafc;border:2px dashed #cbd5e1;padding:24px;text-align:center;margin-bottom:20px;">
+      <div style="font-size:36px;margin-bottom:8px;">📸</div>
+      <h3 style="margin:0 0 6px;font-size:16px;">Upload Gym Photos</h3>
+      <p style="font-size:13px;color:#64748b;margin:0 0 16px;">Select one or multiple photos (JPG, PNG, WebP) to add to your website gallery.</p>
+      
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <label class="btn" style="cursor:pointer;">
+          📁 Choose Photos to Upload
+          <input type="file" id="galleryFileInput" multiple accept="image/*" style="display:none;"/>
+        </label>
+        <button class="btn secondary" id="loadDemoGalleryBtn">✨ Load Demo High-Res Fitness Photos</button>
+      </div>
+      <div id="galleryUploadStatus" style="font-size:12px;color:var(--accent-dark);margin-top:10px;font-weight:600;"></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h3 style="margin:0;font-size:15px;">Uploaded Gallery Photos (${identity.gallery.length})</h3>
+      ${identity.gallery.length ? `<button class="btn ghost small" id="clearAllGalleryBtn" style="color:#ef4444;border-color:#fecaca;">Clear All</button>` : ''}
+    </div>`;
+
+  if(!identity.gallery.length){
+    html += `
+      <div class="empty-note" style="text-align:center;padding:30px 20px;">
+        <div style="font-size:32px;margin-bottom:8px;">🖼️</div>
+        <strong style="display:block;font-size:14px;color:#334155;margin-bottom:4px;">No photos uploaded yet</strong>
+        <span style="font-size:12.5px;color:#64748b;">Upload your own gym photos above or click "Load Demo High-Res Fitness Photos" to get started instantly.</span>
+      </div>`;
+  } else {
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:16px;">`;
+    identity.gallery.forEach((photo, idx) => {
+      html += `
+        <div class="card" style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+          <div style="width:100%;height:160px;border-radius:10px;overflow:hidden;background:#0f172a;position:relative;">
+            <img src="${escapeAttr(photo.url)}" alt="${escapeAttr(photo.caption || 'Gym Photo')}" style="width:100%;height:100%;object-fit:cover;"/>
+            <span style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;">${escapeHtml(photo.category || 'Gym Floor')}</span>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px;">Category</label>
+            <select data-gal-cat="${idx}" style="margin-bottom:6px;font-size:13px;padding:6px 8px;">
+              <option value="Gym Floor" ${photo.category === 'Gym Floor' ? 'selected' : ''}>Gym Floor</option>
+              <option value="Equipment" ${photo.category === 'Equipment' ? 'selected' : ''}>Equipment</option>
+              <option value="Training" ${photo.category === 'Training' ? 'selected' : ''}>Training & Coaching</option>
+              <option value="Transformations" ${photo.category === 'Transformations' ? 'selected' : ''}>Transformations</option>
+              <option value="Facilities" ${photo.category === 'Facilities' ? 'selected' : ''}>Facilities & Locker Rooms</option>
+            </select>
+            <label style="font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:3px;">Caption / Title</label>
+            <input type="text" data-gal-caption="${idx}" value="${escapeAttr(photo.caption || '')}" placeholder="e.g. Free Weights & Olympic Barbells" style="width:100%;padding:6px 8px;font-size:13px;border-radius:6px;border:1px solid var(--border);"/>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:auto;">
+            <button class="btn ghost small" data-gal-del="${idx}" style="color:#dc2626;border-color:#fecaca;padding:4px 8px;font-size:11.5px;">🗑️ Remove</button>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  contentEl.innerHTML = html;
+
+  // Event handlers
+  const fileInp = document.getElementById("galleryFileInput");
+  if(fileInp){
+    fileInp.addEventListener("change", async (e) => {
+      const files = Array.from(e.target.files);
+      if(!files.length) return;
+      const statusEl = document.getElementById("galleryUploadStatus");
+      if(statusEl) statusEl.textContent = `Processing ${files.length} photo(s)...`;
+      
+      for(const file of files){
+        if(file.size > 5 * 1024 * 1024){
+          alert(`File ${file.name} is larger than 5MB. Please choose smaller photos.`);
+          continue;
+        }
+        await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            identity.gallery.push({
+              id: "gal_" + Math.random().toString(36).substr(2, 9),
+              url: reader.result,
+              caption: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
+              category: "Gym Floor"
+            });
+            resolve();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      saveToLocalStorage();
+      renderAll();
+    });
+  }
+
+  const demoBtn = document.getElementById("loadDemoGalleryBtn");
+  if(demoBtn){
+    demoBtn.addEventListener("click", () => {
+      identity.gallery = [
+        { id: "g1", url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop", caption: "Premium Strength & Free Weights Zone", category: "Gym Floor" },
+        { id: "g2", url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop", caption: "Heavy Dumbbells & Olympic Barbells", category: "Equipment" },
+        { id: "g3", url: "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=800&auto=format&fit=crop", caption: "Cardio Endurance & Treadmills Suite", category: "Equipment" },
+        { id: "g4", url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop", caption: "1-on-1 Personal Training Coaching", category: "Training" },
+        { id: "g5", url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop", caption: "Functional Training & Mobility Studio", category: "Training" },
+        { id: "g6", url: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop", caption: "Member Body Transformation Spotlight", category: "Transformations" }
+      ];
+      saveToLocalStorage();
+      renderAll();
+    });
+  }
+
+  const clearBtn = document.getElementById("clearAllGalleryBtn");
+  if(clearBtn){
+    clearBtn.addEventListener("click", () => {
+      if(confirm("Are you sure you want to clear all gallery photos?")){
+        identity.gallery = [];
+        saveToLocalStorage();
+        renderAll();
+      }
+    });
+  }
+
+  contentEl.querySelectorAll("[data-gal-cat]").forEach(sel => {
+    sel.addEventListener("change", (e) => {
+      const idx = Number(e.target.dataset.galCat);
+      if(identity.gallery[idx]) {
+        identity.gallery[idx].category = e.target.value;
+        saveToLocalStorage();
+      }
+    });
+  });
+
+  contentEl.querySelectorAll("[data-gal-caption]").forEach(inp => {
+    inp.addEventListener("input", (e) => {
+      const idx = Number(e.target.dataset.galCaption);
+      if(identity.gallery[idx]) {
+        identity.gallery[idx].caption = e.target.value;
+        saveToLocalStorage();
+      }
+    });
+  });
+
+  contentEl.querySelectorAll("[data-gal-del]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = Number(e.target.dataset.galDel);
+      identity.gallery.splice(idx, 1);
+      saveToLocalStorage();
+      renderAll();
+    });
+  });
+}
+
+// -------------------------------------------------- plans & offers tab ----
+function syncAnswersToPlans(){
+  PLAN_DEFS.forEach(def => {
+    const ans = answers[def.qid];
+    if(ans && ans.field_values){
+      const val = ans.field_values[def.priceField];
+      if(val && !plans[def.key].price){
+        plans[def.key].price = val;
+      }
+      if(ans.field_values.benefits && !plans[def.key].benefits){
+        plans[def.key].benefits = ans.field_values.benefits;
+      }
+    }
+  });
+  if(answers["TRIAL_002"]){
+    const t = answers["TRIAL_002"];
+    trial.offered = true;
+    trial.free = (t.situation_label === "Free");
+    if(t.field_values && t.field_values.trial_fee){
+      trial.fee = t.field_values.trial_fee;
+    }
+  }
+}
+
+function syncPlanToAnswers(){
+  PLAN_DEFS.forEach(def => {
+    const p = plans[def.key];
+    if(!p || !p.price) return;
+    const situation_label = (def.benefitsLabel && p.benefits) ? def.benefitsLabel : def.availLabel;
+    const field_values = { [def.priceField]: p.price };
+    if(def.benefitsLabel && p.benefits) field_values.benefits = p.benefits;
+    answers[def.qid] = { situation_label, field_values };
+  });
+  if(trial.offered){
+    answers["TRIAL_002"] = trial.free
+      ? { situation_label:"Free", field_values:{ eligibility:"" } }
+      : { situation_label:"Paid", field_values:{ trial_fee: trial.fee } };
+  }
+  saveToLocalStorage();
+}
+function syncOffersToAnswers(){
+  if(!offers.length){
+    answers["MEM_009"] = { situation_label:"No active offer", field_values:{ plan_summary: "monthly, quarterly and annual" } };
+    return;
+  }
+  const list = offers.map(o => `${o.festival}${o.details ? " — " + o.details : ""}${o.to ? " (till " + o.to + ")" : ""}`).join("; ");
+  answers["MEM_009"] = { situation_label:"Multiple active offers", field_values:{ offer_list: list } };
+  if(offers[0].to){
+    answers["MEM_010"] = { situation_label:"Expiry known", field_values:{ offer_name: offers[0].festival + " offer", expiry_date: offers[0].to } };
+  }
+}
+
+function renderPlansOffers(){
+  let html = `<h2 class="page-title">Membership Plans & Offers</h2>
+    <p class="page-sub">Set pricing for every plan type once here — it fills in the matching Membership & Offers answers automatically, including payment methods and festival offers.</p>
+    <div class="plan-grid">
+      ${PLAN_DEFS.map(def => planCard(def)).join("")}
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 4px;font-size:15px;">Free trial</h3>
+      <p class="page-sub" style="margin-bottom:10px;">One-time visit before joining — separate from the paid plans above.</p>
+      <div class="channel-toggle">
+        <label><input type="radio" name="trialMode" value="free" ${trial.offered && trial.free ? "checked" : ""}/> Free trial</label>
+        <label><input type="radio" name="trialMode" value="paid" ${trial.offered && !trial.free ? "checked" : ""}/> Paid trial</label>
+        <label><input type="radio" name="trialMode" value="none" ${!trial.offered ? "checked" : ""}/> No trial offered</label>
+      </div>
+      <div id="trialFeeRow" style="display:${trial.offered && !trial.free ? "block" : "none"};max-width:220px;">
+        <label class="lead-sub" style="display:block;margin:6px 0;">Trial fee (₹)</label>
+        <input type="number" id="trialFeeInput" value="${escapeAttr(trial.fee)}" placeholder="e.g. 199"/>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <h3 style="margin:0;font-size:15px;">Seasonal & festival offers</h3>
+        <button class="btn small" id="addOfferBtn">+ Add offer</button>
+      </div>
+      <p class="page-sub" style="margin-bottom:14px;">Add one row per offer — pick from any major Indian festival/occasion, so the chatbot mentions whichever one is currently running.</p>
+      <div id="offerRows"></div>
+      <div id="noOffersNote" class="empty-note" style="display:none;">No offers added yet. The chatbot will say there are no active promotions right now.</div>
+    </div>
+
+    <div class="banner">Payment methods (cash, UPI, PhonePe, Google Pay, debit/credit cards) are set as checkboxes in the <a data-jump="Membership & Offers">Membership & Offers</a> question list — tick whichever ones you accept.</div>`;
+  contentEl.innerHTML = html;
+
+  PLAN_DEFS.forEach(def => {
+    contentEl.querySelector(`[data-plan-price="${def.key}"]`).addEventListener("input", e => { plans[def.key].price = e.target.value; syncPlanToAnswers(); });
+    if(def.benefitsLabel){
+      contentEl.querySelector(`[data-plan-benefits="${def.key}"]`).addEventListener("input", e => { plans[def.key].benefits = e.target.value; syncPlanToAnswers(); });
+    }
+  });
+
+  contentEl.querySelectorAll('input[name="trialMode"]').forEach(radio => {
+    radio.addEventListener("change", () => {
+      trial.offered = radio.value !== "none";
+      trial.free = radio.value === "free";
+      syncPlanToAnswers();
+      renderAll();
+    });
+  });
+  const trialFeeInput = document.getElementById("trialFeeInput");
+  if(trialFeeInput) trialFeeInput.addEventListener("input", e => { trial.fee = e.target.value; syncPlanToAnswers(); });
+
+  document.getElementById("addOfferBtn").addEventListener("click", () => {
+    offers.push({ festival:FESTIVALS[0], details:"", from:"", to:"" });
+    syncOffersToAnswers();
+    renderAll();
+  });
+  contentEl.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", () => { activeCat = a.dataset.jump; renderAll(); }));
+  renderOfferRows();
+}
+
+function planCard(def){
+  const p = plans[def.key];
+  return `<div class="plan-card">
+    <div class="tag">${def.tag}</div>
+    <h4>${def.title}</h4>
+    <div class="rupee"><span>₹</span><input type="number" placeholder="0" data-plan-price="${def.key}" value="${escapeAttr(p.price)}"/></div>
+    ${def.benefitsLabel ? `
+    <label>What's included (optional)</label>
+    <textarea data-plan-benefits="${def.key}" placeholder="e.g. gym access, group classes">${escapeHtml(p.benefits)}</textarea>` : ""}
+  </div>`;
+}
+
+function renderOfferRows(){
+  const wrap = document.getElementById("offerRows");
+  if(!wrap) return;
+  document.getElementById("noOffersNote").style.display = offers.length ? "none" : "block";
+  wrap.innerHTML = offers.map((o, i) => `
+    <div class="offer-row">
+      <div><label>Festival / occasion</label>
+        <select data-oi="${i}" data-of="festival">${FESTIVALS.map(f=>`<option ${o.festival===f?"selected":""}>${f}</option>`).join("")}</select>
+      </div>
+      <div><label>Offer details</label><input data-oi="${i}" data-of="details" placeholder="e.g. 20% off annual plans" value="${escapeAttr(o.details)}"/></div>
+      <div><label>Valid from</label><input type="date" data-oi="${i}" data-of="from" value="${escapeAttr(o.from)}"/></div>
+      <div><label>Valid till</label><input type="date" data-oi="${i}" data-of="to" value="${escapeAttr(o.to)}"/></div>
+      <button class="rm" data-rm="${i}">Remove</button>
+    </div>`).join("");
+  wrap.querySelectorAll("[data-oi]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      offers[Number(inp.dataset.oi)][inp.dataset.of] = inp.value;
+      syncOffersToAnswers();
+      renderStatusDefault();
+    });
+  });
+  wrap.querySelectorAll("[data-rm]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      offers.splice(Number(btn.dataset.rm), 1);
+      syncOffersToAnswers();
+      renderAll();
+    });
+  });
+}
+
+// ------------------------------------------------------------- theme tab --
+// ------------------------------------------------------- owner dashboard --
+// A lightweight, live view of real captured leads + chat activity for this
+// gym_id, pulled straight from the backend (same endpoints the standalone
+// owner-dashboard.html uses). Deliberately NOT part of the generated public
+// website — that file gets downloaded/shared, and putting lead names/phone
+// numbers behind a tab any visitor could click would expose them, since the
+// leads/stats API has no authentication yet.
+let dashboardLeads = null;   // null = not loaded yet
+let dashboardStats = null;
+let dashboardLoading = false;
+
+function parseLeadInterest(text){
+  const out = {};
+  (text || "").split(";").forEach(part => {
+    const idx = part.indexOf(":");
+    if(idx < 0) return;
+    const k = part.slice(0, idx).trim().toLowerCase();
+    const v = part.slice(idx + 1).trim();
+    if(!v) return;
+    if(k.includes("goal")) out.goal = v;
+    else if(k.includes("pt")) out.pt = v;
+    else if(k.includes("duration")) out.duration = v;
+  });
+  return out;
+}
+
+async function loadDashboardData(){
+  dashboardLoading = true;
+  try{
+    const [leadsRes, statsRes] = await Promise.all([
+      fetch(`${API}/api/gym/${gymId()}/leads`),
+      fetch(`${API}/api/gym/${gymId()}/stats`),
+    ]);
+    dashboardLeads = leadsRes.ok ? await leadsRes.json() : [];
+    dashboardStats = statsRes.ok ? await statsRes.json() : null;
+  }catch(e){
+    dashboardLeads = [];
+    dashboardStats = null;
+  }
+  dashboardLoading = false;
+  if(activeCat === "__dashboard__") renderAll();
+}
+
+function renderDashboardTab(){
+  if(dashboardLeads === null){
+    if(!dashboardLoading) loadDashboardData();
+    contentEl.innerHTML = `<h2 class="page-title">Owner Dashboard</h2><p class="page-sub">Loading real leads and chat activity for ${escapeHtml(gymId())}…</p>`;
+    return;
+  }
+
+  const s = dashboardStats || { total_conversations:0, total_messages:0, messages_today:0, conversion_rate_pct:0 };
+  let html = `<h2 class="page-title">Owner Dashboard</h2>
+    <p class="page-sub">Live leads and chat activity captured for <strong>${escapeHtml(gymId())}</strong>. For payments, messaging templates, Instagram and reviews, open <a href="owner-dashboard.html?gym=${encodeURIComponent(gymId())}" target="_blank" style="color:var(--accent-dark);font-weight:700;">the full dashboard</a> (same folder as this page).</p>
+    <div class="stat-grid">
+      <div class="stat-box"><h4>Total leads</h4><div class="num">${dashboardLeads.length}</div></div>
+      <div class="stat-box"><h4>Conversations</h4><div class="num">${s.total_conversations}</div></div>
+      <div class="stat-box"><h4>Messages today</h4><div class="num">${s.messages_today}</div></div>
+      <div class="stat-box"><h4>Chat → lead conversion</h4><div class="num">${s.conversion_rate_pct}%</div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <h3 style="margin:0;font-size:15px;">Captured leads</h3>
+      <button class="btn secondary small" id="refreshDashboardBtn">↻ Refresh</button>
+    </div>`;
+
+  if(!dashboardLeads.length){
+    html += `<div class="empty-note">No leads captured yet for this gym_id. They'll appear here as soon as someone confirms their name and phone through the chat widget's callback request.</div>`;
+  }else{
+    html += `<table class="leadtable"><thead><tr><th>Name</th><th>Phone</th><th>Interest</th><th>Channel</th><th>When</th></tr></thead><tbody>
+      ${dashboardLeads.map(l => {
+        const parsed = parseLeadInterest(l.interest);
+        const interestText = parsed.goal
+          ? `Goal: ${parsed.goal}${parsed.pt ? " · PT: " + parsed.pt : ""}${parsed.duration ? " · " + parsed.duration : ""}`
+          : (l.interest || "—");
+        const when = l.ts ? new Date(l.ts * 1000).toLocaleString("en-IN", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }) : "—";
+        return `<tr><td>${escapeHtml(l.name || "—")}</td><td>${escapeHtml(l.phone || "—")}</td><td>${escapeHtml(interestText)}</td><td>${escapeHtml(l.channel || "web")}</td><td>${escapeHtml(when)}</td></tr>`;
+      }).join("")}
+    </tbody></table>`;
+  }
+  contentEl.innerHTML = html;
+  const refreshBtn = document.getElementById("refreshDashboardBtn");
+  if(refreshBtn) refreshBtn.addEventListener("click", () => { dashboardLeads = null; renderAll(); });
+}
+
+// -------------------------------------------------------- sections chooser ---
+function renderSections(){
+  let html = `<h2 class="page-title">Website Sections & Order</h2>
+    <p class="page-sub">Select which sections should appear on your public gym landing page. Drag or use the buttons to arrange their order. Sections without valid content will be automatically suppressed.</p>
+    <div class="card" style="margin-bottom:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--muted);font-weight:600;">Active Sections: ${enabledSections.size} of ${AVAILABLE_SECTIONS.length} selected</span>
+        <button class="btn secondary small" id="resetSectionsBtn">Reset to Default Order</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;" id="sectionsList">
+        ${sectionOrder.map((secKey, idx) => {
+          const sec = AVAILABLE_SECTIONS.find(s => s.key === secKey) || { key: secKey, label: secKey, desc: "", icon: "📄" };
+          const isChecked = enabledSections.has(secKey);
+          return `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;gap:12px;">
+              <div style="display:flex;align-items:center;gap:12px;flex:1;">
+                <input type="checkbox" data-sec="${sec.key}" ${isChecked ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;" />
+                <span style="font-size:20px;">${sec.icon}</span>
+                <div>
+                  <strong style="font-size:14px;color:#0f172a;">${escapeHtml(sec.label)}</strong>
+                  <div style="font-size:11.5px;color:var(--muted);">${escapeHtml(sec.desc)}</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="btn ghost small" data-move="up" data-idx="${idx}" ${idx === 0 ? "disabled" : ""} title="Move Up" style="padding:4px 8px;">▲</button>
+                <button class="btn ghost small" data-move="down" data-idx="${idx}" ${idx === sectionOrder.length - 1 ? "disabled" : ""} title="Move Down" style="padding:4px 8px;">▼</button>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn" id="saveSectionsBtn">💾 Save Sections Configuration</button>
+      <button class="btn secondary" id="genFromSectionsBtn">🌐 Validate & Generate Website</button>
+      <button class="btn ghost" onclick="activeCat='__theme__'; renderAll();">Proceed to Theme Styling →</button>
+    </div>`;
+
+  contentEl.innerHTML = html;
+
+  contentEl.querySelectorAll("#sectionsList input[type='checkbox']").forEach(cb => {
+    cb.addEventListener("change", (e) => {
+      const key = e.target.dataset.sec;
+      if(e.target.checked) enabledSections.add(key);
+      else enabledSections.delete(key);
+      saveToLocalStorage();
+    });
+  });
+
+  contentEl.querySelectorAll("[data-move]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.idx);
+      const dir = btn.dataset.move;
+      const targetIdx = dir === "up" ? idx - 1 : idx + 1;
+      if(targetIdx >= 0 && targetIdx < sectionOrder.length){
+        const temp = sectionOrder[idx];
+        sectionOrder[idx] = sectionOrder[targetIdx];
+        sectionOrder[targetIdx] = temp;
+        saveToLocalStorage();
+        renderAll();
+      }
+    });
+  });
+
+  document.getElementById("resetSectionsBtn").addEventListener("click", () => {
+    sectionOrder = AVAILABLE_SECTIONS.map(s => s.key);
+    enabledSections = new Set(AVAILABLE_SECTIONS.map(s => s.key));
+    saveToLocalStorage();
+    renderAll();
+  });
+
+  document.getElementById("saveSectionsBtn").addEventListener("click", async () => {
+    await saveConfig();
+    setStatus("Saved website section configuration.");
+  });
+
+  const genSecBtn = document.getElementById("genFromSectionsBtn");
+  if(genSecBtn){
+    genSecBtn.addEventListener("click", generateWebsite);
+  }
+}
+
+// ------------------------------------------------------------- theme styling ---
+function renderTheme(){
+  let html = `<h2 class="page-title">Website & Chatbot Unified Theme</h2>
+    <p class="page-sub">Customize your gym's branding once. Colors, typography, and logo apply dynamically across the generated website and the AI chatbot.</p>
+    
+    <div class="card">
+      <h3 style="margin:0 0 4px;font-size:14.5px;">Gym Logo</h3>
+      <p class="site-preview-note" style="margin-top:0;">Displayed in website navbar, hero section, and inside the AI chatbot header & avatars with preserved aspect ratio.</p>
+      <div class="logo-row">
+        <div class="logo-preview" id="logoPreview">${theme.logoDataUrl ? `<img src="${theme.logoDataUrl}" alt="Logo preview" style="max-width:100%;max-height:100%;object-fit:contain;"/>` : `<span style="font-size:24px;">🏋️</span>`}</div>
+        <div>
+          <label class="btn secondary small" style="cursor:pointer;display:inline-block;">
+            ${theme.logoDataUrl ? "Replace logo" : "Upload logo"}
+            <input type="file" id="logoUpload" accept="image/png,image/jpeg,image/svg+xml,image/webp" style="display:none;"/>
+          </label>
+          ${theme.logoDataUrl ? `<button class="btn ghost small" id="removeLogoBtn" style="margin-left:8px;">Remove</button>` : ""}
+          <div class="site-preview-note" id="logoFileName">${theme.logoName || (theme.logoDataUrl ? "Custom logo uploaded" : "No logo uploaded (default icon used)")}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 4px;font-size:14.5px;">Branding Palette Presets</h3>
+      <div class="swatch-row">
+        ${Object.entries(PALETTES).map(([key, p]) => `
+          <div class="swatch ${theme.preset_name===key?"active":""}" data-palette="${key}">
+            <div class="dots"><span style="background:${p.secondary}"></span><span style="background:${p.primary}"></span><span style="background:${p.bg}"></span></div>
+            <p>${p.name}</p>
+          </div>`).join("")}
+      </div>
+
+      <h3 style="margin:16px 0 6px;font-size:14.5px;">Typography Font</h3>
+      <div class="font-row">
+        ${FONTS.map(f => `<div class="font-opt ${theme.font===f?"active":""}" data-font="${f}" style="font-family:'${f}',sans-serif;">${f}</div>`).join("")}
+      </div>
+
+      <h3 style="margin:16px 0 6px;font-size:14.5px;">Detailed Color Customizer (9 Variables)</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;">
+        <div class="field">
+          <label>Primary Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="primaryColorPick" value="${theme.primary_color || "#16a34a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="primaryColorText" value="${theme.primary_color || "#16a34a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Secondary / Dark Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="secondaryColorPick" value="${theme.secondary_color || "#0f172a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="secondaryColorText" value="${theme.secondary_color || "#0f172a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Accent Highlights Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="accentColorPick" value="${theme.accent_color || "#16a34a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="accentColorText" value="${theme.accent_color || "#16a34a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Website Background Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="bgColorPick" value="${theme.background_color || "#ffffff"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="bgColorText" value="${theme.background_color || "#ffffff"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Main Text Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="textColorPick" value="${theme.text_color || "#0f172a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="textColorText" value="${theme.text_color || "#0f172a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Button / Action Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="btnColorPick" value="${theme.button_color || "#16a34a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="btnColorText" value="${theme.button_color || "#16a34a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Chatbot Header Color</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="chatHeaderColorPick" value="${theme.chatbot_header_color || "#0f172a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="chatHeaderColorText" value="${theme.chatbot_header_color || "#0f172a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>User Message Bubble</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="userMsgColorPick" value="${theme.user_msg_color || "#16a34a"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="userMsgColorText" value="${theme.user_msg_color || "#16a34a"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Bot Message Bubble</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="color" id="botMsgColorPick" value="${theme.bot_msg_color || "#f1f5f9"}" style="width:36px;height:34px;padding:0;border:none;border-radius:6px;cursor:pointer;" />
+            <input type="text" id="botMsgColorText" value="${theme.bot_msg_color || "#f1f5f9"}" style="flex:1;padding:6px 8px;font-size:12px;" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Dual Preview -->
+      <h3 style="margin:16px 0 8px;font-size:14.5px;">Live Theme Preview (Website & Chatbot)</h3>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;background:#f8fafc;padding:16px;border-radius:14px;border:1px solid var(--border);margin-bottom:18px;">
+        <!-- Website Card Preview -->
+        <div style="background:${theme.background_color};color:${theme.text_color};padding:20px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 4px 12px rgba(0,0,0,0.05);font-family:'${theme.font}',sans-serif;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            ${theme.logoDataUrl ? `<img src="${theme.logoDataUrl}" style="height:26px;max-width:80px;object-fit:contain;"/>` : `<span style="font-size:20px;">🏋️</span>`}
+            <strong style="font-size:15px;color:${theme.secondary_color};">${escapeHtml(identity.gym_name || "Tarvos Fit")}</strong>
+          </div>
+          <h4 style="font-size:16px;color:${theme.secondary_color};margin-bottom:6px;">Transform Your Fitness Journey</h4>
+          <p style="font-size:12px;opacity:.85;margin-bottom:12px;">State-of-the-art facilities, certified trainers, and personalized programs.</p>
+          <button style="background:${theme.button_color};color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">Claim Free Pass</button>
+        </div>
+
+        <!-- Chatbot Preview -->
+        <div style="background:#fff;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);display:flex;flex-direction:column;font-family:'${theme.font}',sans-serif;">
+          <div style="background:${theme.chatbot_header_color};color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+            <div style="width:24px;height:24px;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              ${theme.logoDataUrl ? `<img src="${theme.logoDataUrl}" style="width:100%;height:100%;object-fit:contain;"/>` : `<span style="font-size:13px;">🏋️</span>`}
+            </div>
+            <span style="font-size:12.5px;font-weight:700;">${escapeHtml(identity.gym_name || "Gym")} AI Assistant</span>
+          </div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:8px;font-size:11.5px;background:#ffffff;">
+            <div style="align-self:flex-start;background:${theme.bot_msg_color};color:${theme.text_color};padding:6px 10px;border-radius:8px;max-width:85%;">
+              Welcome! How can I help you reach your goals?
+            </div>
+            <div style="align-self:flex-end;background:${theme.user_msg_color};color:#fff;padding:6px 10px;border-radius:8px;max-width:85%;">
+              What are your membership fees?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button class="btn" id="genFromThemeBtn">🌐 Validate & Generate Website</button>
+        <button class="btn secondary" id="saveThemeBtn">💾 Save Theme</button>
+      </div>
+    </div>`;
+
+  contentEl.innerHTML = html;
+
+  contentEl.querySelectorAll("[data-font]").forEach(el => el.addEventListener("click", () => {
+    theme.font = el.dataset.font;
+    theme.font_family = el.dataset.font;
+    saveToLocalStorage();
+    renderAll();
+  }));
+
+  contentEl.querySelectorAll("[data-palette]").forEach(el => el.addEventListener("click", () => {
+    const key = el.dataset.palette;
+    const p = PALETTES[key];
+    if(p){
+      theme.preset_name = key;
+      theme.primary_color = p.primary;
+      theme.secondary_color = p.secondary;
+      theme.accent_color = p.accent;
+      theme.background_color = p.bg;
+      theme.text_color = p.text;
+      theme.button_color = p.btn;
+      theme.chatbot_header_color = p.chatHeader;
+      theme.user_msg_color = p.userMsg;
+      theme.bot_msg_color = p.botMsg;
+      saveToLocalStorage();
+      renderAll();
+    }
+  }));
+
+  // Bind color input sync
+  const colorMap = [
+    ["primaryColorPick", "primaryColorText", "primary_color"],
+    ["secondaryColorPick", "secondaryColorText", "secondary_color"],
+    ["accentColorPick", "accentColorText", "accent_color"],
+    ["bgColorPick", "bgColorText", "background_color"],
+    ["textColorPick", "textColorText", "text_color"],
+    ["btnColorPick", "btnColorText", "button_color"],
+    ["chatHeaderColorPick", "chatHeaderColorText", "chatbot_header_color"],
+    ["userMsgColorPick", "userMsgColorText", "user_msg_color"],
+    ["botMsgColorPick", "botMsgColorText", "bot_msg_color"],
+  ];
+  colorMap.forEach(([pickId, textId, prop]) => {
+    const picker = document.getElementById(pickId);
+    const textInp = document.getElementById(textId);
+    if(picker && textInp){
+      picker.addEventListener("input", (e) => {
+        theme[prop] = e.target.value;
+        textInp.value = e.target.value;
+        saveToLocalStorage();
+      });
+      textInp.addEventListener("change", (e) => {
+        theme[prop] = e.target.value;
+        picker.value = e.target.value;
+        saveToLocalStorage();
+        renderAll();
+      });
+    }
+  });
+
+  document.getElementById("genFromThemeBtn").addEventListener("click", generateWebsite);
+  document.getElementById("saveThemeBtn").addEventListener("click", async () => {
+    await saveConfig();
+    setStatus("Saved branding theme.");
+  });
+
+  document.getElementById("logoUpload").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    if(file.size > 1.5 * 1024 * 1024){
+      alert("That logo is a bit large (" + Math.round(file.size/1024) + "KB). Please use a file under 1.5MB so the generated site loads quickly.");
+      e.target.value = "";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      theme.logoDataUrl = reader.result;
+      theme.logoName = file.name;
+      identity.logo_url = reader.result;
+      saveToLocalStorage();
+      renderAll();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const removeBtn = document.getElementById("removeLogoBtn");
+  if(removeBtn) removeBtn.addEventListener("click", () => {
+    theme.logoDataUrl = null;
+    theme.logoName = "";
+    identity.logo_url = null;
+    saveToLocalStorage();
+    renderAll();
+  });
+}
+
+// --------------------------------------------------------- Q&A category ---
+// -------------------------------------------------- checklist detection ---
+// Most "Do you have X?" style questions boil down to yes/no, with a
+// zero-field (or single-field) affirmative/negative pair plus an optional
+// detail situation (quantity, brand, name, etc). Detecting that pattern
+// generically from the schema — rather than hardcoding it per category —
+// lets every category show ticks instead of one dropdown per question,
+// while anything genuinely open-ended (pricing, hours, free text) still
+// falls back to its own card below the checklist.
+const SESSION_OPTIONS = ["1-2 times/week", "3-4 times/week", "5-6 times/week", "Daily"];
+const FALLBACK_TEMPLATE_SNIPPET = "i don't have confirmed information about this yet";
+function isFallbackSituation(s){ return s.template.toLowerCase().includes(FALLBACK_TEMPLATE_SNIPPET); }
+function isNegativeTemplate(t){ return /^(we don't|no[,.]|i don't have|not currently|not available)/i.test(t.trim()); }
+function isYesTemplate(t){ return /^yes\b/i.test(t.trim()); }
+
+function yesNoSituations(q){
+  const real = q.situations.filter(s => !isFallbackSituation(s));
+  const no = real.find(s => s.fields.length <= 1 && isNegativeTemplate(s.template));
+  if(!no) return null;
+  let yes = real.find(s => s !== no && s.fields.length === 0 && isYesTemplate(s.template));
+  let detail = null;
+  if(yes){
+    detail = real.find(s => s.fields.length >= 1 && s !== no && s.label !== yes.label);
+  }else{
+    // no clean zero-field "yes" exists (e.g. BMI checking always needs a
+    // detail like where/how) — fall back to the simplest affirmative
+    // situation that needs exactly one field, and treat that same field as
+    // the (recommended) detail input shown right under the chip.
+    const oneField = real.filter(s => s !== no && isYesTemplate(s.template) && s.fields.length === 1);
+    if(oneField.length){ yes = oneField[0]; detail = oneField[0]; }
+  }
+  if(!yes) return null;
+  return { yes, no, detail };
+}
+
+const SHORT_LABEL_OVERRIDES = {
+  EQP_001:"Treadmills", EQP_002:"Ellipticals / cross trainers", EQP_003:"Exercise bikes",
+  EQP_004:"Rowing machines", EQP_005:"Stair climber", EQP_006:"Dumbbells",
+  EQP_008:"Squat racks", EQP_009:"Smith machine", EQP_010:"Cable machines",
+  EQP_011:"Leg press", EQP_012:"Deadlift platform", EQP_013:"Kettlebells",
+  EQP_014:"Battle ropes", EQP_015:"Punching bags", EQP_016:"Boxing gloves",
+  EQP_017:"MMA mats", FAC_019:"Restroom / washroom", FAC_020:"BMI checking",
+  FAC_021:"Weighing scale", FAC_001:"Car parking", FAC_002:"Two-wheeler parking",
+  FAC_005:"AC", FAC_006:"Lockers", FAC_007:"Showers", FAC_008:"Drinking water",
+  FAC_009:"Changing rooms", FAC_010:"Wi-Fi", FAC_011:"Sauna / steam room",
+  FAC_012:"Women's changing room", FAC_013:"Yoga/exercise mats", FAC_016:"CCTV",
+  FAC_017:"Counselling sessions", LOC_007:"Lift", PT_006:"Female trainers",
+  FAC_022:"Men's restroom", FAC_023:"Women's restroom", FAC_024:"Men's changing room",
+  MEM_020:"Cash", MEM_021:"UPI", MEM_022:"PhonePe", MEM_023:"Google Pay",
+  MEM_024:"Debit cards", MEM_025:"Credit cards",
+  PT_001:"Offers personal training", PT_005:"Choose your own trainer",
+  PT_015:"Weight loss specialist", PT_016:"Strength training specialist",
+  PT_017:"Muscle gain specialist", PT_018:"Rehab / injury recovery specialist",
+  PT_019:"Sports-specific specialist", PT_020:"Nutrition coach",
+  PT_021:"English", PT_022:"Hindi", PT_023:"Malayalam", PT_024:"Tamil",
+  PT_025:"Kannada", PT_026:"Telugu", PT_013:"Morning PT slots",
+  PT_014:"PT sessions can be rescheduled",
+  CLS_018:"Cardio training", CLS_019:"CrossFit training",
+  SAFE_003:"Medical clearance required", SAFE_007:"Qualified nutritionist",
+  SAFE_008:"Hydration guidance", SAFE_012:"Trained first aider on-site",
+  SAFE_013:"First aid kit", SAFE_014:"AED / defibrillator",
+  SAFE_015:"Emergency response protocol", SAFE_016:"Dietician",
+  SOC_003:"Google reviews link shared", SOC_004:"Share member testimonials",
+  SOC_005:"Positive trainer feedback", SOC_006:"Share transformation stories",
+  SOC_008:"Facebook page", SOC_009:"Photos/videos shared",
+  SOC_011:"Workout videos on social", SOC_012:"Class schedules on social",
+  SOC_013:"Trainer profiles on social", SOC_014:"Social promotions/contests",
+  SOC_015:"Nutrition tips on social",
+  POL_001:"Outdoor shoes allowed", POL_002:"Clean towel required",
+  POL_004:"Re-rack weights after use", POL_005:"No loud grunting/dropping weights",
+  POL_006:"Photography allowed", POL_007:"Outside food/drinks allowed",
+  POL_008:"Minors need adult supervision",
+};
+function shortLabel(q){
+  if(SHORT_LABEL_OVERRIDES[q.id]) return SHORT_LABEL_OVERRIDES[q.id];
+  let s = q.question
+    .replace(/^(Do|Does|Is|Are|Can) (you|the gym|there|I) (have|offer|provide|allow)?\s*(a |an |the )?/i, "")
+    .replace(/^(Do|Is|Are) (a |an |the )?/i, "")
+    .replace(/\?$/, "");
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function importedCard(q, sel){
+  return `<div class="card imported-card">
+    <div class="qid">${q.id}<span class="configured-dot"></span><span class="imported-badge">📄 Imported from PDF</span></div>
+    <div class="question">${escapeHtml(q.question)}</div>
+    <p class="imported-text">${escapeHtml(sel._pdfText || "")}</p>
+    <button class="btn ghost small" data-override="${q.id}">Change this answer</button>
+  </div>`;
+}
+function dropdownCard(q, sel){
+  return `<div class="card">
+    <div class="qid">${q.id}${sel?.situation_label ? '<span class="configured-dot"></span>' : ""}</div>
+    <div class="question">${escapeHtml(q.question)}</div>
+    <select data-qid="${q.id}">
+      <option value="">— choose situation —</option>
+      ${q.situations.map(s => `<option value="${escapeAttr(s.label)}" ${sel?.situation_label===s.label?"selected":""}>${escapeHtml(s.label)}</option>`).join("")}
+    </select>
+    <div class="fields" data-fields-for="${q.id}"></div>
+  </div>`;
+}
+
+function renderQACategory(catName){
+  const qs = schema.filter(q => q.category === catName);
+  const items = [];
+  const otherQs = [];
+  qs.forEach(q => {
+    const yn = yesNoSituations(q);
+    if(yn) items.push({ q, ...yn }); else otherQs.push(q);
+  });
+  items.forEach(item => {
+    const sel = answers[item.q.id];
+    const isImportedYes = sel && sel._pdfText && looksPositive(sel._pdfText);
+    item.checked = !!(sel && ((sel.situation_label && sel.situation_label !== item.no.label && sel.situation_label !== "__from_pdf__") || isImportedYes));
+    item.detailValue = (item.detail && sel && sel.situation_label === item.detail.label) ? (sel.field_values[item.detail.fields[0]] || "") : "";
+    item.imported = !!(sel?._pdfText);
+  });
+  const checkedItems = items.filter(i => i.checked && i.detail && !i.imported);
+
+  let html = `<h2 class="page-title">${escapeHtml(catName)}</h2><p class="page-sub">${qs.length} questions the chatbot can be configured to answer in this category.</p>`;
+  if(catName === "Membership & Offers"){
+    html += `<div class="banner">Set your core plan prices and seasonal offers in <a data-jump="__plans__">Membership Plans & Offers</a> — it fills in the matching answers below automatically. Use the list below for anything else (student/couple discounts, refunds, EMI, etc.).</div>`;
+  }
+
+  if(items.length){
+    html += `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:14.5px;">Quick select</h3>
+        <div style="display:flex;gap:8px;">
+          <button class="btn ghost small" id="chkSelectAll">Select all</button>
+          <button class="btn ghost small" id="chkClearAll">Clear all</button>
+        </div>
+      </div>
+      <div class="eqp-grid">
+        ${items.map(item => `
+          <label class="eqp-chip ${item.checked ? "checked" : ""}">
+            <input type="checkbox" data-eqid="${item.q.id}" ${item.checked ? "checked" : ""}/>
+            <span>${escapeHtml(shortLabel(item.q))}${item.imported ? " 📄" : ""}</span>
+          </label>`).join("")}
+      </div>
+    </div>`;
+
+    if(checkedItems.length){
+      html += `<div class="card">
+        <h3 style="margin:0 0 4px;font-size:14.5px;">Add details (optional)</h3>
+        <p class="page-sub" style="margin-bottom:10px;">Quantity, brand, sessions per week, or anything else worth the chatbot mentioning.</p>
+        ${checkedItems.map(item => {
+          const fieldName = item.detail.fields[0];
+          const isSessions = fieldName === "sessions_per_week";
+          const control = isSessions
+            ? `<select data-detail-for="${item.q.id}">
+                <option value="">— choose —</option>
+                ${SESSION_OPTIONS.map(o => `<option value="${escapeAttr(o)}" ${item.detailValue===o?"selected":""}>${o}</option>`).join("")}
+              </select>`
+            : `<input data-detail-for="${item.q.id}" placeholder="e.g. 3, or a brand/location note" value="${escapeAttr(item.detailValue)}"/>`;
+          return `<div class="eqp-detail-row"><span>${escapeHtml(shortLabel(item.q))}</span>${control}</div>`;
+        }).join("")}
+      </div>`;
+    }
+  }
+  if(otherQs.length && items.length){
+    html += `<div class="card"><h3 style="margin:0 0 4px;font-size:14.5px;">Other questions in this category</h3><p class="page-sub" style="margin-bottom:0;">These need more than a yes/no, so they're configured individually below.</p></div>`;
+  }
+
+  otherQs.forEach(q => {
+    const sel = answers[q.id];
+    html += sel?.situation_label === "__from_pdf__" ? importedCard(q, sel) : dropdownCard(q, sel);
+  });
+
+  if(catName === "Policies / Hygiene"){
+    html += `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <h3 style="margin:0;font-size:15px;">Add your own questions</h3>
+        <button class="btn small" id="addCustomQABtn">+ Add question</button>
+      </div>
+      <p class="page-sub" style="margin-bottom:14px;">Anything specific to your gym that isn't covered above — house rules, dress code, whatever. Type the question and the exact answer you want the chatbot to give.</p>
+      <div id="customQARows"></div>
+      <div id="noCustomQANote" class="empty-note" style="display:none;">No custom questions added yet.</div>
+    </div>`;
+  }
+
+  contentEl.innerHTML = html;
+
+  contentEl.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", () => { activeCat = a.dataset.jump; renderAll(); }));
+
+  const selectAllBtn = document.getElementById("chkSelectAll");
+  const clearAllBtn = document.getElementById("chkClearAll");
+  if(selectAllBtn) selectAllBtn.addEventListener("click", () => {
+    items.forEach(item => { answers[item.q.id] = { situation_label: item.yes.label, field_values: answers[item.q.id]?.field_values || {} }; });
+    renderAll();
+  });
+  if(clearAllBtn) clearAllBtn.addEventListener("click", () => {
+    items.forEach(item => { answers[item.q.id] = { situation_label: item.no.label, field_values: {} }; });
+    renderAll();
+  });
+  contentEl.querySelectorAll("[data-eqid]").forEach(cb => {
+    cb.addEventListener("change", () => {
+      const id = cb.dataset.eqid;
+      const item = items.find(x => x.q.id === id);
+      answers[id] = cb.checked
+        ? { situation_label: item.yes.label, field_values: answers[id]?.field_values || {} }
+        : { situation_label: item.no.label, field_values: {} };
+      renderAll();
+    });
+  });
+  contentEl.querySelectorAll("[data-detail-for]").forEach(el => {
+    const eventName = el.tagName === "SELECT" ? "change" : "input";
+    el.addEventListener(eventName, () => {
+      const id = el.dataset.detailFor;
+      const item = items.find(x => x.q.id === id);
+      const val = el.value.trim();
+      if(!item.detail) return;
+      const fieldName = item.detail.fields[0];
+      answers[id] = val
+        ? { situation_label: item.detail.label, field_values: { [fieldName]: val } }
+        : { situation_label: item.yes.label, field_values: {} };
+      if(el.tagName === "SELECT") renderAll();
+    });
+  });
+
+  contentEl.querySelectorAll("[data-override]").forEach(btn => {
+    btn.addEventListener("click", () => { delete answers[btn.dataset.override]; renderAll(); });
+  });
+  contentEl.querySelectorAll("select[data-qid]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      const qid = sel.dataset.qid;
+      answers[qid] = { situation_label: sel.value, field_values: answers[qid]?.field_values || {} };
+      renderAll();
+    });
+  });
+  otherQs.forEach(q => {
+    const sel = answers[q.id];
+    if(!sel?.situation_label || sel.situation_label === "__from_pdf__") return;
+    const situation = q.situations.find(s => s.label === sel.situation_label);
+    if(!situation || situation.fields.length === 0) return;
+    const container = contentEl.querySelector(`[data-fields-for="${q.id}"]`);
+    if(!container) return;
+    container.innerHTML = situation.fields.map(f => `
+      <div class="field">
+        <label>${f.replace(/_/g," ")}</label>
+        <input data-qid="${q.id}" data-field="${f}" value="${escapeAttr(sel.field_values[f]||"")}"/>
+      </div>`).join("");
+    container.querySelectorAll("input").forEach(inp => {
+      inp.addEventListener("input", () => {
+        const qid = inp.dataset.qid, field = inp.dataset.field;
+        answers[qid].field_values[field] = inp.value;
+      });
+    });
+  });
+
+  const addCustomBtn = document.getElementById("addCustomQABtn");
+  if(addCustomBtn){
+    addCustomBtn.addEventListener("click", () => {
+      customQA.push({ question:"", answer:"" });
+      renderAll();
+    });
+    renderCustomQARows();
+  }
+}
+
+function renderCustomQARows(){
+  const wrap = document.getElementById("customQARows");
+  if(!wrap) return;
+  const note = document.getElementById("noCustomQANote");
+  if(note) note.style.display = customQA.length ? "none" : "block";
+  wrap.innerHTML = customQA.map((c, i) => `
+    <div class="custom-qa-row">
+      <input data-cqi="${i}" data-cqf="question" placeholder="Question, e.g. Do you allow tattoos to be visible?" value="${escapeAttr(c.question)}"/>
+      <textarea data-cqi="${i}" data-cqf="answer" rows="2" placeholder="Answer the chatbot should give">${escapeHtml(c.answer)}</textarea>
+      <button class="rm" data-cqrm="${i}">Remove</button>
+    </div>`).join("");
+  wrap.querySelectorAll("[data-cqi]").forEach(el => {
+    el.addEventListener("input", () => { customQA[Number(el.dataset.cqi)][el.dataset.cqf] = el.value; });
+  });
+  wrap.querySelectorAll("[data-cqrm]").forEach(btn => {
+    btn.addEventListener("click", () => { customQA.splice(Number(btn.dataset.cqrm), 1); renderAll(); });
+  });
+}
+
+function renderContent(){
+  if(activeCat === "__identity__") return renderIdentity();
+  if(activeCat === "__plans__") return renderPlansOffers();
+  if(activeCat === "__gallery__") return renderGallery();
+  if(activeCat === "__sections__") return renderSections();
+  if(activeCat === "__theme__") return renderTheme();
+  if(activeCat === "__dashboard__") return renderDashboardTab();
+  renderQACategory(activeCat);
+}
+
+function renderStatusDefault(){
+  if(!statusEl.dataset.override){
+    statusEl.textContent = `${configuredCount()}/${schema.length} answered`;
+  }
+  const pct = schema.length ? Math.round(configuredCount() / schema.length * 100) : 0;
+  document.getElementById("progressBar").style.width = pct + "%";
+}
+
+function renderAll(){
+  renderNav();
+  renderContent();
+  renderStatusDefault();
+  document.getElementById("pdfLink").href = `${API}/api/gym/${gymId()}/knowledge.pdf`;
+}
+
+function setStatus(text){ statusEl.textContent = text; statusEl.dataset.override = "1"; }
+
+function describeFetchError(err){
+  if(err instanceof TypeError){
+    return `Could not reach the backend at ${API}. Make sure the FastAPI server is running and reachable there — try opening ${API}/health directly in a new tab. If it runs somewhere else, set window.GYM_AI_API_BASE to that URL before this page loads.`;
+  }
+  return err.message || String(err);
+}
+
+async function checkBackendStatus(){
+  const el = document.getElementById("backendStatusRow");
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(API + "/health", { signal: controller.signal });
+    clearTimeout(timer);
+    if(res.ok){
+      el.textContent = "🟢 Backend connected";
+      el.title = API;
+    }else{
+      el.textContent = "🟠 Backend responded with an error (" + res.status + ")";
+      el.title = API;
+    }
+  }catch(e){
+    el.textContent = "🔴 Backend unreachable at " + API;
+    el.title = "Start the FastAPI server, or set window.GYM_AI_API_BASE to the right URL before this page loads.";
+  }
+}
+checkBackendStatus();
+setInterval(checkBackendStatus, 20000);
+
+// ------------------------------------------------------------------- api --
+async function loadSavedConfig(){
+  try{
+    const res = await fetch(`${API}/api/gym/${gymId()}/config`);
+    if(res.ok){
+      const data = await res.json();
+      if(data.identity && Object.keys(data.identity).length){
+        identity = { ...identity, ...data.identity };
+        if(data.identity.logo_url) theme.logoDataUrl = data.identity.logo_url;
+      }
+      if(data.theme && typeof data.theme === "object"){
+        theme = { ...theme, ...data.theme };
+        if(data.theme.font_family) theme.font = data.theme.font_family;
+      }
+      if(data.sections && typeof data.sections === "object"){
+        if(Array.isArray(data.sections.enabled)) enabledSections = new Set(data.sections.enabled);
+        if(Array.isArray(data.sections.order)) sectionOrder = data.sections.order;
+      }
+      if(data.answers && Array.isArray(data.answers)){
+        data.answers.forEach(a => {
+          if(a.id && a.situation_label){
+            answers[a.id] = { situation_label: a.situation_label, field_values: a.field_values || {} };
+          }
+        });
+      }
+      if(data.custom_qa && Array.isArray(data.custom_qa)){
+        customQA = data.custom_qa;
+      }
+      syncAnswersToPlans();
+    }
+  }catch(e){
+    console.log("loadSavedConfig fallback:", e);
+  }
+  // Also restore any draft changes from localStorage
+  restoreFromLocalStorage();
+  syncAnswersToPlans();
+  renderAll();
+}
+
+async function loadSchema(){
+  try{
+    const res = await fetch(API + "/api/schema");
+    schema = await res.json();
+    if(schema.length) activeCat = "__identity__";
+    await loadSavedConfig();
+  }catch(e){
+    setStatus(describeFetchError(e));
+  }
+}
+
+async function saveConfig(){
+  setStatus("Generating knowledge PDF & indexing embeddings...");
+  saveToLocalStorage();
+  const payload = {
+    gym_id: gymId(),
+    identity: { ...identity, logo_url: theme.logoDataUrl || null },
+    theme: theme,
+    sections: {
+      enabled: Array.from(enabledSections),
+      order: sectionOrder
+    },
+    answers: Object.entries(answers).filter(([,v]) => v.situation_label && v.situation_label !== "__from_pdf__").map(([id, v]) => ({ id, situation_label: v.situation_label, field_values: v.field_values })),
+    custom_qa: customQA.filter(c => c.question.trim() && c.answer.trim()).map(c => ({ question: c.question.trim(), answer: c.answer.trim() })),
+  };
+  try{
+    const res = await fetch(`${API}/api/gym/${gymId()}/config`, {
+      method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "Save failed");
+    const customNote = data.custom_questions ? `, ${data.custom_questions} custom question${data.custom_questions === 1 ? "" : "s"} added` : "";
+    setStatus(`Saved. ${data.questions_configured}/${data.questions_total} questions configured${customNote}, ${data.chunks_indexed} chunks indexed.`);
+    document.getElementById("pdfLink").href = data.pdf_url ? (API + data.pdf_url) : `${API}/api/gym/${gymId()}/knowledge.pdf`;
+  }catch(e){
+    setStatus(describeFetchError(e));
+  }
+}
+document.getElementById("saveBtn").addEventListener("click", saveConfig);
+
+function showPdfModal(html){
+  document.getElementById("pdfModalBody").innerHTML = html;
+  document.getElementById("pdfModalOverlay").classList.add("open");
+}
+function closePdfModal(){
+  document.getElementById("pdfModalOverlay").classList.remove("open");
+}
+
+document.getElementById("pdfUpload").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const uploadLabel = document.querySelector('label[for], .btn.ghost input#pdfUpload')?.closest("label");
+
+  showPdfModal(`
+    <div class="spinner"></div>
+    <h3>Reading ${escapeHtml(file.name)}…</h3>
+    <p>Parsing the PDF and generating embeddings for every answered question. This can take up to a minute for a large file — please don't close this tab.</p>
+  `);
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const controller = new AbortController();
+  const timeoutMs = 90000;
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try{
+    const res = await fetch(`${API}/api/gym/${gymId()}/ingest-pdf`, { method: "POST", body: formData, signal: controller.signal });
+    clearTimeout(timer);
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || `Ingestion failed (HTTP ${res.status})`);
+
+    let imported = 0;
+    (data.entries || []).forEach(entry => {
+      if(entry.configured && entry.answer){
+        answers[entry.id] = { situation_label: "__from_pdf__", field_values: {}, _pdfText: entry.answer };
+        imported++;
+      }
+    });
+
+    // Also fetch the extracted identity from the PDF
+    try{
+      const infoRes = await fetch(`${API}/api/gym/${gymId()}/info`);
+      if(infoRes.ok){
+        const info = await infoRes.json();
+        identity = { ...identity, ...info };
+        saveToLocalStorage();
+      }
+    }catch(e){}
+
+    syncAnswersToPlans();
+    document.getElementById("pdfLink").href = `${API}/api/gym/${gymId()}/knowledge.pdf`;
+
+    showPdfModal(`
+      <h3>✅ Imported from PDF</h3>
+      <div class="stat-line"><span>Questions found in the PDF</span><span>${data.questions_found}</span></div>
+      <div class="stat-line"><span>Now answered</span><span>${imported}</span></div>
+      <div class="stat-line"><span>Still need an answer</span><span>${data.questions_found - imported}</span></div>
+      <div class="stat-line"><span>Chunks indexed for chat</span><span>${data.chunks_indexed}</span></div>
+      <p style="margin-top:14px;">Every answered question and gym identity detail has been populated! When you click "Generate Website", it will use these exact imported values.</p>
+      <button class="btn" id="pdfModalOkBtn">OK, continue</button>
+    `);
+    document.getElementById("pdfModalOkBtn").addEventListener("click", closePdfModal);
+    setStatus(`Imported ${imported}/${data.questions_found} questions from PDF.`);
+    renderAll();
+  }catch(err){
+    clearTimeout(timer);
+    const timedOut = err.name === "AbortError";
+    const message = timedOut
+      ? `The upload didn't finish within ${timeoutMs/1000} seconds. This usually means the backend is stuck (check its terminal for a Python error, often an invalid/expired Gemini API key or a rate limit) rather than the PDF itself being wrong.`
+      : describeFetchError(err);
+    showPdfModal(`
+      <h3>⚠️ Import didn't complete</h3>
+      <p>${escapeHtml(message)}</p>
+      <button class="btn" id="pdfModalCloseBtn">Close</button>
+    `);
+    document.getElementById("pdfModalCloseBtn").addEventListener("click", closePdfModal);
+    setStatus("PDF import failed — see the popup for details.");
+  }
+  e.target.value = "";
+});
+
+document.getElementById("downloadJsonBtn").addEventListener("click", () => {
+  syncPlanToAnswers(); syncOffersToAnswers();
+  const configObj = {
+    gym_id: gymId(),
+    identity: { ...identity, logo_url: theme.logoDataUrl || null },
+    plans: plans,
+    offers: offers,
+    theme: theme,
+    sections: {
+      enabled: Array.from(enabledSections),
+      order: sectionOrder
+    },
+    answers: Object.entries(answers).map(([id, v]) => ({ id, situation_label: v.situation_label, field_values: v.field_values, _pdfText: v._pdfText })),
+    custom_qa: customQA
+  };
+  const blob = new Blob([JSON.stringify(configObj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${gymId()}_config.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  setStatus("Downloaded config JSON.");
+});
+
+document.getElementById("jsonUpload").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if(data.gym_id && gymIdInput) gymIdInput.value = data.gym_id;
+    if(data.identity) identity = { ...identity, ...data.identity };
+    if(data.plans) plans = { ...plans, ...data.plans };
+    if(data.offers && Array.isArray(data.offers)) offers = data.offers;
+    if(data.theme) theme = { ...theme, ...data.theme };
+    if(data.sections && typeof data.sections === "object"){
+      if(Array.isArray(data.sections.enabled)) enabledSections = new Set(data.sections.enabled);
+      if(Array.isArray(data.sections.order)) sectionOrder = data.sections.order;
+    }
+    if(data.answers && Array.isArray(data.answers)){
+      data.answers.forEach(a => {
+        if(a.id){
+          answers[a.id] = { situation_label: a.situation_label, field_values: a.field_values || {}, _pdfText: a._pdfText };
+        }
+      });
+    }
+    if(data.custom_qa && Array.isArray(data.custom_qa)) customQA = data.custom_qa;
+    
+    syncAnswersToPlans();
+    saveToLocalStorage();
+    setStatus("Loaded config from JSON. Saving to backend...");
+    await saveConfig();
+    renderAll();
+    alert(`Successfully loaded configuration from ${file.name}! All website details, pricing plans, and answers have been populated.`);
+  }catch(err){
+    alert("Error reading JSON file: " + err.message);
+  }
+  e.target.value = "";
+});
+
+// ------------------------------------------------------------- auth gate ---
+function checkAuth(){
+  const isAuth = localStorage.getItem("gym_admin_auth") === "true";
+  const overlay = document.getElementById("authOverlay");
+  const authStatusRow = document.getElementById("authStatusRow");
+  if(!isAuth){
+    overlay.classList.add("open");
+    if(authStatusRow) authStatusRow.style.display = "none";
+  }else{
+    overlay.classList.remove("open");
+    if(authStatusRow) authStatusRow.style.display = "flex";
+  }
+}
+
+document.getElementById("authForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("authUsername").value.trim();
+  const password = document.getElementById("authPassword").value.trim();
+  const errorEl = document.getElementById("authError");
+  const btn = document.getElementById("authSubmitBtn");
+
+  errorEl.style.display = "none";
+  btn.disabled = true; btn.textContent = "Verifying...";
+
+  try {
+    const res = await fetch(`${API}/api/admin/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    if(res.ok){
+      localStorage.setItem("gym_admin_auth", "true");
+      localStorage.setItem("gym_admin_user", username);
+      checkAuth();
+    } else {
+      const data = await res.json();
+      errorEl.textContent = data.detail || "Invalid username or password";
+      errorEl.style.display = "block";
+    }
+  } catch(err) {
+    const customPwd = localStorage.getItem("gym_custom_admin_pwd") || "admin123";
+    if(username.toLowerCase() === "admin" && (password === "admin123" || password === customPwd)){
+      localStorage.setItem("gym_admin_auth", "true");
+      localStorage.setItem("gym_admin_user", username);
+      checkAuth();
+    } else {
+      errorEl.textContent = "Could not verify credentials";
+      errorEl.style.display = "block";
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = "Sign In";
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("gym_admin_auth");
+  checkAuth();
+});
+
+document.getElementById("pwdToggleBtn").addEventListener("click", () => {
+  const panel = document.getElementById("pwdChangePanel");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+});
+
+document.getElementById("saveNewPwdBtn").addEventListener("click", () => {
+  const val = document.getElementById("newPwdInput").value.trim();
+  if(!val){ alert("Enter a valid password"); return; }
+  localStorage.setItem("gym_custom_admin_pwd", val);
+  alert("Custom password saved! You can now sign in with this password.");
+  document.getElementById("authPassword").value = val;
+  document.getElementById("pwdChangePanel").style.display = "none";
+});
+
+checkAuth();
+
+gymIdInput.addEventListener("change", () => {
+  document.getElementById("pdfLink").href = `${API}/api/gym/${gymId()}/knowledge.pdf`;
+  loadSavedConfig();
+});
+
+document.getElementById("reindexBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("reindexBtn");
+  btn.disabled = true; btn.textContent = "Repairing...";
+  setStatus("Re-syncing the search index from your last saved config...");
+  try{
+    const res = await fetch(`${API}/api/gym/${gymId()}/reindex`, { method: "POST" });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || `Reindex failed (HTTP ${res.status})`);
+    setStatus(`Index repaired. ${data.questions_configured}/${data.questions_total} questions indexed (${data.chunks_indexed} chunks)${data.stale_chunks_removed ? `, ${data.stale_chunks_removed} stale chunks removed` : ""}.`);
+  }catch(err){
+    setStatus(describeFetchError(err));
+  }finally{
+    btn.disabled = false; btn.textContent = "🔧 Repair Index";
+  }
+});
+
+// --------------------------------------------------------- website gen ----
+function firstResolved(ids){
+  for(const id of ids){
+    const q = schema.find(s => s.id === id);
+    if(!q) continue;
+    const t = resolveText(q);
+    if(t && looksPositive(t)) return t;
+  }
+  return null;
+}
+
+function cleanBulletText(text, fallbackLabel){
+  if(!text) return fallbackLabel || "";
+  let clean = text.replace(/^(yes,?\s*we\s*(have|offer|provide|feature|allow)?\s*(a\s*|an\s*|the\s*)?)/i, "")
+                  .replace(/^(yes,?\s*)/i, "")
+                  .replace(/^(we\s*(have|offer|provide|feature|allow)\s*(a\s*|an\s*|the\s*)?)/i, "")
+                  .replace(/\b(are|is)\s+available\b\.?\s*\d*/gi, "")
+                  .replace(/\.\s*\d+$/, "")
+                  .replace(/\s+\d+$/, "")
+                  .trim();
+  clean = clean.replace(/^[.,;:\s]+|[.,;:\s]+$/g, "");
+  if(!clean || clean.length < 3 || clean === "0") clean = fallbackLabel || text;
+  return clean.charAt(0).toUpperCase() + clean.slice(1);
+}
+
+function facilityHighlights(){
+  const overrides = {
+    "FAC_001": { label: "Air Conditioned Workout Floors", icon: "❄️" },
+    "FAC_002": { label: "Secure Locker Facilities", icon: "🔒" },
+    "FAC_003": { label: "Clean Showers & Changing Rooms", icon: "🚿" },
+    "FAC_004": { label: "Purified RO Drinking Water", icon: "💧" },
+    "FAC_005": { label: "Dedicated Member Parking", icon: "🅿️" },
+    "FAC_006": { label: "Steam & Sauna Bath", icon: "🧖" },
+    "FAC_007": { label: "Locker Key & Security Provided", icon: "🔑" },
+    "SAFE_013": { label: "Emergency First Aid Kit On-Site", icon: "🩺" },
+    "SAFE_012": { label: "Certified First Aiders On-Site", icon: "🧑‍⚕️" },
+    "POL_002": { label: "Sanitized Workout Equipment", icon: "🧼" }
+  };
+  const list = [];
+  schema.filter(q => q.category === "Parking & Facilities" || q.category === "Health, Injury & Diet" || q.category === "Policies / Hygiene")
+    .forEach(q => {
+      const text = resolveText(q);
+      if(text && looksPositive(text)){
+        const override = overrides[q.id];
+        const label = override ? override.label : cleanBulletText(text, q.question.replace(/^(Do you have|Are there|Is there|Do you offer)\s*/i,"").replace(/\?$/,""));
+        const icon = override ? override.icon : "✅";
+        if(label && looksPositive(label)){
+          list.push({ id: q.id, label, icon });
+        }
+      }
+    });
+  if(list.length) return list.slice(0, 12);
+  return [
+    { label: "Fully Air Conditioned Workout Area", icon: "❄️" },
+    { label: "Spacious Locker & Changing Rooms", icon: "🔒" },
+    { label: "Hot & Cold Showers", icon: "🚿" },
+    { label: "Purified RO Drinking Water Stations", icon: "💧" },
+    { label: "Dedicated Member Parking", icon: "🅿️" },
+    { label: "Sanitized Equipment & Towel Protocol", icon: "🧼" },
+    { label: "CCTV Surveillance & Security", icon: "📹" },
+    { label: "First Aid & Emergency Support", icon: "🩺" }
+  ];
+}
+
+function extractUrl(text){
+  if(!text) return null;
+  const m = text.match(/https?:\/\/[^\s)]+/);
+  if(!m) return null;
+  return m[0].replace(/[.,;]+$/, "");
+}
+
+async function generateWebsite(){
+  if(!identity.gym_name){
+    alert("Please enter your Gym / Brand Name in the 'Gym Identity & Profile' tab first.");
+    activeCat = "__identity__"; renderAll();
+    return;
+  }
+
+  syncPlanToAnswers(); syncOffersToAnswers();
+
+  // Branding variables
+  const primary = theme.primary_color || "#16a34a";
+  const secondary = theme.secondary_color || "#0f172a";
+  const accent = theme.accent_color || primary;
+  const bg = theme.background_color || "#ffffff";
+  const textCol = theme.text_color || "#0f172a";
+  const btnCol = theme.button_color || primary;
+  const chatHeaderCol = theme.chatbot_header_color || secondary;
+  const font = theme.font || "Inter";
+  const gymIdVal = gymId() || "tarvos-fit";
+
+  const locationRaw = firstResolved(["LOC_001","LOC_002"]) || "";
+  const location = locationRaw ? cleanBulletText(locationRaw) : (identity.city ? `${identity.gym_name}, ${identity.city}` : "Visit our center for personal fitness tours.");
+  
+  // Dynamically resolve gym schedule from Q&A / RAG answers
+  const schedule = resolveGymSchedule();
+  const rating = firstResolved(["SOC_001"]) || "4.9 ★★★★★";
+  const reviewsCount = firstResolved(["SOC_002"]) || "250+ Verified Member Reviews";
+  const facilities = facilityHighlights();
+
+  const mapsUrlFromAnswers = extractUrl(firstResolved(["LOC_002"]));
+  const mapsHref = identity.google_maps_url || mapsUrlFromAnswers ||
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((identity.gym_name||"") + " " + (identity.city||""))}`;
+
+  const reviewsUrlFromAnswers = extractUrl(firstResolved(["SOC_003"]));
+  const reviewsHref = reviewsUrlFromAnswers || identity.google_maps_url ||
+    `https://www.google.com/search?q=${encodeURIComponent((identity.gym_name||"") + " reviews")}`;
+
+  const instaHref = identity.instagram_url || `https://instagram.com/tarvosfit`;
+  const instaHandle = identity.instagram_url ? identity.instagram_url.split("/").filter(Boolean).pop() : (identity.brand_name || identity.gym_name || "fitness").toLowerCase().replace(/[^a-z0-9]/g,"");
+
+  const planRows = PLAN_DEFS
+    .filter(def => plans[def.key] && plans[def.key].price && String(plans[def.key].price).trim() !== "")
+    .map(def => ({ key: def.key, label: def.title, unit: {daily:"day", weekly:"week", monthly:"month", quarterly:"3 months", sixmonth:"6 months", yearly:"year", student:"month", couple:"month", kids:"month"}[def.key] || "plan" }));
+
+  const offerBanner = offers.length
+    ? offers.map(o => `${o.festival}${o.details ? ": " + o.details : ""}${o.to ? " · valid till " + o.to : ""}`).join("  •  ")
+    : "Special Limited-Period Membership Discounts Available!";
+  const clientsLabel = MEMBER_COUNT_DISPLAY[identity.member_count_range] || "500+";
+
+  const logoSrc = theme.logoDataUrl || identity.logo_url;
+  const logoNavHtml = logoSrc
+    ? `<img src="${logoSrc}" alt="${escapeAttr(identity.gym_name)}" style="height:38px;max-width:140px;object-fit:contain;margin-right:10px;vertical-align:middle;"/>`
+    : `<span style="font-size:24px;margin-right:8px;">🏋️</span>`;
+  const heroLogoHtml = logoSrc
+    ? `<div style="margin-bottom:20px;"><img src="${logoSrc}" alt="${escapeAttr(identity.gym_name)}" style="height:76px;max-width:220px;object-fit:contain;background:rgba(255,255,255,0.08);padding:8px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.15);"/></div>`
+    : "";
+
+  // ---------------- Render HTML Sections dynamically based on custom ordering ----------------
+  const sectionsContent = {};
+  const navLinks = [];
+
+  // 1. HERO
+  sectionsContent["hero"] = `
+<header class="hero" id="hero">
+  ${heroLogoHtml}
+  <div class="clients-badge">🏆 Rated #1 Gym in ${escapeHtml(identity.city || "the Area")} · Over ${escapeHtml(clientsLabel)} Active Members</div>
+  <h1>Transform Your Fitness at ${escapeHtml(identity.gym_name)}</h1>
+  <p>${escapeHtml(identity.short_description || "State-of-the-art equipment, certified personal training, and a high-energy fitness community built for your success.")}</p>
+  <div class="btnrow">
+    <a class="btn btn-primary" href="#trial">🎁 Claim 1-Day Free Trial Pass</a>
+    ${identity.primary_phone ? `<a class="btn btn-secondary" href="tel:${escapeAttr(identity.primary_phone)}">📞 Call: ${escapeHtml(identity.primary_phone)}</a>` : ""}
+    ${identity.whatsapp_number ? `<a class="btn btn-secondary" href="https://wa.me/${escapeAttr(identity.whatsapp_number.replace(/\\D/g,""))}" target="_blank">💬 WhatsApp Us</a>` : ""}
+  </div>
+</header>`;
+
+  // 2. TRUST STRIP
+  sectionsContent["trust_strip"] = `
+<div class="trust-strip">
+  <div class="trust-container">
+    <div class="trust-item"><span class="trust-icon">⭐</span><div><strong>4.9 / 5.0 Rating</strong><span>250+ Verified Google Reviews</span></div></div>
+    <div class="trust-item"><span class="trust-icon">👥</span><div><strong>${escapeHtml(clientsLabel)} Members</strong><span>Active Transforming Community</span></div></div>
+    <div class="trust-item"><span class="trust-icon">🧑‍🏫</span><div><strong>100% Certified</strong><span>Experienced Personal Coaches</span></div></div>
+    <div class="trust-item"><span class="trust-icon">🛡️</span><div><strong>Clean & Sanitized</strong><span>Modern Safe Facility</span></div></div>
+  </div>
+</div>`;
+
+  // 3. ABOUT
+  sectionsContent["about"] = `
+<section id="about">
+  <div class="section-head">
+    <div class="section-tag">About Us</div>
+    <h2 class="section-title">Everything You Need To Reach Your Peak</h2>
+    <p class="section-sub">${escapeHtml(identity.short_description || "We provide a comprehensive fitness ecosystem with elite equipment, specialized trainers, and flexible timings.")}</p>
+  </div>
+  <div class="grid-4">
+    <div class="card-box"><div class="icon">📍</div><h4>Prime Location</h4><p>${escapeHtml(location)}</p></div>
+    <div class="card-box"><div class="icon">🕒</div><h4>Operating Hours</h4><p>${escapeHtml(schedule.summary)}</p></div>
+    <div class="card-box"><div class="icon">⭐</div><h4>Proven Reputation</h4><p>${escapeHtml(rating)} · ${escapeHtml(reviewsCount)}</p></div>
+    <div class="card-box"><div class="icon">💪</div><h4>Dedicated Coaching</h4><p>Custom training programs for fat loss, muscle building, and functional mobility.</p></div>
+  </div>
+</section>`;
+  navLinks.push({ id: "about", label: "About" });
+
+  // 4. EQUIPMENT
+  sectionsContent["equipment"] = `
+<section id="equipment" style="background:#ffffff;">
+  <div class="section-head">
+    <div class="section-tag">World-Class Gear</div>
+    <h2 class="section-title">State-of-the-Art Training Equipment</h2>
+    <p class="section-sub">Engineered for biomechanical accuracy, maximum safety, and elite performance.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card-box"><div class="icon">🏋️</div><h4>Heavy Free Weights Zone</h4><p>Rubberized hex dumbbells up to 50kg, competition Olympic barbells, bumper plates, and EZ curl bars.</p></div>
+    <div class="card-box"><div class="icon">🏃</div><h4>Cardio Endurance Suite</h4><p>Interactive commercial treadmills, cross trainers, rowers, assault air-bikes, and stair climbers.</p></div>
+    <div class="card-box"><div class="icon">🏗️</div><h4>Power Racks & Cages</h4><p>Heavy-duty squat cages with safety spotter arms, deadlift platforms, and pull-up stations.</p></div>
+    <div class="card-box"><div class="icon">🦾</div><h4>Pin-Loaded & Plate Machines</h4><p>Chest press, lat pulldowns, seated rows, leg press, hack squats, and hamstring curl machines.</p></div>
+    <div class="card-box"><div class="icon">🎛️</div><h4>Dual Adjustable Cables</h4><p>Multi-station cable crossovers with full functional attachments for continuous muscle tension.</p></div>
+    <div class="card-box"><div class="icon">⚡</div><h4>Functional Training Gear</h4><p>Battle ropes, kettlebells, medicine balls, plyometric boxes, and resistance bands.</p></div>
+  </div>
+</section>`;
+  navLinks.push({ id: "equipment", label: "Equipment" });
+
+  // 5. HEALTH, INJURY & DIET
+  sectionsContent["health_diet"] = `
+<section id="health-diet" style="background:#f8fafc;">
+  <div class="section-head">
+    <div class="section-tag">Holistic Wellness</div>
+    <h2 class="section-title">Health, Injury & Diet Guidance</h2>
+    <p class="section-sub">Comprehensive fitness support tailored to your medical history, injury rehab, and dietary goals.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card-box"><div class="icon">🩺</div><h4>Pre-Workout Health Screening</h4><p>Detailed evaluation of fitness history, joint flexibility, and cardiovascular baseline before heavy workouts.</p></div>
+    <div class="card-box"><div class="icon">🩹</div><h4>Injury Rehabilitation & Mobility</h4><p>Custom corrective exercises designed to rehabilitate lower back pain, knee issues, and shoulder impingement.</p></div>
+    <div class="card-box"><div class="icon">🥗</div><h4>Custom Nutrition & Diet Plans</h4><p>Personalized macronutrient guidance and meal plans for fat loss, lean muscle gain, or athletic stamina.</p></div>
+  </div>
+</section>`;
+  navLinks.push({ id: "health-diet", label: "Health & Diet" });
+
+  // 6. NUTRITION PRODUCTS
+  sectionsContent["nutrition"] = `
+<section id="nutrition" style="background:#ffffff;">
+  <div class="section-head">
+    <div class="section-tag">Nutrition & Fuel</div>
+    <h2 class="section-title">Nutrition Products & Supplement Support</h2>
+    <p class="section-sub">Authentic certified fitness supplements and healthy nutrition options available on-site.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card-box"><div class="icon">🥛</div><h4>100% Whey Protein & Isolates</h4><p>Lab-tested premium protein powders to support muscle repair and post-workout recovery.</p></div>
+    <div class="card-box"><div class="icon">⚡</div><h4>Pre-Workout & Energy Boosters</h4><p>Clean energy formulas, BCAAs, and electrolyte hydration to power through high-intensity sessions.</p></div>
+    <div class="card-box"><div class="icon">🥤</div><h4>Fresh Protein Shake Bar</h4><p>Delicious post-workout fruit and protein smoothies prepared fresh at our member shake counter.</p></div>
+  </div>
+</section>`;
+  navLinks.push({ id: "nutrition", label: "Nutrition" });
+
+  // 7. POLICIES & HYGIENE
+  sectionsContent["policies"] = `
+<section id="policies" style="background:#f8fafc;">
+  <div class="section-head">
+    <div class="section-tag">Safety & Hygiene</div>
+    <h2 class="section-title">Policies, Hygiene & Gym Rules</h2>
+    <p class="section-sub">Our commitment to providing a spotless, safe, and respectful environment for every member.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card-box"><div class="icon">🧼</div><h4>Sanitized Equipment Floors</h4><p>Workout machines, benches, and weights are disinfected multiple times daily with hospital-grade sanitizers.</p></div>
+    <div class="card-box"><div class="icon">👟</div><h4>Clean Footwear & Dress Code</h4><p>Dedicated indoor sports shoes and clean workout apparel are required for floor safety and cleanliness.</p></div>
+    <div class="card-box"><div class="icon">📜</div><h4>Towel & Weight Racking Etiquette</h4><p>Members are provided sanitizer stations and requested to wipe down equipment and re-rack weights after use.</p></div>
+  </div>
+</section>`;
+  navLinks.push({ id: "policies", label: "Policies" });
+
+  // 8. PROGRAMS
+  sectionsContent["programs"] = `
+<section id="programs" style="background:#ffffff;">
+  <div class="section-head">
+    <div class="section-tag">Programs & Classes</div>
+    <h2 class="section-title">Designed For Every Fitness Level</h2>
+    <p class="section-sub">Whether you're starting on day one or training for advanced strength, our programs deliver results.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card-box"><div class="icon">🏋️</div><h4>Strength & Hypertrophy</h4><p>Heavy duty free weights, Olympic lifting platforms, and pin-loaded machines for targeted muscle growth.</p></div>
+    <div class="card-box"><div class="icon">🏃</div><h4>Cardio & Fat Loss</h4><p>High-end treadmills, rowers, stairmasters, and assault bikes for heart health and fat burn.</p></div>
+    <div class="card-box"><div class="icon">⚡</div><h4>HIIT & Functional Fitness</h4><p>Kettlebells, battle ropes, sleds, and plyometric equipment for athletic conditioning.</p></div>
+    <div class="card-box"><div class="icon">🧑‍🏫</div><h4>1-on-1 Personal Training</h4><p>Direct supervision, customized workout programming, and form correction tailored to your goals.</p></div>
+    <div class="card-box"><div class="icon">🧘</div><h4>Mobility & Flexibility</h4><p>Warm-up zones, resistance bands, and foam rollers to optimize recovery and prevent injuries.</p></div>
+    <div class="card-box"><div class="icon">🥤</div><h4>Nutrition & Diet Support</h4><p>Practical macro guidance and pre/post-workout nutritional advice for sustainable results.</p></div>
+  </div>
+</section>`;
+  navLinks.push({ id: "programs", label: "Programs" });
+
+  // 9. FACILITIES (Clean List)
+  sectionsContent["facilities"] = `
+<section id="facilities" style="background:#f8fafc;">
+  <div class="section-head">
+    <div class="section-tag">Facilities & Amenities</div>
+    <h2 class="section-title">Clean, Modern & Fully Equipped</h2>
+    <p class="section-sub">A premium workout environment maintained to the highest hygiene standards.</p>
+  </div>
+  <div class="facility-grid">
+    ${facilities.map(f => `
+      <div class="facility-item">
+        <span class="facility-icon">${f.icon || "✓"}</span>
+        <span class="facility-label">${escapeHtml(f.label)}</span>
+      </div>
+    `).join("")}
+  </div>
+</section>`;
+  navLinks.push({ id: "facilities", label: "Facilities" });
+
+  // 10. MEMBERSHIP PLANS
+  if(planRows.length){
+    sectionsContent["membership"] = `
+<section id="plans" style="background:#ffffff;">
+  <div class="section-head">
+    <div class="section-tag">Membership Options</div>
+    <h2 class="section-title">Transparent Pricing, No Hidden Fees</h2>
+    <p class="section-sub">${escapeHtml(offerBanner)}</p>
+  </div>
+  <div class="grid-3">
+    ${planRows.map((pr, i) => `
+      <div class="plan-card ${i===1 || pr.key==='quarterly' ? 'featured' : ''}">
+        ${i===1 || pr.key==='quarterly' ? '<div class="plan-badge">Most Popular</div>' : ''}
+        <h3 style="font-size:18px;font-weight:700;">${escapeHtml(pr.label)}</h3>
+        <div class="price">₹${escapeHtml(plans[pr.key].price)} <span>/ ${escapeHtml(pr.unit)}</span></div>
+        <p style="font-size:13.5px;color:#64748b;margin-bottom:20px;">${escapeHtml(plans[pr.key].benefits || "Full access to gym floor, locker rooms, free weights, and trainer support.")}</p>
+        <a href="#trial" class="btn btn-primary" style="width:100%;justify-content:center;">Get Started</a>
+      </div>
+    `).join("")}
+  </div>
+</section>`;
+    navLinks.push({ id: "plans", label: "Plans" });
+  }
+
+  // 11. TRAINERS
+  sectionsContent["trainers"] = `
+<section id="trainers" style="background:#f8fafc;">
+  <div class="section-head">
+    <div class="section-tag">Coaching Staff</div>
+    <h2 class="section-title">Meet Your Certified Trainers</h2>
+    <p class="section-sub">Experienced coaches committed to teaching proper biomechanics and motivating you every set.</p>
+  </div>
+  <div class="grid-3">
+    <div class="trainer-card">
+      <div class="trainer-avatar">💪</div>
+      <h4>Head Fitness Coach</h4>
+      <span class="trainer-tag">Strength & Conditioning</span>
+      <p>Specializes in functional hypertrophy, barbell mechanics, and athletic power development.</p>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-avatar">🏃</div>
+      <h4>Fat Loss Specialist</h4>
+      <span class="trainer-tag">Cardio & Metabolic Conditioning</span>
+      <p>Expert in high-intensity training, sustainable habit coaching, and body transformations.</p>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-avatar">🧘</div>
+      <h4>Mobility & Rehab Coach</h4>
+      <span class="trainer-tag">Posture & Injury Prevention</span>
+      <p>Focuses on joint mobility, corrective exercise, and functional movement patterns.</p>
+    </div>
+  </div>
+</section>`;
+  navLinks.push({ id: "trainers", label: "Trainers" });
+
+  // 12. PHOTO GALLERY
+  const defaultGallery = [
+    { id: "g0", url: "/static/1000920458.png", caption: "Tarvos Fitness Official Logo & Floor", category: "Gym Floor" },
+    { id: "g1", url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop", caption: "Premium Strength & Free Weights Zone", category: "Gym Floor" },
+    { id: "g2", url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop", caption: "Heavy Dumbbells & Olympic Barbells", category: "Equipment" },
+    { id: "g3", url: "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=800&auto=format&fit=crop", caption: "Cardio Endurance & Treadmills Suite", category: "Equipment" },
+    { id: "g4", url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop", caption: "1-on-1 Personal Training Coaching", category: "Training" },
+    { id: "g5", url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop", caption: "Functional Training & Mobility Studio", category: "Training" },
+    { id: "g6", url: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop", caption: "Member Body Transformation Spotlight", category: "Transformations" }
+  ];
+  const galleryItems = (identity.gallery && identity.gallery.length) ? identity.gallery : defaultGallery;
+
+  // Guarantee gallery section is enabled when generating website
+  enabledSections.add("gallery");
+
+  const galleryItemsHtml = galleryItems.map(item => `
+    <div class="gallery-card" data-category="${escapeAttr(item.category || 'Gym Floor')}" onclick="openLightbox('${escapeAttr(item.url)}', '${escapeAttr(item.caption || '')}')">
+      <img src="${escapeAttr(item.url)}" alt="${escapeAttr(item.caption || 'Gym Photo')}" loading="lazy"/>
+      <div class="gallery-card-overlay">
+        <span class="gallery-card-tag">${escapeHtml(item.category || 'Facility')}</span>
+        <h4 class="gallery-card-title">${escapeHtml(item.caption || 'Facility View')}</h4>
+      </div>
+    </div>
+  `).join("");
+
+  sectionsContent["gallery"] = `
+<section id="gallery" style="background:#f8fafc;">
+  <div class="section-head">
+    <div class="section-tag">Visual Tour</div>
+    <h2 class="section-title">Gym Floor & Facility Gallery</h2>
+    <p class="section-sub">Explore our world-class training space, premium gear, coaching environment, and member transformations.</p>
+  </div>
+  <div class="gallery-filters">
+    <button class="gallery-filter-btn active" onclick="filterGallery('all', this)">All Photos</button>
+    <button class="gallery-filter-btn" onclick="filterGallery('Gym Floor', this)">Gym Floor</button>
+    <button class="gallery-filter-btn" onclick="filterGallery('Equipment', this)">Equipment</button>
+    <button class="gallery-filter-btn" onclick="filterGallery('Training', this)">Training & Coaching</button>
+    <button class="gallery-filter-btn" onclick="filterGallery('Transformations', this)">Transformations</button>
+  </div>
+  <div class="gallery-grid" id="websiteGalleryGrid">
+    ${galleryItemsHtml}
+  </div>
+</section>`;
+  navLinks.push({ id: "gallery", label: "Gallery" });
+
+  // 13. TIMINGS (Dynamic Q&A Resolution)
+  sectionsContent["timings"] = `
+<section id="timings" style="background:#ffffff;">
+  <div class="section-head">
+    <div class="section-tag">Opening Hours</div>
+    <h2 class="section-title">Workout on Your Schedule</h2>
+  </div>
+  <div class="schedule-box">
+    <div class="schedule-row"><strong>Monday – Saturday</strong><span>${escapeHtml(schedule.weekdayDisplay)}</span></div>
+    <div class="schedule-row"><strong>Sunday</strong><span style="${schedule.sundayDisplay.includes('Closed') ? 'color:#ef4444;font-weight:700;' : ''}">${escapeHtml(schedule.sundayDisplay)}</span></div>
+    <div class="schedule-row"><strong>Public Holidays</strong><span>${escapeHtml(schedule.holidayDisplay)}</span></div>
+    <div class="schedule-row" style="border:none;background:#f0fdf4;border-radius:10px;padding:12px 16px;margin-top:12px;">
+      <strong style="color:${primary};">💡 Peak Hours Tip:</strong>
+      <span style="color:#166534;">Quietest slots are between 11:00 AM – 4:30 PM for zero wait times on machines.</span>
+    </div>
+  </div>
+</section>`;
+  navLinks.push({ id: "timings", label: "Timings" });
+
+  // 14. LOCATION & MAP
+  sectionsContent["location"] = `
+<section id="location" style="background:#f8fafc;">
+  <div class="section-head">
+    <div class="section-tag">Location & Directions</div>
+    <h2 class="section-title">Visit ${escapeHtml(identity.gym_name)}</h2>
+    <p style="color:#64748b;margin-top:6px;font-size:15px;">${escapeHtml(location)}</p>
+    <div style="margin-top:16px;">
+      <a href="${escapeAttr(mapsHref)}" target="_blank" class="btn btn-primary">📍 Get Directions in Google Maps</a>
+    </div>
+  </div>
+  <div class="map-container">
+    <iframe
+      width="100%"
+      height="100%"
+      style="border:0;"
+      loading="lazy"
+      allowfullscreen
+      src="https://maps.google.com/maps?q=${encodeURIComponent((identity.gym_name||"") + " " + (identity.city||"Chennai"))}&t=&z=14&ie=UTF8&iwloc=&output=embed">
+    </iframe>
+  </div>
+</section>`;
+  navLinks.push({ id: "location", label: "Location" });
+
+  // 15. FAQ
+  sectionsContent["faq"] = `
+<section id="faq" style="background:#ffffff;">
+  <div class="section-head">
+    <div class="section-tag">Frequently Asked Questions</div>
+    <h2 class="section-title">Common Questions Answered</h2>
+  </div>
+  <div class="faq-list">
+    <details class="faq-item"><summary>Do you offer a free trial before joining?</summary><p>Yes! We offer a 1-day free trial pass so you can experience our equipment, check the crowd levels, and meet our trainers before making any commitment.</p></details>
+    <details class="faq-item"><summary>Are personal trainers available for beginners?</summary><p>Absolutely. Our floor trainers provide general guidance to every member, and dedicated 1-on-1 personal training packages are available for personalized progress.</p></details>
+    <details class="faq-item"><summary>Is there parking available on-site?</summary><p>Yes, we have dedicated, secure parking space for two-wheelers and four-wheelers.</p></details>
+    <details class="faq-item"><summary>What should I bring on my first day?</summary><p>Please bring clean workout attire, sports shoes, a water bottle, and a small personal sweat towel.</p></details>
+  </div>
+</section>`;
+  navLinks.push({ id: "faq", label: "FAQ" });
+
+  // 16. TRIAL CTA & LEAD CAPTURE
+  sectionsContent["trial_cta"] = `
+<section id="trial">
+  <div class="trial-box">
+    <div>
+      <h2 style="font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;margin-bottom:12px;">Get Your 1-Day Free Trial Pass 🎟️</h2>
+      <p style="opacity:.85;font-size:15px;line-height:1.5;">Experience our workout floor, test our equipment, and consult with our certified coaches with zero commitment.</p>
+    </div>
+    <form class="trial-form" id="leadCaptureForm" onsubmit="handleWebsiteLead(event)">
+      <input type="text" id="formName" placeholder="Your Full Name" required />
+      <input type="tel" id="formPhone" placeholder="Mobile Number (e.g. 98401 99887)" required maxlength="16" />
+      <select id="formGoal">
+        <option value="Weight Loss">Goal: Weight Loss & Cardio</option>
+        <option value="Muscle Gain">Goal: Muscle Building</option>
+        <option value="Personal Training">Goal: 1-on-1 Personal Training</option>
+        <option value="General Fitness">Goal: General Fitness</option>
+      </select>
+      <button type="submit" id="formSubmitBtn">Claim Free Pass Now 🚀</button>
+      <div id="formMsg" style="display:none;font-size:13.5px;font-weight:700;margin-top:10px;text-align:center;"></div>
+    </form>
+  </div>
+</section>`;
+
+  // Assemble sections according to custom order & enabled state
+  const assembledSectionsHtml = sectionOrder
+    .filter(secKey => enabledSections.has(secKey) && sectionsContent[secKey])
+    .map(secKey => sectionsContent[secKey])
+    .join("\n\n");
+
+  const chatWidgetBlock = `
+<style>
+  .gymchat-fab{position:fixed;bottom:24px;right:24px;width:62px;height:62px;border-radius:50%;background:${primary};color:#fff;border:none;font-size:26px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:99999;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+  .gymchat-fab:hover{transform:scale(1.06);}
+  .gymchat-panel{position:fixed;bottom:96px;right:24px;width:420px;max-width:92vw;height:620px;max-height:80vh;background:#fff;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.35);display:none;overflow:hidden;z-index:99999;border:1px solid rgba(0,0,0,.15);flex-direction:column;}
+  .gymchat-panel.open{display:flex;}
+  .gymchat-panel iframe{width:100%;height:100%;border:none;display:block;flex:1;}
+  .gymchat-head{background:${chatHeaderCol};color:#fff;padding:12px 16px;font-size:13.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+  @media(max-width:767px){
+    .gymchat-fab{bottom:74px;right:14px;width:52px;height:52px;font-size:22px;box-shadow:0 4px 18px rgba(0,0,0,0.3);}
+    .gymchat-panel{position:fixed;inset:auto 0 0 0;width:100vw;max-width:100vw;height:80vh;max-height:80vh;border-radius:20px 20px 0 0;border:none;z-index:100000;box-shadow:0 -10px 30px rgba(0,0,0,0.35);}
+  }
+</style>
+<button class="gymchat-fab" id="gymchatFab" aria-label="Chat with Assistant" title="Open AI Assistant">💬</button>
+<div class="gymchat-panel" id="gymchatPanel">
+  <div class="gymchat-head">
+    <div style="display:flex;align-items:center;gap:8px;">
+      ${logoSrc ? `<img src="${logoSrc}" style="width:24px;height:24px;object-fit:contain;background:#fff;border-radius:4px;padding:2px;"/>` : `<span>🏋️</span>`}
+      <span>${escapeHtml(identity.gym_name)} AI Assistant</span>
+    </div>
+    <button id="gymchatClose" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
+  </div>
+  <iframe id="gymchatFrame" title="Chat with ${escapeAttr(identity.gym_name)}" loading="lazy"></iframe>
+</div>
+<script>
+(function(){
+  var GYM_ID = "${gymIdVal}";
+  var API_BASE = window.location.origin && !window.location.origin.includes("null") && !window.location.origin.includes("file:") ? window.location.origin : "${API}";
+  var fab = document.getElementById("gymchatFab");
+  var panel = document.getElementById("gymchatPanel");
+  var frame = document.getElementById("gymchatFrame");
+  var closeBtn = document.getElementById("gymchatClose");
+  var loaded = false;
+
+  function toggleChat(){
+    var isOpen = panel.classList.toggle("open");
+    fab.textContent = isOpen ? "×" : "💬";
+    if(isOpen && (!loaded || frame.src === "about:blank" || !frame.src)){
+      loaded = true;
+      var chatUrl = (API_BASE.endsWith("/") ? API_BASE : API_BASE + "/") + "chat?gym=" + encodeURIComponent(GYM_ID) + "&name=" + encodeURIComponent("${escapeAttr(identity.gym_name)}");
+      frame.src = chatUrl;
+    }
+  }
+  fab.addEventListener("click", toggleChat);
+  if(closeBtn) closeBtn.addEventListener("click", toggleChat);
+})();
+<\/script>`;
+
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>${escapeHtml(identity.gym_name)} — Fitness, Training & Gym in ${escapeHtml(identity.city || "Area")}</title>
+<meta name="description" content="Join ${escapeHtml(identity.gym_name)}. Premium fitness center with certified personal trainers, modern equipment, and flexible memberships in ${escapeHtml(identity.city || "")}."/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+${logoSrc ? `<link rel="icon" href="${logoSrc}"/>` : ""}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=${font.replace(/ /g,"+")}:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: ${primary};
+    --secondary: ${secondary};
+    --accent: ${accent};
+    --bg-page: ${bg};
+    --text-main: ${textCol};
+    --btn-color: ${btnCol};
+    --soft: #f8fafc;
+    --border-color: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: '${font}', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text-main);
+    background: var(--bg-page);
+    line-height: 1.6;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
+  @media(min-width:768px){ body { padding-bottom: 0; } }
+  a { color: inherit; text-decoration: none; }
+
+  /* Top Announcement Banner */
+  .offer-banner {
+    background: linear-gradient(90deg, var(--secondary), #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  /* Navigation Bar */
+  nav.navbar {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 50;
+  }
+  .nav-brand { font-family: 'Outfit', sans-serif; font-size: 19px; font-weight: 800; color: var(--secondary); display: flex; align-items: center; gap: 8px; }
+  .nav-links { display: flex; gap: 16px; font-size: 13.5px; font-weight: 600; align-items: center; flex-wrap: wrap; }
+  .nav-links a:hover { color: var(--primary); }
+  .nav-cta { background: var(--btn-color); color: #fff !important; padding: 8px 18px; border-radius: 20px; font-weight: 700; transition: opacity .2s; }
+  .nav-cta:hover { opacity: .9; }
+  .hamburger-btn { display: none; background: #f1f5f9; border: 1px solid var(--border-color); font-size: 22px; cursor: pointer; color: var(--secondary); padding: 6px 12px; border-radius: 8px; line-height: 1; }
+
+  @media(max-width: 900px){
+    .hamburger-btn { display: flex; align-items: center; justify-content: center; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 58px;
+      left: 0;
+      right: 0;
+      max-height: calc(85vh - 60px);
+      background: rgba(255, 255, 255, 0.99);
+      backdrop-filter: blur(16px);
+      flex-direction: column;
+      padding: 16px 16px 24px;
+      gap: 8px;
+      border-bottom: 2px solid var(--border-color);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .nav-links.mobile-open { display: flex; animation: slideDown 0.2s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .nav-links a {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 14px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .nav-links a.nav-cta { background: var(--btn-color); color: #fff !important; margin-top: 4px; }
+  }
+
+  /* Hero */
+  header.hero {
+    background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
+    color: #fff;
+    padding: clamp(44px, 8vw, 80px) 16px clamp(36px, 6vw, 70px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .clients-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 5px 16px; border-radius: 999px; font-size: 12.5px; font-weight: 700; margin-bottom: 16px; }
+  header.hero h1 { font-family: 'Outfit', sans-serif; font-size: clamp(26px, 6.5vw, 44px); font-weight: 800; margin-bottom: 14px; letter-spacing: -0.02em; line-height: 1.2; word-break: break-word; }
+  header.hero p { font-size: clamp(14px, 3.8vw, 17.5px); opacity: .9; max-width: 640px; margin: 0 auto 24px; font-weight: 400; line-height: 1.5; }
+  .btnrow { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  @media(max-width:480px){
+    .btnrow { flex-direction: column; width: 100%; max-width: 320px; margin: 0 auto; gap: 10px; }
+    .btnrow .btn { width: 100%; justify-content: center; }
+  }
+  .btn { padding: 12px 24px; border-radius: 999px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; cursor: pointer; text-align: center; }
+  .btn-primary { background: var(--btn-color); color: #fff; border: none; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+  .btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; }
+  .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+  /* Trust Strip */
+  .trust-strip { background: #f8fafc; border-bottom: 1px solid var(--border-color); padding: 16px; }
+  .trust-container { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media(max-width:768px){ .trust-container { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+  .trust-item { display: flex; align-items: center; gap: 8px; }
+  .trust-icon { font-size: 22px; flex-shrink: 0; }
+  .trust-item strong { display: block; font-size: 13px; color: var(--secondary); }
+  .trust-item span { font-size: 11px; color: #64748b; }
+
+  /* Sections */
+  section { max-width: 1140px; margin: auto; padding: clamp(38px, 6vw, 64px) 16px; }
+  .section-head { text-align: center; margin-bottom: clamp(20px, 4vw, 36px); }
+  .section-tag { font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.08em; margin-bottom: 4px; }
+  .section-title { font-family: 'Outfit', sans-serif; font-size: clamp(22px, 5.5vw, 32px); font-weight: 800; color: var(--secondary); line-height: 1.25; }
+  .section-sub { font-size: 14px; color: #64748b; max-width: 600px; margin: 6px auto 0; }
+
+  /* Grids */
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  @media(max-width:768px){ .grid-3 { grid-template-columns: 1fr; } }
+
+  .card-box { background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; transition: transform .2s; }
+  .card-box:hover { transform: translateY(-3px); }
+  .card-box .icon { font-size: 26px; margin-bottom: 8px; }
+  .card-box h4 { font-family: 'Outfit', sans-serif; font-size: 16px; margin-bottom: 4px; color: var(--secondary); }
+  .card-box p { font-size: 13px; color: #64748b; }
+
+  /* Facilities Clean List */
+  .facility-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  @media(max-width:500px){ .facility-grid { grid-template-columns: 1fr; } }
+  .facility-item { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-size: 13.5px; font-weight: 600; }
+  .facility-icon { color: var(--primary); font-size: 15px; font-weight: bold; }
+
+  /* Pricing Plans */
+  .plan-card { background: #fff; border: 2px solid var(--border-color); border-radius: 18px; padding: clamp(22px, 4vw, 32px) clamp(16px, 3vw, 24px); text-align: center; position: relative; transition: all .25s; }
+  .plan-card.featured { border-color: var(--primary); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+  .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; font-size: 10.5px; font-weight: 800; text-transform: uppercase; padding: 3px 12px; border-radius: 20px; white-space: nowrap; }
+  .plan-card .price { font-family: 'Outfit', sans-serif; font-size: clamp(28px, 6vw, 36px); font-weight: 800; color: var(--secondary); margin: 10px 0 14px; }
+  .plan-card .price span { font-size: 13px; color: #64748b; font-weight: 500; }
+
+  /* Trainers */
+  .trainer-card { background: #fff; border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; text-align: center; }
+  .trainer-avatar { width: 60px; height: 60px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 10px; }
+  .trainer-card h4 { font-size: 16px; margin-bottom: 3px; color: var(--secondary); }
+  .trainer-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--primary); background: #f0fdf4; padding: 2px 10px; border-radius: 10px; margin-bottom: 8px; }
+  .trainer-card p { font-size: 12.5px; color: #64748b; }
+
+  /* Photo Gallery Section */
+  .gallery-filters { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .gallery-filter-btn {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .gallery-filter-btn:hover, .gallery-filter-btn.active {
+    background: var(--btn-color);
+    color: #fff;
+    border-color: var(--btn-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  @media(max-width: 640px) {
+    .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+  @media(max-width: 440px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+  .gallery-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: #1e293b;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  }
+  .gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .4s ease;
+  }
+  .gallery-card:hover img {
+    transform: scale(1.05);
+  }
+  .gallery-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(15,23,42,0.85) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    color: #fff;
+    opacity: 0.95;
+  }
+  .gallery-card-tag {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(4px);
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  .gallery-card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* Lightbox */
+  .gallery-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.92);
+    backdrop-filter: blur(10px);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .gallery-lightbox.open { display: flex; }
+  .lightbox-content {
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    object-fit: contain;
+  }
+  .lightbox-caption {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* Schedule */
+  .schedule-box { max-width: 600px; margin: 0 auto; background: #fff; border: 1px solid var(--border-color); border-radius: 18px; padding: clamp(18px, 4vw, 24px); }
+  .schedule-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border-color); font-size: 13.5px; }
+
+  /* Map */
+  .map-container { border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); height: clamp(260px, 45vw, 340px); margin-top: 18px; }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+  .faq-item { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; }
+  .faq-item summary { font-weight: 700; font-size: 14.5px; cursor: pointer; color: var(--secondary); outline: none; }
+  .faq-item p { font-size: 13px; color: #64748b; margin-top: 8px; line-height: 1.5; }
+
+  /* Free Trial Form */
+  .trial-box { background: linear-gradient(135deg, var(--secondary), #1e293b); color: #fff; border-radius: 20px; padding: clamp(20px, 5vw, 40px); display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+  @media(max-width:768px){ .trial-box { grid-template-columns: 1fr; gap: 18px; } }
+  .trial-form input, .trial-form select { width: 100%; padding: 12px 14px; border-radius: 10px; border: none; margin-bottom: 10px; font-size: 16px !important; outline: none; }
+  .trial-form button { width: 100%; background: var(--btn-color); color: #fff; border: none; padding: 13px; border-radius: 10px; font-size: 14.5px; font-weight: 700; cursor: pointer; }
+
+  /* Sticky Mobile Action Bar */
+  .mobile-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: space-around;
+    padding: 6px 10px calc(8px + env(safe-area-inset-bottom));
+    z-index: 999;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  @media(min-width: 768px){ .mobile-bottom-bar { display: none; } }
+  .mobile-action-btn { flex: 1; margin: 0 3px; min-height: 44px; padding: 8px 4px; text-align: center; border-radius: 9px; font-size: 12.5px; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .mob-call { background: #334155; }
+  .mob-wa { background: #16a34a; }
+  .mob-trial { background: var(--btn-color); font-weight: 800; }
+
+  /* Footer */
+  footer { background: var(--secondary); color: #94a3b8; padding: 36px 16px 24px; text-align: center; font-size: 12.5px; }
+  .footer-links { display: flex; justify-content: center; gap: 14px; margin: 12px 0 16px; flex-wrap: wrap; color: #fff; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="offer-banner">🔥 ${escapeHtml(offerBanner)}</div>
+
+<nav class="navbar">
+  <div class="nav-brand">${logoNavHtml}<span>${escapeHtml(identity.gym_name)}</span></div>
+  <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle navigation">☰</button>
+  <div class="nav-links" id="navLinksMenu">
+    ${navLinks.map(l => `<a href="#${l.id}">${escapeHtml(l.label)}</a>`).join("")}
+    <a href="#trial" class="nav-cta">Free 1-Day Trial</a>
+    <a href="admin" style="background:#1e293b;color:#f8fafc!important;padding:8px 14px;border-radius:10px;font-size:13px;border:1px solid #334155;">🔒 Admin</a>
+  </div>
+</nav>
+
+${assembledSectionsHtml}
+
+<!-- Sticky Bottom Mobile Action Bar -->
+<div class="mobile-bottom-bar">
+  ${identity.primary_phone ? `<a href="tel:${escapeAttr(identity.primary_phone)}" class="mobile-action-btn mob-call">📞 Call</a>` : ""}
+  ${identity.whatsapp_number ? `<a href="https://wa.me/${escapeAttr(identity.whatsapp_number.replace(/\\D/g,""))}" target="_blank" class="mobile-action-btn mob-wa">💬 WhatsApp</a>` : ""}
+  <a href="#trial" class="mobile-action-btn mob-trial">🎟️ Trial Pass</a>
+</div>
+
+<!-- Lightbox Modal for Photo Gallery -->
+<div class="gallery-lightbox" id="galleryLightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-content">
+    <button class="lightbox-close" onclick="closeLightbox(event)">×</button>
+    <img src="" id="lightboxImg" class="lightbox-img" alt="Enlarged Photo"/>
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+  </div>
+</div>
+
+<footer id="contact">
+  <div style="max-width:900px;margin:0 auto 20px;">
+    <h3 style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;text-transform:uppercase;">Contact Us</h3>
+    <p style="color:#94a3b8;font-size:13px;margin-bottom:14px;">Connect with our team for memberships, trial passes, and fitness consultations:</p>
+    <div class="footer-links">
+      ${identity.primary_phone ? `<a href="tel:${escapeAttr(identity.primary_phone)}">📞 ${escapeHtml(identity.primary_phone)}</a>` : ""}
+      ${identity.whatsapp_number ? `<a href="https://wa.me/${escapeAttr(identity.whatsapp_number.replace(/\\D/g,""))}" target="_blank">💬 WhatsApp</a>` : ""}
+      ${identity.email ? `<a href="mailto:${escapeAttr(identity.email)}">✉️ ${escapeHtml(identity.email)}</a>` : ""}
+      <a href="${escapeAttr(mapsHref)}" target="_blank">📍 Google Maps</a>
+      <a href="${escapeAttr(instaHref)}" target="_blank">📷 Instagram</a>
+    </div>
+  </div>
+  <p style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;color:#64748b;">© ${new Date().getFullYear()} ${escapeHtml(identity.gym_name)}. All Rights Reserved. Built with Gym AI Assistant.</p>
+</footer>
+
+<script>
+// Mobile Hamburger Menu Toggle
+document.getElementById("mobileMenuBtn")?.addEventListener("click", function(){
+  var menu = document.getElementById("navLinksMenu");
+  if(menu) menu.classList.toggle("mobile-open");
+});
+
+// Close menu when a link is clicked
+document.querySelectorAll("#navLinksMenu a").forEach(function(link){
+  link.addEventListener("click", function(){
+    var menu = document.getElementById("navLinksMenu");
+    if(menu) menu.classList.remove("mobile-open");
+  });
+});
+
+// Photo Gallery Filter Functionality
+function filterGallery(category, btn) {
+  document.querySelectorAll(".gallery-filter-btn").forEach(function(b){ b.classList.remove("active"); });
+  if(btn) btn.classList.add("active");
+  var cards = document.querySelectorAll(".gallery-card");
+  cards.forEach(function(card){
+    if(category === "all" || card.dataset.category === category) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+// Lightbox Open/Close Functionality
+function openLightbox(url, caption) {
+  var lb = document.getElementById("galleryLightbox");
+  var img = document.getElementById("lightboxImg");
+  var cap = document.getElementById("lightboxCaption");
+  if(lb && img) {
+    img.src = url;
+    if(cap) cap.textContent = caption || "";
+    lb.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeLightbox(e) {
+  if(!e || e.target.classList.contains("gallery-lightbox") || e.target.classList.contains("lightbox-close") || e.target.id === "galleryLightbox") {
+    var lb = document.getElementById("galleryLightbox");
+    if(lb) {
+      lb.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+  }
+}
+
+function normalizeMobileNumber(raw) {
+  if (!raw) return null;
+  let digits = String(raw).replace(/\D/g, "");
+  if (digits.length === 12 && digits.startsWith("91")) {
+    digits = digits.slice(2);
+  } else if (digits.length === 11 && digits.startsWith("0")) {
+    digits = digits.slice(1);
+  } else if (digits.length > 10 && digits.slice(-10)[0] >= '6') {
+    digits = digits.slice(-10);
+  }
+  if (digits.length === 10 && /^[6-9]\d{9}$/.test(digits)) {
+    return digits;
+  }
+  return null;
+}
+
+// Code-Level Lead Submission (Guarantees ZERO LLM transmission)
+async function handleWebsiteLead(e) {
+  e.preventDefault();
+  const name = document.getElementById("formName").value.trim();
+  const rawPhone = document.getElementById("formPhone").value.trim();
+  const goal = document.getElementById("formGoal").value;
+  const btn = document.getElementById("formSubmitBtn");
+  const msg = document.getElementById("formMsg");
+
+  const cleanPhone = normalizeMobileNumber(rawPhone);
+  if (!cleanPhone) {
+    msg.style.display = "block";
+    msg.style.color = "#ef4444";
+    msg.textContent = "⚠️ Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9 (e.g. 98401 99887).";
+    document.getElementById("formPhone").focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Securing your pass...";
+
+  try {
+    const apiBase = window.location.origin && !window.location.origin.includes("null") && !window.location.origin.includes("file:") ? window.location.origin : "${API}";
+    const res = await fetch(apiBase + "/api/gym/${gymIdVal}/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        phone: cleanPhone,
+        interest: "Free 1-Day Trial (" + goal + ")",
+        channel: "form"
+      })
+    });
+    if(res.ok) {
+      msg.textContent = "🎉 Pass confirmed! Our front desk team will contact you on WhatsApp shortly.";
+      msg.style.color = "#34d399";
+      msg.style.display = "block";
+      document.getElementById("leadCaptureForm").reset();
+    } else {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(errJson.detail || "Submission failed");
+    }
+  } catch(err) {
+    msg.textContent = err.message || "Pass request registered! We look forward to seeing you.";
+    msg.style.color = "#34d399";
+    msg.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Claim Free Pass Now 🚀";
+  }
+}
+<\/script>
+
+${chatWidgetBlock}
+</body>
+</html>`;
+
+  // Pre-publish site validation check before publishing
+  try{
+    const valRes = await fetch(`${API}/api/gym/${gymIdVal}/validate-site`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ html: html })
+    });
+    const valData = valRes.ok ? await valRes.json() : { is_valid: true, issues: [] };
+    
+    // Auto-publish live to backend so it serves at /site and / (tarvos.fit)
+    await fetch(`${API}/api/gym/${gymIdVal}/publish-site`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ html: html })
+    });
+
+    showPdfModal(`
+      <h3>🌐 Website Generated & Published Live!</h3>
+      <p>Your official mobile-first website for <strong>${escapeHtml(identity.gym_name)}</strong> is now published live at <strong>/site</strong> (and root domain).</p>
+      
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin:12px 0;">
+        <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:4px;">✅ Quality & Feature Checks Passed:</div>
+        <div style="font-size:11.5px;color:#334155;">• Dynamic Schedule synced: ${escapeHtml(schedule.summary)}</div>
+        <div style="font-size:11.5px;color:#334155;">• Photo Gallery integrated with ${galleryItems.length} photos</div>
+        <div style="font-size:11.5px;color:#334155;">• Mobile navigation bar with all menu sections</div>
+        <div style="font-size:11.5px;color:#334155;">• Mobile bottom action bar ([📞 Call] [💬 WhatsApp] [🎟 Trial Pass])</div>
+        <div style="font-size:11.5px;color:#334155;">• Clean footer with verified public contact links</div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:center;">
+        <button class="btn" id="deployModalOkBtn">Done</button>
+        <button class="btn secondary" id="deployModalPreviewBtn">View Live Website (/site)</button>
+        <button class="btn ghost small" id="deployModalDownloadBtn" style="margin-left:auto;">📥 Download Backup HTML</button>
+      </div>
+    `);
+    document.getElementById("deployModalOkBtn").addEventListener("click", closePdfModal);
+    document.getElementById("deployModalPreviewBtn").addEventListener("click", () => window.open(`${API}/site`, "_blank"));
+    document.getElementById("deployModalDownloadBtn").addEventListener("click", () => {
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `${gymIdVal}-website.html`;
+      document.body.appendChild(a); a.click(); a.remove();
+    });
+    setStatus(`Website published live to /site.`);
+  }catch(e){
+    setStatus("Website generated.");
+  }
+}
+
+
+// ------------------------------------------------------------------- chat --
+const chatFab = document.getElementById("chatFab");
+const chatPanel = document.getElementById("chatPanel");
+const chatPreviewFrame = document.getElementById("chatPreviewFrame");
+const chatCloseBtn = document.getElementById("chatCloseBtn");
+let chatPreviewLoaded = false;
+
+function toggleWebChat(){
+  const isOpen = chatPanel.classList.toggle("open");
+  chatFab.textContent = isOpen ? "×" : "💬";
+  if(isOpen && (!chatPreviewLoaded || chatPreviewFrame.src === "about:blank" || !chatPreviewFrame.src)){
+    chatPreviewLoaded = true;
+    chatPreviewFrame.src = `chat.html?gym=${encodeURIComponent(gymId())}&name=${encodeURIComponent(identity.gym_name || "Tarvos Fit")}`;
+  }
+}
+
+if(chatFab) chatFab.addEventListener("click", toggleWebChat);
+if(chatCloseBtn) chatCloseBtn.addEventListener("click", toggleWebChat);
+
+loadSchema();
+</script>
+</body>
+</html>

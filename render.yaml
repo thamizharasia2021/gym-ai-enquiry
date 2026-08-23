@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: gym-ai-assistant
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: APP_DOMAIN
+        value: tarvos.fit
+      - key: CHAT_SUBDOMAIN
+        value: chat.tarvos.fit
+      - key: DEFAULT_GYM_ID
+        value: tarvos-fit
+      - key: GEMINI_CHAT_MODEL
+        value: gemini-2.0-flash
+      - key: GEMINI_EMBED_MODEL
+        value: gemini-embedding-001
+      - key: VECTOR_BACKEND
+        value: faiss
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ADMIN_KEY
+        value: admin123
+      - key: ADMIN_SESSION_SECRET
+        generateValue: true
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        value: gym_ai_verify_token
+      - key: LEAD_WEBHOOK_URL
+        sync: false
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: INSTAGRAM_ACCESS_TOKEN
+        sync: false
+      - key: INSTAGRAM_USER_ID
+        sync: false
+    # Optional persistent disk for Starter Plan ($7/mo).
+    # NOTE: If deploying on Render Free Tier, comment out or delete the disk block below.
+    disk:
+      name: gym-data
+      mountPath: /opt/render/project/src/backend/data
+      sizeGB: 1
