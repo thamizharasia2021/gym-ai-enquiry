@@ -37,11 +37,14 @@ services:
         sync: false
       - key: INSTAGRAM_ACCESS_TOKEN
         sync: false
+      - key: DATA_DIR
+        value: /opt/render/project/src/storage
       - key: INSTAGRAM_USER_ID
         sync: false
     # Optional persistent disk for Starter Plan ($7/mo).
     # NOTE: If deploying on Render Free Tier, comment out or delete the disk block below.
     disk:
       name: gym-data
-      mountPath: /opt/render/project/src/backend/data
+      mountPath: /opt/render/project/src/storage
       sizeGB: 1
+

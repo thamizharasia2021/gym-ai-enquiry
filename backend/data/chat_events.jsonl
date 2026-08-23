@@ -234,3 +234,6 @@
 {"gym_id": "tarvos-fit", "session_id": "wa-1787483242283-pepsk", "ts": 1787483263.4289184, "category": "FAC", "lead_capture_prompt": false, "channel": "web"}
 {"gym_id": "tarvos-fit", "session_id": "wa-1787483242283-pepsk", "ts": 1787483267.5292368, "category": "MEM", "lead_capture_prompt": true, "channel": "web"}
 {"gym_id": "tarvos-fit", "session_id": "", "ts": 1787483394.3605456, "category": "FAC", "lead_capture_prompt": true, "channel": "web"}
+{"gym_id": "tarvos-fit", "session_id": "test-session-chat-lead", "ts": 1787486253.9891903, "category": "LEAD_CAPTURED", "lead_capture_prompt": false, "channel": "web"}
+{"gym_id": "tarvos-fit", "session_id": "test-injection", "ts": 1787486254.1834807, "category": "FAC", "lead_capture_prompt": false, "channel": "web"}
+{"gym_id": "tarvos-fit", "session_id": "test-category-facilities", "ts": 1787486254.1845162, "category": "FAC", "lead_capture_prompt": false, "channel": "web"}

@@ -82,8 +82,11 @@ async def security_headers_middleware(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    # Allow embedding the chat widget in iframes on tarvos.fit / www.tarvos.fit
+    if not (path.startswith("/chat") or path.startswith("/static/")):
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
     return response
+
 
 
 # Frontend directory path

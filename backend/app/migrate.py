@@ -9,9 +9,30 @@ import uuid
 from . import config
 
 
+def seed_initial_data():
+    """Copy bundled seed files from backend/data into DATA_DIR if DATA_DIR is clean or missing files."""
+    import shutil
+    repo_data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
+    target_data_dir = os.path.abspath(config.DATA_DIR)
+    
+    if repo_data_dir != target_data_dir and os.path.exists(repo_data_dir):
+        os.makedirs(target_data_dir, exist_ok=True)
+        for fname in os.listdir(repo_data_dir):
+            src_file = os.path.join(repo_data_dir, fname)
+            dst_file = os.path.join(target_data_dir, fname)
+            if os.path.isfile(src_file) and not os.path.exists(dst_file):
+                try:
+                    shutil.copy2(src_file, dst_file)
+                    print(f"[Seed Data] Copied initial seed file: {fname}")
+                except Exception as e:
+                    print(f"[Seed Data] Failed copying {fname}: {e}")
+
+
 def run_migrations():
     """Runs data migrations on startup to upgrade data models seamlessly."""
+    seed_initial_data()
     leads_path = os.path.join(config.DATA_DIR, "leads.jsonl")
+
     if os.path.exists(leads_path):
         migrated_leads = []
         updated = False
