@@ -677,6 +677,31 @@ function renderGallery(){
 
   // Event handlers
   const fileInp = document.getElementById("galleryFileInput");
+  function compressImageFile(file, maxWidth = 1024, maxHeight = 1024, quality = 0.82) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxWidth || h > maxHeight) {
+            if (w > h) { h = Math.round((h * maxWidth) / w); w = maxWidth; }
+            else { w = Math.round((w * maxHeight) / h); h = maxHeight; }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
   if(fileInp){
     fileInp.addEventListener("change", async (e) => {
       const files = Array.from(e.target.files);
@@ -685,28 +710,25 @@ function renderGallery(){
       if(statusEl) statusEl.textContent = `Processing ${files.length} photo(s)...`;
       
       for(const file of files){
-        if(file.size > 5 * 1024 * 1024){
-          alert(`File ${file.name} is larger than 5MB. Please choose smaller photos.`);
+        if(file.size > 10 * 1024 * 1024){
+          alert(`File ${file.name} is larger than 10MB. Please choose smaller photos.`);
           continue;
         }
-        await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            identity.gallery.push({
-              id: "gal_" + Math.random().toString(36).substr(2, 9),
-              url: reader.result,
-              caption: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
-              category: "Gym Floor"
-            });
-            resolve();
-          };
-          reader.readAsDataURL(file);
-        });
+        const compressedUrl = await compressImageFile(file, 1024, 1024, 0.82);
+        if(compressedUrl){
+          identity.gallery.push({
+            id: "gal_" + Math.random().toString(36).substr(2, 9),
+            url: compressedUrl,
+            caption: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
+            category: "Gym Floor"
+          });
+        }
       }
       saveToLocalStorage();
       renderAll();
     });
   }
+
 
   const demoBtn = document.getElementById("loadDemoGalleryBtn");
   if(demoBtn){
@@ -1292,24 +1314,24 @@ function renderTheme(){
     setStatus("Saved branding theme.");
   });
 
-  document.getElementById("logoUpload").addEventListener("change", (e) => {
+  document.getElementById("logoUpload").addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if(!file) return;
-    if(file.size > 1.5 * 1024 * 1024){
-      alert("That logo is a bit large (" + Math.round(file.size/1024) + "KB). Please use a file under 1.5MB so the generated site loads quickly.");
+    if(file.size > 5 * 1024 * 1024){
+      alert("Please choose a logo file under 5MB.");
       e.target.value = "";
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      theme.logoDataUrl = reader.result;
+    const compressed = await compressImageFile(file, 400, 400, 0.88);
+    if(compressed){
+      theme.logoDataUrl = compressed;
       theme.logoName = file.name;
-      identity.logo_url = reader.result;
+      identity.logo_url = compressed;
       saveToLocalStorage();
       renderAll();
-    };
-    reader.readAsDataURL(file);
+    }
   });
+
 
   const removeBtn = document.getElementById("removeLogoBtn");
   if(removeBtn) removeBtn.addEventListener("click", () => {
@@ -1724,8 +1746,14 @@ async function saveConfig(){
     const res = await fetch(`${API}/api/gym/${gymId()}/config`, {
       method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
     });
-    const data = await res.json();
+    let data = {};
+    try {
+      data = await res.json();
+    } catch(e) {
+      if(!res.ok) throw new Error(`Save failed (HTTP ${res.status})`);
+    }
     if(!res.ok) throw new Error(data.detail || "Save failed");
+
     const customNote = data.custom_questions ? `, ${data.custom_questions} custom question${data.custom_questions === 1 ? "" : "s"} added` : "";
     setStatus(`Saved. ${data.questions_configured}/${data.questions_total} questions configured${customNote}, ${data.chunks_indexed} chunks indexed.`);
     document.getElementById("pdfLink").href = data.pdf_url ? (API + data.pdf_url) : `${API}/api/gym/${gymId()}/knowledge.pdf`;
@@ -1764,8 +1792,14 @@ document.getElementById("pdfUpload").addEventListener("change", async (e) => {
   try{
     const res = await fetch(`${API}/api/gym/${gymId()}/ingest-pdf`, { method: "POST", body: formData, signal: controller.signal });
     clearTimeout(timer);
-    const data = await res.json();
+    let data = {};
+    try {
+      data = await res.json();
+    } catch(e) {
+      if(!res.ok) throw new Error(`Server error HTTP ${res.status} (${res.statusText || "Internal Error"})`);
+    }
     if(!res.ok) throw new Error(data.detail || `Ingestion failed (HTTP ${res.status})`);
+
 
     let imported = 0;
     (data.entries || []).forEach(entry => {

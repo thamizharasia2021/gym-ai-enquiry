@@ -721,11 +721,15 @@ def publish_site(gym_id: str, payload: PublishSitePayload):
     with open(site_path, "w", encoding="utf-8") as f:
         f.write(payload.html)
     
-    public_path = os.path.join(FRONTEND_DIR, "public_site.html")
-    with open(public_path, "w", encoding="utf-8") as f:
-        f.write(payload.html)
+    try:
+        public_path = os.path.join(FRONTEND_DIR, "public_site.html")
+        with open(public_path, "w", encoding="utf-8") as f:
+            f.write(payload.html)
+    except Exception as e:
+        print(f"[Publish Site Warning] Could not update static frontend/public_site.html: {e}")
     
     return {"status": "ok", "url": "/", "gym_id": gym_id}
+
 
 
 # --------------------------------------------------- Frontend Page Routes ---

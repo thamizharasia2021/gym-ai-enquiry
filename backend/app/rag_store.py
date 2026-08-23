@@ -45,22 +45,29 @@ def embed_texts(texts: list[str], task_type: str = "RETRIEVAL_DOCUMENT") -> np.n
         return np.zeros((len(texts), config.EMBED_DIM), dtype="float32")
 
     all_vecs = []
-    for i in range(0, len(texts), GEMINI_EMBED_BATCH_LIMIT):
-        batch = texts[i:i + GEMINI_EMBED_BATCH_LIMIT]
-        result = client.models.embed_content(
-            model=config.GEMINI_EMBED_MODEL,
-            contents=batch,
-            config=types.EmbedContentConfig(
-                task_type=task_type,
-                output_dimensionality=config.EMBED_DIM,
-            ),
-        )
-        all_vecs.extend(e.values for e in result.embeddings)
+    try:
+        for i in range(0, len(texts), GEMINI_EMBED_BATCH_LIMIT):
+            batch = texts[i:i + GEMINI_EMBED_BATCH_LIMIT]
+            result = client.models.embed_content(
+                model=config.GEMINI_EMBED_MODEL,
+                contents=batch,
+                config=types.EmbedContentConfig(
+                    task_type=task_type,
+                    output_dimensionality=config.EMBED_DIM,
+                ),
+            )
+            all_vecs.extend(e.values for e in result.embeddings)
+    except Exception as e:
+        print(f"[Embedding Warning] Gemini embed_content failed: {e}. Falling back to offline zero-vectors.")
+        return np.zeros((len(texts), config.EMBED_DIM), dtype="float32")
+
     vecs = np.array(all_vecs, dtype="float32")
-    # normalize so inner-product search == cosine similarity
+    if vecs.shape[0] != len(texts):
+        return np.zeros((len(texts), config.EMBED_DIM), dtype="float32")
     norms = np.linalg.norm(vecs, axis=1, keepdims=True)
     norms[norms == 0] = 1
     return vecs / norms
+
 
 
 def embed_query(text: str) -> np.ndarray:
